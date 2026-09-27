@@ -9,5 +9,5 @@
     "skipLibCheck": true,
     "types": ["node", "vitest/globals"]
   },
-  "include": ["platform/**/src/**/*.ts", "platform/**/tests/**/*.ts", "products/golms/src/**/*.ts", "products/golms/tests/**/*.ts"]
+  "include": ["platform/**/src/**/*.ts", "platform/**/tests/**/*.ts", "products/golms/src/**/*.ts", "products/golms/tests/**/*.ts", "standards/**/src/**/*.ts", "standards/**/tests/**/*.ts"]
 }

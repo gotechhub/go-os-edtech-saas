@@ -29,7 +29,9 @@
     { "id": "storage-domain", "path": "v3/platform/storage/src/index.ts", "kind": "domain-entry" },
     { "id": "storage-migration", "path": "v3/supabase/migrations/202609270004_v3_storage_foundation.sql", "kind": "database-foundation" },
     { "id": "storage-api", "path": "v3/apps/web/src/lib/storage-runtime.ts", "kind": "api-integration" },
-    { "id": "storage-iac", "path": "v3/infra/aws/storage/vercel-oidc-roles.yaml", "kind": "infrastructure-template" }
+    { "id": "storage-iac", "path": "v3/infra/aws/storage/vercel-oidc-roles.yaml", "kind": "infrastructure-template" },
+    { "id": "scorm-package-validator", "path": "v3/standards/scorm/src/index.ts", "kind": "standards-entry" },
+    { "id": "scorm-package-tests", "path": "v3/standards/scorm/tests/scorm.test.ts", "kind": "security-test" }
   ],
   "edges": [
     { "from": "tracker", "to": "architecture", "relation": "tasks follow boundaries" },
@@ -58,6 +60,9 @@
     { "from": "storage-migration", "to": "platform-migration", "relation": "uses tenant role product access and trial gate" },
     { "from": "storage-api", "to": "storage-domain", "relation": "creates scoped signed S3 operations" },
     { "from": "storage-api", "to": "storage-migration", "relation": "persists intent integrity and audit state" },
-    { "from": "storage-iac", "to": "storage-contract", "relation": "defines OIDC role boundary" }
+    { "from": "storage-iac", "to": "storage-contract", "relation": "defines OIDC role boundary" },
+    { "from": "scorm-package-validator", "to": "storage-domain", "relation": "validates quarantined GOLMS packages before publication" },
+    { "from": "scorm-package-tests", "to": "scorm-package-validator", "relation": "proves ZIP and manifest rejection gates" },
+    { "from": "golms-domain", "to": "scorm-package-validator", "relation": "consumes validated package metadata for content versions" }
   ]
 }

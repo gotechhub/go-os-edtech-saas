@@ -30,7 +30,7 @@
 
 ## Henüz tamamlanmayan kapsam
 
-- S3 imzalı ZIP yükleme, antivirüs işi, manifest ayrıştırıcı ve güvenli player kabuğu.
+- S3 imzalı ZIP yükleme yerel sözleşmesi ve SCORM ZIP/manifest kabul motoru hazırdır; canlı OIDC, antivirüs/tarama worker'ı, değişmez yayın ve güvenli player kabuğu tamamlanmadı.
 - Ekip/rol/dinamik kural ataması, aday gösterme, onay ve bekleme listesi.
 - SCORM sequencing, xAPI, cmi5 ve LTI 1.3 adaptörleri.
 - Program taslağı formu BFF komutuna bağlıdır; adım düzenleyici, yayın, atama, öğrenci player ve mobil yüzey henüz tamamlanmadı.

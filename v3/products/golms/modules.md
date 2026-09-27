@@ -7,7 +7,7 @@
 | LMS-01 | F2 | Eğitim nesnesi ve içerik yönetişimi | 0/3 |
 | LMS-02 | F2 | Program, müfredat ve öğrenme haritası | 0/3 |
 | LMS-03 | F2 | Atama, kayıt, aday gösterme ve onay | 0/3 |
-| LMS-04 | F2 | SCORM, xAPI, cmi5 ve LTI çalışma zamanı | 0/3 |
+| LMS-04 | F2 | SCORM, xAPI, cmi5 ve LTI çalışma zamanı | 1/3 |
 | LMS-05 | F2 | Soru bankası, sınav ve değerlendirme | 0/3 |
 | LMS-06 | F2 | Anket, form ve eğitim değerlendirmesi | 0/3 |
 | LMS-07 | F2 | Görev, gözlem ve iş başı kanıtı | 0/3 |
