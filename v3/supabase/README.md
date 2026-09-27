@@ -21,14 +21,14 @@ Bu klasör Respongo OS V3 için temiz migration zinciridir. V1/V2 tablolarına v
 
 [`202609270003_v3_golms_read_models.sql`](migrations/202609270003_v3_golms_read_models.sql) admin program listesi ve öğrenenin kendi atamaları için rol kapsamlı, tenant kontrollü okuma modellerini sağlar. Web ve mobil istemci tablo birleştirme kurallarını tekrar yazmaz.
 
-## Mevcut doğrulama düzeyi
+## Mevcut doğrulama düzeyi — 2026-09-27
 
-- Migration yalnızca yerel PGlite/PostgreSQL uyum testinde uygulanmıştır.
+- Üç migration yeni V3 hosted Supabase projesine uygulanmış; `migration list` çıktısında `202609270001`, `202609270002` ve `202609270003` yerel/uzak olarak eşleşmiştir.
 - İki müşteri tenantı, iç demo, owner, learner, outsider ve MFA'lı HQ operatör senaryoları test edilir.
 - GOLMS için oluşturma, tarama kanıtı, yayın, program, atama, öğrenci başlatma, tamamlama ve rapor zinciri yerel PostgreSQL uyum testinden geçer.
 - Yayın değişmezliği, tekrar/sıra dışı olay, tenant RLS ve deneme sonrası runtime yazma negatif testleri bulunur.
 - Deneme sonrasında yetkili okuma açık, ürün yazması kapalıdır.
-- Hosted Supabase projesine migration uygulanmamıştır; canlı doğrulama veya yayın kanıtı değildir.
+- Hosted şema kurulumu doğrulanmıştır. Gerçek Auth kullanıcılarıyla iki tenant RLS negatif testi, Supabase advisor/lint ve yedek/geri yükleme provası henüz yayın kabul kanıtı değildir ve sonraki güvenlik kapısında tamamlanacaktır.
 
 ## Yayın ve geri dönüş
 
