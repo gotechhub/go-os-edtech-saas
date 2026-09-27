@@ -23,7 +23,8 @@
     { "id": "design-tokens", "path": "v3/packages/design-tokens/src/tokens.css", "kind": "design-contract" },
     { "id": "goai-architecture", "path": "v3/intelligence/goai-engine/product-architecture.md", "kind": "intelligence-boundary" },
     { "id": "goai-review", "path": "v3/research/goai-architecture-review.md", "kind": "research-evidence" },
-    { "id": "goai-ui-boundary", "path": "v3/packages/goai-ui/README.md", "kind": "ui-contract" }
+    { "id": "goai-ui-boundary", "path": "v3/packages/goai-ui/README.md", "kind": "ui-contract" },
+    { "id": "release-gates", "path": "v3/docs/architecture/release-gates.md", "kind": "release-evidence" }
   ],
   "edges": [
     { "from": "tracker", "to": "architecture", "relation": "tasks follow boundaries" },
@@ -46,6 +47,7 @@
     { "from": "goai-review", "to": "goai-architecture", "relation": "records accepted and corrected source decisions" },
     { "from": "goai-architecture", "to": "architecture", "relation": "applies product ownership and control plane boundaries" },
     { "from": "tracker", "to": "goai-architecture", "relation": "tracks GOAI definition implementation and acceptance gates" },
-    { "from": "goai-ui-boundary", "to": "goai-architecture", "relation": "implements embedded product UI contract" }
+    { "from": "goai-ui-boundary", "to": "goai-architecture", "relation": "implements embedded product UI contract" },
+    { "from": "tracker", "to": "release-gates", "relation": "counts only dated acceptance evidence" }
   ]
 }

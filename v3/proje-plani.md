@@ -1,8 +1,8 @@
 # Respongo OS V3 · proje yol haritası
 
-**Kaynak tarihi:** 2026-09-27 · **Durum:** V3 planlama · **Aktif faz:** F0 Araştırma ve mimari
+**Kaynak tarihi:** 2026-09-27 · **Durum:** Uygulama başladı · **Aktif faz:** F0 Araştırma ve mimari
 
-**Doğrulanmış ilerleme:** %0 · **Görev:** 0/444 tamamlandı, 444 kaldı · **Modül:** 148 · **Engel:** 0
+**Doğrulanmış ilerleme:** %1 · **Görev:** 3/447 tamamlandı, 444 kaldı · **Modül:** 149 · **Engel:** 0
 **Dil hedefi:** 10 dil; 2 temel (Türkçe varsayılan + İngilizce), 8 ek lisans. Paketler [Respongo HQ](operations/respongo-hq/language-control.md) tarafından yönetilir.
 
 > Bu oran yalnızca tarihli kabul kanıtı bulunan görevlerden hesaplanır. V1/V2 oranları ve taslak dosyalar V3 tamamlanması sayılmaz.
@@ -18,7 +18,7 @@
 | Faz | Hedef | Modül | Doğrulanan/görev |
 |---|---|---:|---:|
 | F0 · Araştırma ve mimari | Ürün sınırları, kaynaklar, güvenlik, deneyim ve kabul ölçütleri | 5 | 0/15 |
-| F1 · Ortak platform ve yönetim | Kimlik, tenant, deneme, Control Center ve Respongo HQ | 30 | 0/90 |
+| F1 · Ortak platform ve yönetim | Kimlik, tenant, deneme, Control Center ve Respongo HQ | 31 | 3/93 |
 | F2 · Tasarım ve öğrenme çekirdeği | Yeni deneyim, öğrenme operasyonu, SCORM ve rapor | 25 | 0/75 |
 | F3 · Üretim ve içerik hizmeti | GOAUTHOR AI ve GOFACTORY müşteri/üretim akışı | 18 | 0/54 |
 | F4 · Deneyim ve katalog | GOLXP, içerik keşfi, hak ve lisans | 18 | 0/54 |
@@ -42,7 +42,7 @@
 | GOPM · performans ve gelişim | 9 | 0/27 | [Modüller](products/gopm/modules.md) |
 | GOAI Engine · ortak zekâ | 18 | 0/54 | [Modüller](intelligence/goai-engine/modules.md) |
 | Standartlar ve entegrasyon | 4 | 0/12 | [Modüller](standards/modules.md) |
-| Yayın ve operasyon | 6 | 0/18 | [Modüller](docs/architecture/release-modules.md) |
+| Yayın ve operasyon | 7 | 3/21 | [Modüller](docs/architecture/release-modules.md) |
 
 ## Engeller
 

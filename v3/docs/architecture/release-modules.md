@@ -4,12 +4,19 @@
 
 | ID | Faz | Modül | Durum |
 |---|---|---|---|
+| REL-00 | F1 | Beta barındırma ve GitOps temeli | 3/3 |
 | REL-01 | F6 | CI/CD ve kalite kapıları | 0/3 |
 | REL-02 | F6 | Gözlemlenebilirlik ve destek | 0/3 |
 | REL-03 | F6 | Yedek, geri dönüş ve felaket kurtarma | 0/3 |
 | REL-04 | F6 | Müşteri pilotu ve küresel hazırlık | 0/3 |
 | REL-05 | F6 | 10 dil ve white-label yayın kabulü | 0/3 |
 | REL-06 | F6 | Filo dil paketi yükseltme tatbikatı | 0/3 |
+
+## REL-00 · Beta barındırma ve GitOps temeli
+
+Faz: **F1**. Alt modüller: Kanonik GitHub deposu ve korumalı sürüm geçmişi; Supabase hosted proje ve migration temeli; Vercel Production/Preview yapılandırması ve otomatik dağıtım; Tek kanonik proje, ortam değişkeni ve canlı sağlık doğrulaması.
+
+**Kabul senaryosu:** Kanonik main pushu tek Vercel projesinde Production dağıtımı üretir; canlı sayfa, güvenlik başlıkları ve Supabase Auth sağlığı doğrulanır; sırlar repoda tutulmaz.
 
 ## REL-01 · CI/CD ve kalite kapıları
 
