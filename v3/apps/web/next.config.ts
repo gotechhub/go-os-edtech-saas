@@ -1,7 +1,14 @@
 import type { NextConfig } from "next";
+import path from "node:path";
+import { fileURLToPath } from "node:url";
+
+const appDirectory = path.dirname(fileURLToPath(import.meta.url));
 
 const config: NextConfig = {
   poweredByHeader: false,
+  turbopack: {
+    root: path.resolve(appDirectory, "../../..")
+  },
   transpilePackages: ["@respongo-os/golms", "@respongo-os/design-tokens"],
   async headers() {
     return [{ source: "/:path*", headers: [
