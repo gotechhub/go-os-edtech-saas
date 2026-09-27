@@ -4,7 +4,7 @@
 
 Müşterinin yönetim alanı **Control Center**, Respongo'nun iç süper yönetim/CRM alanı **Respongo HQ** adını taşır. GOHR/GORECRUIT aktif kapsamda yoktur. İlk beta için sektör bağımsız çekirdek hazırlanır; Oguz Law Academy daha sonra HQ'dan iç demo/müşteri portalı olarak açılır. V3'e tarihsel Oguz seed'i ve arayüzü aktarılmaz.
 
-**2026-09-27 durumu:** Temiz V3 deposu GitHub'a gönderildi; platform ve GOLMS migration zinciri yeni hosted Supabase projesine uygulandı; Next.js V3 kabuğu Vercel production ortamında çalışıyor. Program taslak formu gerçek BFF komutuna bağlıdır. Gerçek Auth/rol UAT, hosted RLS negatif testi, S3 yapılandırması, HQ/Control Center ekranları ve tam program/SCORM akışı henüz kabul edilmedi.
+**2026-09-27 durumu:** Temiz V3 deposu GitHub/Vercel/Supabase üzerinde çalışır. Platform/GOLMS ilk dikey dilimine ek olarak S3 depolama sözleşmesinin yerel kodu hazırlandı: tenant anahtar/prefix politikası, metadata migration'ı, karantina upload intent API'si, yayımlanmış dosya download API'si, manifest aktarım aracı ve Vercel OIDC rol şablonu bulunur. Hosted migration 004, canlı OIDC rolü, bucket güvenlik denetimi, tarama worker'ı ve CloudFront henüz doğrulanmamıştır.
 
 **GOAI kararı:** Ürün içi deneyim tek `packages/goai-ui` sözleşmesini kullanır. Tenant bütçe/agent/bilgi/onay yönetimi Control Center'da; global provider secret, model route, platform maliyeti, eval ve rollout Respongo HQ'dadır. Ayrıntı için [GOAI kanonik mimarisi](../intelligence/goai-engine/product-architecture.md).
 

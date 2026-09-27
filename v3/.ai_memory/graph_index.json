@@ -24,7 +24,12 @@
     { "id": "goai-architecture", "path": "v3/intelligence/goai-engine/product-architecture.md", "kind": "intelligence-boundary" },
     { "id": "goai-review", "path": "v3/research/goai-architecture-review.md", "kind": "research-evidence" },
     { "id": "goai-ui-boundary", "path": "v3/packages/goai-ui/README.md", "kind": "ui-contract" },
-    { "id": "release-gates", "path": "v3/docs/architecture/release-gates.md", "kind": "release-evidence" }
+    { "id": "release-gates", "path": "v3/docs/architecture/release-gates.md", "kind": "release-evidence" },
+    { "id": "storage-contract", "path": "v3/docs/architecture/storage-and-assets.md", "kind": "cross-product-contract" },
+    { "id": "storage-domain", "path": "v3/platform/storage/src/index.ts", "kind": "domain-entry" },
+    { "id": "storage-migration", "path": "v3/supabase/migrations/202609270004_v3_storage_foundation.sql", "kind": "database-foundation" },
+    { "id": "storage-api", "path": "v3/apps/web/src/lib/storage-runtime.ts", "kind": "api-integration" },
+    { "id": "storage-iac", "path": "v3/infra/aws/storage/vercel-oidc-roles.yaml", "kind": "infrastructure-template" }
   ],
   "edges": [
     { "from": "tracker", "to": "architecture", "relation": "tasks follow boundaries" },
@@ -48,6 +53,11 @@
     { "from": "goai-architecture", "to": "architecture", "relation": "applies product ownership and control plane boundaries" },
     { "from": "tracker", "to": "goai-architecture", "relation": "tracks GOAI definition implementation and acceptance gates" },
     { "from": "goai-ui-boundary", "to": "goai-architecture", "relation": "implements embedded product UI contract" },
-    { "from": "tracker", "to": "release-gates", "relation": "counts only dated acceptance evidence" }
+    { "from": "tracker", "to": "release-gates", "relation": "counts only dated acceptance evidence" },
+    { "from": "storage-domain", "to": "storage-contract", "relation": "implements object key and upload policy" },
+    { "from": "storage-migration", "to": "platform-migration", "relation": "uses tenant role product access and trial gate" },
+    { "from": "storage-api", "to": "storage-domain", "relation": "creates scoped signed S3 operations" },
+    { "from": "storage-api", "to": "storage-migration", "relation": "persists intent integrity and audit state" },
+    { "from": "storage-iac", "to": "storage-contract", "relation": "defines OIDC role boundary" }
   ]
 }

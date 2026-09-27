@@ -6,6 +6,7 @@
 - Vercel: Next.js web ve kısa süreli yetkili API/BFF (arka uç arayüzü). Uzun medya dönüştürme, toplu rapor ve AI işleri HTTP isteğinde yapılmaz.
 - Supabase: PostgreSQL, Auth ve uygun gerçek zamanlı özellikler; tenant RLS ve migration kapıları. Büyük ölçek için bağlantı, sorgu, indeks, arşiv ve bölümleme ihtiyacı ölçülür.
 - Amazon S3: özel dosya/video/paket nesne deposu. S3 veritabanı veya uygulama sunucusu değildir. Kısa ömürlü imzalı URL, karantina → tarama/format/hak kontrolü → sürümlü yayın anahtarı kullanılır. Üretim içeriği ve müşteri dosyaları için ayrı erişim politikası.
+- S3 bağlantısı: Vercel OIDC uygulama rolü ile geçici AWS kimliği kullanır; bucket provisioning ayrı HQ rolüdür. Detaylı prefix, API ve kabul sözleşmesi [S3 depolama ve varlık mimarisindedir](storage-and-assets.md).
 - Arka plan işleri: sürümlü görev/olay sözleşmesi, tekrar çalıştırmaya dayanıklılık, yeniden deneme, dead-letter (başarısız iş kuyruğu), izleme. Beta worker sağlayıcısı F1 teknik araştırma/kapasite kararında seçilir; veri modeli sağlayıcıya kilitlenmez.
 
 ## Güvenlik kapıları

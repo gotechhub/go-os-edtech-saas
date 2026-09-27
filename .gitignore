@@ -10,3 +10,6 @@ playwright-report/
 .vercel/
 v3/supabase/.temp/
 *.log
+v3/assets/payload/
+v3/assets/local-transfer/
+*.scorm.zip

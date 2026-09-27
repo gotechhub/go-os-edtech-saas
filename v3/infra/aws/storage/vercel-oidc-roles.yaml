@@ -1,0 +1,73 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Description: Respongo OS V3 Vercel OIDC storage roles. Does not create or delete customer buckets.
+Parameters:
+  VercelTeamSlug: { Type: String }
+  VercelProjectName: { Type: String }
+  SystemBucketName: { Type: String }
+  TenantBucketPrefix: { Type: String, Default: respongo-tenant }
+Resources:
+  VercelOidcProvider:
+    Type: AWS::IAM::OIDCProvider
+    Properties:
+      Url: https://oidc.vercel.com
+      ClientIdList: [sts.amazonaws.com]
+  VercelStorageApplicationRole:
+    Type: AWS::IAM::Role
+    Properties:
+      RoleName: respongo-vercel-storage-app
+      AssumeRolePolicyDocument:
+        Version: '2012-10-17'
+        Statement:
+          - Effect: Allow
+            Principal: { Federated: !Ref VercelOidcProvider }
+            Action: sts:AssumeRoleWithWebIdentity
+            Condition:
+              StringEquals:
+                oidc.vercel.com:aud: sts.amazonaws.com
+              StringLike:
+                oidc.vercel.com:sub:
+                  - !Sub owner:${VercelTeamSlug}:project:${VercelProjectName}:environment:production
+                  - !Sub owner:${VercelTeamSlug}:project:${VercelProjectName}:environment:preview
+      Policies:
+        - PolicyName: respongo-private-assets
+          PolicyDocument:
+            Version: '2012-10-17'
+            Statement:
+              - Effect: Allow
+                Action: [s3:GetObject, s3:GetObjectVersion]
+                Resource:
+                  - !Sub arn:${AWS::Partition}:s3:::${SystemBucketName}/system/*
+                  - !Sub arn:${AWS::Partition}:s3:::${TenantBucketPrefix}-*/quarantine/*
+                  - !Sub arn:${AWS::Partition}:s3:::${TenantBucketPrefix}-*/published/*
+                  - !Sub arn:${AWS::Partition}:s3:::${TenantBucketPrefix}-*/derived/*
+                  - !Sub arn:${AWS::Partition}:s3:::${TenantBucketPrefix}-*/deliverables/*
+                  - !Sub arn:${AWS::Partition}:s3:::${TenantBucketPrefix}-*/exports/*
+              - Effect: Allow
+                Action: [s3:PutObject, s3:AbortMultipartUpload]
+                Resource: !Sub arn:${AWS::Partition}:s3:::${TenantBucketPrefix}-*/quarantine/*
+              - Effect: Allow
+                Action: [s3:ListBucket, s3:GetBucketLocation]
+                Resource:
+                  - !Sub arn:${AWS::Partition}:s3:::${SystemBucketName}
+                  - !Sub arn:${AWS::Partition}:s3:::${TenantBucketPrefix}-*
+  StorageProvisioningRole:
+    Type: AWS::IAM::Role
+    Properties:
+      RoleName: respongo-hq-storage-provisioner
+      AssumeRolePolicyDocument:
+        Version: '2012-10-17'
+        Statement:
+          - Effect: Allow
+            Principal: { AWS: !Sub arn:${AWS::Partition}:iam::${AWS::AccountId}:root }
+            Action: sts:AssumeRole
+      Policies:
+        - PolicyName: respongo-tenant-bucket-provisioning
+          PolicyDocument:
+            Version: '2012-10-17'
+            Statement:
+              - Effect: Allow
+                Action: [s3:CreateBucket, s3:GetBucketLocation, s3:GetBucketVersioning, s3:GetBucketPublicAccessBlock, s3:GetBucketOwnershipControls, s3:PutBucketVersioning, s3:PutBucketPublicAccessBlock, s3:PutBucketOwnershipControls, s3:PutBucketEncryption, s3:PutBucketPolicy, s3:PutLifecycleConfiguration, s3:PutBucketTagging]
+                Resource: !Sub arn:${AWS::Partition}:s3:::${TenantBucketPrefix}-*
+Outputs:
+  ApplicationRoleArn: { Value: !GetAtt VercelStorageApplicationRole.Arn }
+  ProvisioningRoleArn: { Value: !GetAtt StorageProvisioningRole.Arn }
