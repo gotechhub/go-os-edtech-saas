@@ -1,18 +1,26 @@
-# Respongo OS V3
+# Respongo OS · kurumsal EdTech ekosistemi
 
-Respongo'nun temiz, sektör bağımsız kurumsal öğrenme, yetenek ve performans ekosistemi.
+**Durum: mimari temel + platform ve ilk GOLMS çekirdeği.** Bu depo Respongo OS'nin kanonik monoreposudur; ayrıca bir `v3` kaynak katmanı kullanılmaz. Tarihsel V1/V2 kodu bu depoya kopyalanmaz. Tenant/rol/14 günlük deneme temeli ile GOLMS içerik → program → atama → SCORM girişimi → rapor dikey dilimi domain kodu ve temiz migration zincirinde doğrulanır. Dil paketi/lisans/overlay alanı [platform/localization](platform/localization/README.md) altındadır; gerçek HQ/Control Center, 10 dil çevirisi ve hosted kabul ayrı kapılardır.
 
-- Ürün ve mimari başlangıcı: [`v3/README.md`](v3/README.md)
-- Güncel yol haritası: [`v3/proje-plani.html`](v3/proje-plani.html)
-- GOLMS uygulama durumu: [`v3/products/golms/implementation-status.md`](v3/products/golms/implementation-status.md)
-- Supabase migration zinciri: [`v3/supabase/README.md`](v3/supabase/README.md)
+| Katman | Alanlar |
+|---|---|
+| CREATE · Üret | GOAUTHOR AI (müşteri yazarlığı); GOFACTORY (Respongo üretim hizmeti) |
+| LEARN · Öğren | GOLMS; GOLXP; GOCATALOG |
+| PERFORM · Performans | GOPM |
+| INTELLIGENCE · Zekâ | GOAI Engine (ortak, yetki kontrollü) |
+| OPERATIONS · Yönetim | Respongo HQ (yalnızca iç ekip); Control Center (müşteri yönetimi) |
 
-## Yerel çalışma
+Hedef: **Öğrenme Üret. Yetenekleri Geliştir. Performansı Artır.** Tek marka ve kimlikle çalışan, veri sahipliği açık bir kurumsal öğrenme ekosistemi. Çok ürünlü olmak, her ürünün olgun olduğu veya rakiplerden benzersiz olduğu iddiası değildir; farklılaştırma hipotezleri ürün kabulünde sınanır.
 
-```powershell
-corepack pnpm install
-corepack pnpm check
-corepack pnpm dev
-```
+## Başlangıç haritası
 
-Web uygulaması varsayılan olarak `http://127.0.0.1:3003/tr` adresinde çalışır. Gerçek müşteri verisi veya gizli anahtar repoya eklenmez.
+- [Bağlam ve hafıza](context/README.md): Codex/Claude karar ve kaynak yönlendirmesi.
+- [Rakip araştırması](research/competitive-landscape.md): resmî ürün kaynakları ve ayrışma hipotezleri.
+- [Mimari](docs/architecture/README.md): alan sahipliği, güvenlik, veri, entegrasyon ve altyapı.
+- [10 dil ve white-label etiket mimarisi](docs/architecture/localization-white-label.md): TR/EN dahil, sekiz ek lisans, HQ paket kontrolü ve müşterinin korunarak güncellenen terim varyantı.
+- [Tasarım](design/README.md): sıfırdan web/mobil UX ve 21st.dev brief'i.
+- [SaaS ürünleri](products/README.md), [GOFACTORY hizmeti](services/gofactory/README.md), [Respongo HQ](operations/respongo-hq/README.md) ve [müşteri Control Center](platform/control-center/README.md).
+- [GOLMS ilk uygulama durumu](products/golms/implementation-status.md) ve [temiz Supabase migration zinciri](supabase/README.md).
+- [Tek takip kaynağı](project-tracker.json): buradan [HTML](proje-plani.html) ve [Markdown](proje-plani.md) üretilir.
+
+Beta: GitHub + Vercel (web/API) + Supabase (PostgreSQL/Auth) + özel Amazon S3 (dosya/medya). S3 tek başına uygulama sunucusu değildir. Daha sonraki AWS taşıması veritabanı, kimlik, işler, depolama ve operasyonu birlikte kapsayan ayrı bir geçiştir.
