@@ -16,7 +16,7 @@ Takip yüzdesi yalnızca `project-tracker.json` içindeki tarihli `verified` ad�
 - GitHub: temiz V3 `main` dalı ve geri izlenebilir commit zinciri.
 - Supabase: üç migration uygulandı ve uzak migration geçmişiyle eşleşti.
 - Vercel: production dağıtımı `READY`, kalıcı alan adı `https://saas-edtech-platform-360.vercel.app`.
-- Vercel Git entegrasyonu: mevcut `saas-edtech-platform-360` projesi, ikinci bir proje oluşturmadan `gotechhub/go-os-edtech-saas` deposuna bağlandı; eski depo bağlantısı kaldırıldı.
+- Vercel Git entegrasyonu: kanonik `saas-edtech-platform-360` projesi `gotechhub/go-os-edtech-saas` deposuna bağlandı; eski depo bağlantısı kaldırıldı. Ortam değişkeni bulunmayan mükerrer `go-os-edtech-saas` Vercel projesi 2026-09-27 tarihinde silindi.
 - HTTP smoke: `/` → `/tr`; `/tr` ve üç GOLMS ekranı `200`; program API'si oturumsuz isteği `401 UNAUTHENTICATED` ile reddeder.
 - Header smoke: CSP ve `X-Frame-Options: DENY` canlı yanıtta görülür.
 
