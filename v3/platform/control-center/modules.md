@@ -14,6 +14,7 @@
 | CC-08 | F1 | Entegrasyon ve veri kalitesi merkezi | 0/3 |
 | CC-09 | F6 | Çapraz ürün rapor ve audit merkezi | 0/3 |
 | CC-10 | F1 | İletişim ve şablon stüdyosu | 0/3 |
+| CC-11 | F5 | Tenant GOAI yönetişimi | 0/3 |
 
 ## CC-01 · Müşteri yönetici ana ekranı
 
@@ -74,3 +75,9 @@ Faz: **F6**. Alt modüller: Yetkili kullanım ve sonuç özeti; Veri tazeliği/k
 Faz: **F1**. Alt modüller: E-posta/push/uygulama içi şablon; Ürün olayı ve alıcı kuralı; Önizleme/test gönderimi; Sürüm/geri alma.
 
 **Kabul senaryosu:** Müşteri güvenli değişkenlerle şablon yayımlar; sistem ve hukukî mesajların korumalı alanlarını değiştiremez.
+
+## CC-11 · Tenant GOAI yönetişimi
+
+Faz: **F5**. Alt modüller: Etkin agent ve ürün özellikleri; Bilgi kaynağı ve araç izinleri; Bütçe/onay kuyruğu; Tenant audit ve saklama görünümü.
+
+**Kabul senaryosu:** Müşteri yöneticisi yalnızca kendi tenant AI kapsamını yönetir; global provider sırrı, platform maliyeti veya başka tenant verisi göremez.

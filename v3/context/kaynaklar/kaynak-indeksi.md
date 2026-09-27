@@ -8,5 +8,6 @@
 | SRC-004 | [Unicode CLDR, W3C ve ICU dayanakları](../../docs/architecture/localization-white-label.md) | Resmî uluslararasılaştırma standartları/kütüphane belgeleri | 2026-09-27 incelendi | BCP 47, çoğul/tarih/sayı, RTL ve güvenli mesaj çözümleme |
 | SRC-005 | `v1/upsidelms-saas-screenshot` | Kullanıcı tarafından sağlanan rakip ekran arşivi | 2026-09-27; 547 PNG, altı rol/yüzey; sekiz tekrar çifti | Yalnızca modül, rol, görev ve bilgi mimarisi denetimi; görsel tasarım kopyalanmaz |
 | SRC-006 | [Invince/UpsideLMS arşiv denetimi ve resmî kaynaklar](../../research/invince-upsidelms-screenshot-audit.md) | Birincil ekran kanıtı + resmî üretici/standart sayfaları | 2026-09-27 incelendi | GOLMS boşluk analizi, ürün sahipliği ve kabul kapsamı |
+| SRC-007 | `C:/Users/SG/Desktop/Respongo_GOAI_Final_Architecture_Codex.md` ve [mimari inceleme](../../research/goai-architecture-review.md) | Kullanıcı tarafından sağlanan ürün mimarisi | 2026-09-27 incelendi; SHA-256 `0BAA863631E141843ADDABF4396BBDE14DF811C37857AEBEBFCB0566856C296C` | GOAI'nın ürün içi ortak motor kararı; kontrol düzlemi, güvenlik ve sahiplik düzeltmeleri kanonik mimariye işlendi |
 
 Şablon ZIP depo içine kopyalanmaz; kaynak yolu yerel makineye özgüdür. Gelecekte farklı makinede yoksa kayıt geçerliliğini yeniden değerlendir.

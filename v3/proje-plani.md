@@ -2,7 +2,7 @@
 
 **Kaynak tarihi:** 2026-09-27 · **Durum:** V3 planlama · **Aktif faz:** F0 Araştırma ve mimari
 
-**Doğrulanmış ilerleme:** %0 · **Görev:** 0/411 tamamlandı, 411 kaldı · **Modül:** 137 · **Engel:** 0
+**Doğrulanmış ilerleme:** %0 · **Görev:** 0/444 tamamlandı, 444 kaldı · **Modül:** 148 · **Engel:** 0
 **Dil hedefi:** 10 dil; 2 temel (Türkçe varsayılan + İngilizce), 8 ek lisans. Paketler [Respongo HQ](operations/respongo-hq/language-control.md) tarafından yönetilir.
 
 > Bu oran yalnızca tarihli kabul kanıtı bulunan görevlerden hesaplanır. V1/V2 oranları ve taslak dosyalar V3 tamamlanması sayılmaz.
@@ -22,8 +22,8 @@
 | F2 · Tasarım ve öğrenme çekirdeği | Yeni deneyim, öğrenme operasyonu, SCORM ve rapor | 25 | 0/75 |
 | F3 · Üretim ve içerik hizmeti | GOAUTHOR AI ve GOFACTORY müşteri/üretim akışı | 18 | 0/54 |
 | F4 · Deneyim ve katalog | GOLXP, içerik keşfi, hak ve lisans | 18 | 0/54 |
-| F5 · Performans ve zekâ | GOPM ve izin kontrollü GOAI Engine | 17 | 0/51 |
-| F6 · Küresel beta ve yayın | Standartlar, entegrasyon, operasyon, mobil ve kabul | 24 | 0/72 |
+| F5 · Performans ve zekâ | GOPM ve izin kontrollü GOAI Engine | 27 | 0/81 |
+| F6 · Küresel beta ve yayın | Standartlar, entegrasyon, operasyon, mobil ve kabul | 25 | 0/75 |
 
 ## Ürün ve alanlar
 
@@ -31,8 +31,8 @@
 |---|---:|---:|---|
 | Araştırma ve mimari | 4 | 0/12 | [Modüller](docs/architecture/foundation-modules.md) |
 | Ortak SaaS platformu | 15 | 0/45 | [Modüller](platform/modules.md) |
-| Respongo HQ · iç yönetim | 10 | 0/30 | [Modüller](operations/respongo-hq/modules.md) |
-| Control Center · müşteri yönetimi | 10 | 0/30 | [Modüller](platform/control-center/modules.md) |
+| Respongo HQ · iç yönetim | 11 | 0/33 | [Modüller](operations/respongo-hq/modules.md) |
+| Control Center · müşteri yönetimi | 11 | 0/33 | [Modüller](platform/control-center/modules.md) |
 | Tasarım sistemi ve deneyim | 6 | 0/18 | [Modüller](design/modules.md) |
 | GOLMS · öğrenme yönetimi | 24 | 0/72 | [Modüller](products/golms/modules.md) |
 | GOAUTHOR AI · yazarlık ürünü | 11 | 0/33 | [Modüller](products/goauthor-ai/modules.md) |
@@ -40,7 +40,7 @@
 | GOLXP · deneyim ve beceri | 11 | 0/33 | [Modüller](products/golxp/modules.md) |
 | GOCATALOG · içerik kataloğu | 9 | 0/27 | [Modüller](products/gocatalog/modules.md) |
 | GOPM · performans ve gelişim | 9 | 0/27 | [Modüller](products/gopm/modules.md) |
-| GOAI Engine · ortak zekâ | 9 | 0/27 | [Modüller](intelligence/goai-engine/modules.md) |
+| GOAI Engine · ortak zekâ | 18 | 0/54 | [Modüller](intelligence/goai-engine/modules.md) |
 | Standartlar ve entegrasyon | 4 | 0/12 | [Modüller](standards/modules.md) |
 | Yayın ve operasyon | 6 | 0/18 | [Modüller](docs/architecture/release-modules.md) |
 

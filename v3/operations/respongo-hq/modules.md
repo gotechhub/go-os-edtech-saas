@@ -14,6 +14,7 @@
 | HQ-08 | F1 | Sektör paketleri ve ana şablon kütüphanesi | 0/3 |
 | HQ-09 | F1 | Sağlayıcı ve entegrasyon kayıt merkezi | 0/3 |
 | HQ-10 | F6 | Sürüm, özellik bayrağı ve filo rollout | 0/3 |
+| HQ-11 | F5 | GOAI sağlayıcı ve platform operasyonu | 0/3 |
 
 ## HQ-01 · Portal filosu ve demo fabrikası
 
@@ -74,3 +75,9 @@ Faz: **F1**. Alt modüller: SSO/HRIS/VILT/içerik sağlayıcı kaydı; Sözleşm
 Faz: **F6**. Alt modüller: Pilot/kademeli yayın; Tenant ve ürün kapsamlı feature flag; Geri alma/kill switch; Sürüm kabul ve sağlık kanıtı.
 
 **Kabul senaryosu:** Kritik sürüm pilot portala açılır, ölçülür ve sorun halinde diğer tenantları etkilemeden geri alınır.
+
+## HQ-11 · GOAI sağlayıcı ve platform operasyonu
+
+Faz: **F5**. Alt modüller: Provider secret referansı ve sağlık; Global model/bölge rotası; Platform maliyeti ve kredi oranı; Eval/rollout/kill switch.
+
+**Kabul senaryosu:** HQ sağlayıcı ve modeli tenant içeriğini varsayılan olarak açmadan yönetir; secret istemciye çıkmaz, kritik eval gerilemesi rollout'u durdurur.

@@ -14,5 +14,6 @@ Bu harita *hangi bilginin nerede olduğunu* gösterir. Her görevde yalnızca k�
 | [`kaynaklar/kaynak-indeksi.md`](kaynaklar/kaynak-indeksi.md) | Gerçek dosya ve bağlantı envanteri | Kaynağa dayanırken |
 | [`../.ai_memory/session_state.md`](../.ai_memory/session_state.md) | Son çalışma ve sıradaki iş | Uzun aradan sonra |
 | [`../docs/architecture/localization-white-label.md`](../docs/architecture/localization-white-label.md) | HQ dil paketi, lisans, tenant overlay ve sürüm sözleşmesi | Her ürünün görünen metni veya dil hakkı değişirken |
+| [`../intelligence/goai-engine/product-architecture.md`](../intelligence/goai-engine/product-architecture.md) | GOAI ürün içi deneyim, motorlar, risk/onay ve iki yönetim düzlemi | AI, agent, RAG, araç, MCP veya kredi değişirken |
 
 Tek gerçeklik düzeni: ürün kararı için `context/kararlar.md`; kapsam için ürün belgeleri; görev ve kabul için `project-tracker.json`; kod davranışı için ileride çalışan kod/test; veri için migration. Bir bağlam dosyası eklenir/taşınırsa bu haritayı güncelle. Sohbetin tamamını hafızaya kopyalama.

@@ -26,10 +26,13 @@ v3/
   scripts/                 takip ve yapı doğrulama
   apps/                    F1+ web/API, F2+ Expo mobil uygulama
   packages/                F2+ token, web/native UI, sürümlü sözleşme paketleri
+    goai-ui/               ürün içine gömülen ortak Ask GOAI bileşen/durum sözleşmesi
 ```
 
 **Kod açıldığında beklenen biçim:** her ürün/hizmet kendi `src/domain` (iş modeli), `src/application` (kullanım akışı), `src/infrastructure` (DB/dış servis) ve gerekiyorsa `src/ui` alanını tutar. `apps/web` ve `apps/mobile` uygulama birleştiricisidir; ürünün iş kuralını tekrar yazmaz. `packages/design-tokens`, `ui-web`, `ui-native` ve `contracts` yalnızca gerçekten paylaşılan, kararlı sözleşmeler için açılır. `services/worker` uzun işlerin çalıştırıcısıdır; bir ürünün verisini sahiplenmez.
 
 **Bağımlılık yönü:** UI → application → domain; infrastructure, domain arayüzünü uygular. Ürünler arası bağ sürümlü sözleşme/API/olaydan geçer. Doğrudan başka ürünün tablosuna yazma, tenant kimliğini URL'den güvenilir sayma ve HQ yetkisini müşteri tokenına ekleme yasaktır.
+
+**GOAI yönü:** ürün UI → `packages/goai-ui` → GOAI application → kayıtlı ürün query/command araçları. Model doğrudan ürün tablosuna erişmez. Tenant AI Governance `platform/control-center`, global GOAI Operations `operations/respongo-hq` alanındadır.
 
 **Geçiş:** V1/V2 arşiv olarak kalır. V3 için yeni uygulama kabuğu, migration ve testler bağımsız açılır. Eski kod yalnızca gözlem/karşılaştırma girdisidir; müşteri kodu, kullanıcı, seed, logo veya kimlik bilgisi kopyalanmaz. Hosted beta bağlantıları ve ilk demo portalı F1/F6 kabul kapılarından sonra kurulur.
