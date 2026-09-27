@@ -15,11 +15,13 @@ const stateCopy = {
   error: ["Programlar alınamadı", "Bağlantı veya servis geçici olarak yanıt vermiyor. Daha sonra yeniden deneyin."],
 } as const;
 
-export default async function ProgramsPage({ params }: { params: Promise<{ locale: string }> }) {
+export default async function ProgramsPage({ params, searchParams }: { params: Promise<{ locale: string }>; searchParams: Promise<{ created?: string }> }) {
   const { locale } = await params;
+  const query = await searchParams;
   const result = await loadPrograms(locale === "tr" ? "tr-TR" : "en-US");
   return <WorkspaceShell locale={locale} active="programs" role="admin"><main className="content-page">
     <div className="page-heading"><div><span className="eyebrow">GOLMS · ÖĞRENME YÖNETİMİ</span><h1>Eğitim programları</h1><p>İçerik akışlarını sürümlü olarak hazırlayın, yayımlayın ve hedef kitleye atayın.</p></div><Link className="primary-button" href={`/${locale}/golms/admin/programlar/yeni`}><Plus /> Yeni program</Link></div>
+    {query.created === "1" && <div className="inline-alert inline-alert-success" role="status"><strong>Program taslağı oluşturuldu</strong><span>İçerik adımlarını eklemek için programı düzenleyebilirsiniz.</span></div>}
     <section className="metric-strip" aria-label="Program özeti">
       <article><span>Toplam program</span><strong>{result.state === "ready" ? result.data.length : "—"}</strong></article>
       <article><span>Yayında</span><strong>{result.state === "ready" ? result.data.filter((item) => item.status === "published").length : "—"}</strong></article>

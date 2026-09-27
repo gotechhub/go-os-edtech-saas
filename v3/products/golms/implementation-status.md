@@ -1,6 +1,6 @@
 # GOLMS · uygulama durumu
 
-**Tarih:** 2026-09-27 · **Durum:** İlk öğrenme dikey dilimi yerelde çalışıyor; hosted yayın ve kullanıcı kabulü yapılmadı.
+**Tarih:** 2026-09-27 · **Durum:** İlk öğrenme dikey dilimi hosted Supabase ve Vercel üzerinde ayağa kalktı; gerçek kullanıcı kabulü yapılmadı.
 
 ## Uygulanan ilk dilim
 
@@ -25,13 +25,15 @@
 - Application/BFF sözleşmesi: [`src/application`](src/application)
 - Rol kapsamlı listeler: [`../../supabase/migrations/202609270003_v3_golms_read_models.sql`](../../supabase/migrations/202609270003_v3_golms_read_models.sql)
 - V3 web rotaları: [`../../apps/web/src/app`](../../apps/web/src/app)
+- Program taslak formu: [`../../apps/web/src/components/program-draft-form.tsx`](../../apps/web/src/components/program-draft-form.tsx)
+- Hosted durum: üç migration uzak geçmişle eşleşir; production sayfaları `200`, oturumsuz program API isteği `401` döndürür.
 
 ## Henüz tamamlanmayan kapsam
 
 - S3 imzalı ZIP yükleme, antivirüs işi, manifest ayrıştırıcı ve güvenli player kabuğu.
 - Ekip/rol/dinamik kural ataması, aday gösterme, onay ve bekleme listesi.
 - SCORM sequencing, xAPI, cmi5 ve LTI 1.3 adaptörleri.
-- Admin program stüdyosu, öğrenci player ekranı, BFF/API ve mobil yüzey.
-- Hosted Supabase güvenlik danışmanı, staging migration, gerçek SCORM paketi ve rol bazlı uçtan uca kabul.
+- Program taslağı formu BFF komutuna bağlıdır; adım düzenleyici, yayın, atama, öğrenci player ve mobil yüzey henüz tamamlanmadı.
+- Hosted Supabase güvenlik danışmanı, gerçek Auth kullanıcılarıyla tenant/RLS negatif testi, gerçek SCORM paketi ve rol bazlı uçtan uca kabul.
 
 Bu nedenle LMS-01–04 uygulama kapıları **active** kalır; `verified` değildir.
