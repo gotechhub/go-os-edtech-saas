@@ -1,0 +1,11 @@
+# Control Center · Dil Marketplace ve Labels Stüdyosu
+
+Müşteri admini kendi portalında **Türkçe + İngilizce dahil** dil durumunu görür. Diğer onaylı diller ek lisans kartı olarak listelenir: ürün kapsamı, QA sürümü, fiyat/sözleşme durumu ve varsa deneme hakkı açıkça yazılır. Ödeme altyapısı henüz yoksa “Satın alındı” veya otomatik tahsilat gösterilmez; **lisans talebi** Respongo HQ'ya gider. Entitlement (kullanım hakkı) doğrulanınca müşteri dili etkinleştirir, varsayılan yapar ve kullanıcılarına açar. İptal/süre sonu seçeneği yetkili, kayıtlı ve veri kaybı oluşturmayan geçiştir.
+
+**Özelleştir:** müşteri onaylı bir temel dil paketini “kendime uyarla” ile açar. Sistem paketin tamamını çatallamaz; dokunulan anahtarları tenant overlay'ine kaydeder. Ürün adı, menü, alan, buton ve uygun rehber metni dil bazında düzenlenir. Kaynak/tr-TR ve hedef dil, değişkenler, kullanım ekranları, önerilen uzunluk ve canlı önizleme yan yana görünür. Taslak → yetkili onay → yayın → geri alma akışı vardır. Korumalı güvenlik/hukukî/işlemsel metinler için ayrı yetkili şablon süreci gerekir.
+
+**Güncellemeyi al:** yeni Respongo paket sürümünde eklenen anahtarlar otomatik görünür. Tenantın değiştirmediği mevcut anahtar yeni temel çeviriyi alır; değiştirdiği anahtar aynı kalır ve kaynak metin değişmişse gözden geçirme kuyruğuna düşer. Yönetici karşılaştırmadan “bizim metin”, “Respongo metni” veya “yeni metin” seçebilir. Sürüm farkı, önizleme ve geri dönüş her zaman açık olur. Varsayılan dilin değişmesi geçmiş kullanıcı tercihini veya içerik/sertifika kanıtını bozmaz.
+
+**Deneme ve lisans:** 14 günlük ortak SaaS denemesinde TR/EN temeldir; ek dillerin ücretsiz hakka dahil olduğu varsayılmaz. HQ bir ek dil için sınırlı demo/deneme hakkı verebilir. Deneme bitiminde portalın yetkili okumaları korunur; müşteri dil/etiket yazma komutları, diğer yazmalar gibi durur. Yükseltme veya ek lisans talebi okunabilir kalabilir; gerçek entitlement HQ/sözleşme kaydından gelir.
+
+**Kabul:** iki tenantın aynı temel dilde farklı etiketleri, bir tenantın iki kullanıcısının farklı dil tercihleri, ek lisans olmadan erişim reddi, lisans sonrası web/mobil/e-posta tutarlılığı, paket yükseltmesinde override koruma, korumalı anahtar reddi, draft sızıntısı ve rollback birlikte doğrulanır. [Teknik sözleşme](../../docs/architecture/localization-white-label.md).

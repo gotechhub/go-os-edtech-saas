@@ -1,0 +1,10 @@
+{
+  "name": "@respongo-os/golms",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "exports": {
+    "./domain": "./src/domain/index.ts",
+    "./application": "./src/application/index.ts"
+  }
+}

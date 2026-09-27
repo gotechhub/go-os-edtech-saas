@@ -1,0 +1,53 @@
+{
+  "version": 1,
+  "project": {
+    "name": "respongo-one",
+    "productType": "multi-tenant enterprise learning operating system",
+    "stack": ["Next.js", "React", "TypeScript", "Supabase", "CSS tokens"]
+  },
+  "sources": {
+    "tokens": [],
+    "components": [],
+    "assets": [
+      "assets"
+    ],
+    "instructions": [
+      "AGENTS.md",
+      "CLAUDE.md"
+    ]
+  },
+  "design": {
+    "colorMode": "light-and-dark",
+    "colors": { "brand": "deep teal", "accent": "warm amber", "surfaces": "neutral blue-gray" },
+    "typography": { "sans": "Inter Variable with system and multilingual fallbacks", "style": "legible sans-serif" },
+    "spacing": { "base": 4, "scale": [4, 8, 12, 16, 20, 24, 32, 40, 48, 64] },
+    "radius": { "control": 10, "card": 16, "panel": 20 },
+    "shadows": { "policy": "restrained elevation only for active layers" },
+    "motion": { "micro": "160-220ms", "reducedMotion": true },
+    "density": "role-adaptive"
+  },
+  "components": {
+    "installed": [],
+    "preferredPrimitives": ["semantic HTML", "accessible headless primitives"],
+    "patterns": ["role workspace shell", "task-first dashboard", "explicit data states"]
+  },
+  "constraints": {
+    "must": ["Turkish default", "light and dark themes", "WCAG 2.2 AA target", "360-1920 responsive", "visible focus", "reduced motion", "tenant-safe data states"],
+    "avoid": ["legacy LMS chrome", "serif body typography", "decorative gradients", "glassmorphism", "fake live metrics", "customer data in design prompts"]
+  },
+  "decisions": [
+    { "date": "2026-09-27", "decision": "Use a restrained deep-teal enterprise direction with warm amber focus and sans-serif typography.", "reason": "Supports learner motivation and dense admin work without copying the archived V1/V2 UI." },
+    { "date": "2026-09-27", "decision": "Use one semantic token contract for light/dark web and future native surfaces.", "reason": "Keeps tenant branding and accessibility behavior consistent." }
+  ],
+  "evidence": [
+    {
+      "fact": "project.instructions",
+      "source": "AGENTS.md"
+    },
+    {
+      "fact": "project.instructions",
+      "source": "CLAUDE.md"
+    }
+  ],
+  "generatedAt": "2026-09-27T09:48:42.201Z"
+}

@@ -1,0 +1,19 @@
+{
+  "version": 1,
+  "defaultLocale": "tr-TR",
+  "catalogOwner": "respongo-hq",
+  "includedLocales": ["tr-TR", "en-US"],
+  "status": "planning-only; V3 translations have not been produced",
+  "locales": [
+    { "code": "tr-TR", "nameTr": "Türkçe", "nativeName": "Türkçe", "direction": "ltr", "license": "included", "packageId": "locale.tr-TR" },
+    { "code": "en-US", "nameTr": "İngilizce", "nativeName": "English", "direction": "ltr", "license": "included", "packageId": "locale.en-US" },
+    { "code": "de-DE", "nameTr": "Almanca", "nativeName": "Deutsch", "direction": "ltr", "license": "addon", "packageId": "locale.de-DE" },
+    { "code": "fr-FR", "nameTr": "Fransızca", "nativeName": "Français", "direction": "ltr", "license": "addon", "packageId": "locale.fr-FR" },
+    { "code": "es-ES", "nameTr": "İspanyolca", "nativeName": "Español", "direction": "ltr", "license": "addon", "packageId": "locale.es-ES" },
+    { "code": "pt-BR", "nameTr": "Brezilya Portekizcesi", "nativeName": "Português (Brasil)", "direction": "ltr", "license": "addon", "packageId": "locale.pt-BR" },
+    { "code": "ar", "nameTr": "Arapça", "nativeName": "العربية", "direction": "rtl", "license": "addon", "packageId": "locale.ar" },
+    { "code": "ru-RU", "nameTr": "Rusça", "nativeName": "Русский", "direction": "ltr", "license": "addon", "packageId": "locale.ru-RU" },
+    { "code": "ja-JP", "nameTr": "Japonca", "nativeName": "日本語", "direction": "ltr", "license": "addon", "packageId": "locale.ja-JP" },
+    { "code": "zh-CN", "nameTr": "Basitleştirilmiş Çince", "nativeName": "简体中文", "direction": "ltr", "license": "addon", "packageId": "locale.zh-CN" }
+  ]
+}

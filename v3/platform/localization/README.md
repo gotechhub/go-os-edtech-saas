@@ -1,0 +1,5 @@
+# İlk çalışan V3 dil çekirdeği
+
+`src/` salt TypeScript domain katmanıdır: kayıtlı dil/ek lisans kararı, müşteri için etkin dil seçimi, yalnızca değişen anahtarları tutan “clone”, yetkili etiket değiştirme, temel paket + tenant overlay manifesti ve yeni paket sürümüne üç yönlü geçiş. Bu kod **Supabase migration, API, HQ/Control Center ekranı, gerçek çeviri kataloğu veya ödeme entegrasyonu değildir**. [Mimari sözleşme](../../docs/architecture/localization-white-label.md) ve [HQ işletim akışı](../../operations/respongo-hq/language-control.md) bunların kabul sınırını tanımlar.
+
+Kullanım ilkesi: HQ yayımlanmış, insan QA'lı temel paketi üretir; sunucu tenant/rol/lisans/deneme bağlamını kurar; bu domain sonucu uygular; DB/RLS ve API yetkisi ayrıca doğrular. `changeTenantLabel` revision çakışmasını domain'de kontrol eder, ancak kalıcı kaydın **aynı expected revision ile transaction/RLS kontrolü** yapılmalıdır. Rebase `canActivate=false` dönerse tenant önceki sürümde kalır; değişiklikleri korunur ve çatışma kuyruğa alınır. `validateTemplate` yalnızca ilk yapısal taramadır; yayımlama öncesi tam ICU parser, çevirmen ve erişilebilirlik QA zorunludur.
