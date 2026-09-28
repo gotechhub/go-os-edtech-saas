@@ -47,6 +47,8 @@ Bucket adı `prefix + ortam + bölge + SHA-256(tenant-id)` ile üretilir. Tenant
 
 Kuyruk işleri en fazla beş denemeye, 30–900 saniyelik lease (iş sahipliği süresi) aralığına ve `FOR UPDATE SKIP LOCKED` eşzamanlılık kontrolüne sahiptir. Doğrulama reddi terminal durumdur; ağ/S3 gibi işletim hataları yeniden denenebilir. Aynı asset sürümü ve iş türü için veritabanı yalnız bir iş kabul eder.
 
+Doğrulanmış SCORM asset'i eğitim sürümüne bağlamak ayrı bir GOLMS komutudur. Komut tenant, ürün hakkı, yönetim yetkisi, dosya hakkı, SHA-256 ve kesin SCORM edition değerini yeniden doğrular; aynı eğitim sürümünü ikinci asset'e bağlamaz. Bağlama yalnız `scorm_publication` işi açar. Asset sürümü `published` ve yayın kaydı `ready` olmadan GOLMS eğitim sürümü yayımlanamaz.
+
 İlk API amacı `golms-learning-content` ile sınırlandırılmıştır. Learner görev kanıtı, GOAUTHOR kaynakları ve GOFACTORY teslimleri kendi ürün/hizmet yetki sözleşmeleri tamamlanmadan bu genel uç noktadan açılamaz.
 
 ## Saklama ve geri dönüş

@@ -61,7 +61,11 @@ function detectVersion(manifest: XmlNode, xml: string): ScormVersion {
   const metadata = findChild(manifest, "metadata");
   const schemaVersion = metadata ? textChild(metadata, "schemaversion")?.toLowerCase() : undefined;
   const sample = `${schemaVersion ?? ""} ${xml.slice(0, 12_000)}`.toLowerCase();
-  if (sample.includes("2004") || sample.includes("adlcp_v1p3") || sample.includes("imsss")) return "2004";
+  if (/2004\s*(4th|4\.0|fourth)/.test(sample)) return "2004-4th";
+  if (/2004\s*(3rd|3\.0|third)/.test(sample)) return "2004-3rd";
+  if (sample.includes("2004") || sample.includes("adlcp_v1p3") || sample.includes("imsss")) {
+    throw new ScormValidationError("SCORM_2004_EDITION_UNDETERMINED");
+  }
   if (sample.includes("1.2") || sample.includes("adlcp_rootv1p2")) return "1.2";
   throw new ScormValidationError("SCORM_VERSION_UNSUPPORTED");
 }

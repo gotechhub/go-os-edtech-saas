@@ -9,7 +9,7 @@ create table v3_storage.processing_jobs (
   id uuid primary key default gen_random_uuid(),
   tenant_id uuid not null references v3_platform.tenants(id) on delete restrict,
   asset_version_id uuid not null,
-  job_type text not null check (job_type in ('scorm_ingestion')),
+  job_type text not null check (job_type in ('scorm_ingestion','scorm_publication')),
   status text not null default 'queued' check (status in ('queued','processing','succeeded','rejected','failed')),
   attempt_count integer not null default 0 check (attempt_count >= 0),
   locked_by text,
@@ -28,7 +28,7 @@ create table v3_storage.processing_jobs (
 create table v3_storage.package_manifests (
   asset_version_id uuid primary key,
   tenant_id uuid not null references v3_platform.tenants(id) on delete restrict,
-  standard text not null check (standard in ('scorm_1_2','scorm_2004')),
+  standard text not null check (standard in ('scorm_1_2','scorm_2004_3rd','scorm_2004_4th')),
   manifest_identifier text not null check (length(trim(manifest_identifier)) > 0),
   title text,
   launch_path text not null check (launch_path !~ '(^/|(^|/)\.\.(/|$)|^[a-zA-Z]+:)'),

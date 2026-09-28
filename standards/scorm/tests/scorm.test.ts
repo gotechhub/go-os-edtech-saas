@@ -24,7 +24,7 @@ describe("SCORM package analysis", () => {
       ["content/index.html", "<!doctype html><title>Course</title>"],
     ]));
 
-    expect(result.manifest).toMatchObject({ identifier: "course-001", version: "2004", launchPath: "content/index.html", scoCount: 1 });
+    expect(result.manifest).toMatchObject({ identifier: "course-001", version: "2004-4th", launchPath: "content/index.html", scoCount: 1 });
     expect(result.entries.map((entry) => entry.path)).toContain("content/index.html");
   });
 
@@ -34,6 +34,23 @@ describe("SCORM package analysis", () => {
       ["start.htm", "<!doctype html><title>SCORM 1.2</title>"],
     ]));
     expect(result.manifest).toMatchObject({ identifier: "course-12", version: "1.2", launchPath: "start.htm" });
+  });
+
+  it("distinguishes SCORM 2004 3rd Edition from 4th Edition", async () => {
+    const thirdEdition = MANIFEST_2004.replace("2004 4th Edition", "2004 3rd Edition");
+    const result = await analyzeScormPackage(await createZip([
+      ["imsmanifest.xml", thirdEdition],
+      ["content/index.html", "ok"],
+    ]));
+    expect(result.manifest.version).toBe("2004-3rd");
+  });
+
+  it("rejects SCORM 2004 when the edition cannot be established", async () => {
+    const unknownEdition = MANIFEST_2004.replace("2004 4th Edition", "2004");
+    await expect(analyzeScormPackage(await createZip([
+      ["imsmanifest.xml", unknownEdition],
+      ["content/index.html", "ok"],
+    ]))).rejects.toMatchObject({ code: "SCORM_2004_EDITION_UNDETERMINED" });
   });
 
   it("rejects traversal paths before content publication", async () => {

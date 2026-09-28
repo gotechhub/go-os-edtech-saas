@@ -1,4 +1,4 @@
-export type ScormVersion = "1.2" | "2004";
+export type ScormVersion = "1.2" | "2004-3rd" | "2004-4th";
 
 export interface ScormArchiveLimits {
   maxEntries: number;

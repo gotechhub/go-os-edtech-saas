@@ -22,7 +22,7 @@ export interface DownloadedObject {
 }
 
 export interface ScormManifestResult {
-  standard: "scorm_1_2" | "scorm_2004";
+  standard: "scorm_1_2" | "scorm_2004_3rd" | "scorm_2004_4th";
   manifestIdentifier: string;
   title: string | null;
   launchPath: string;
@@ -91,7 +91,9 @@ class ScormIngestionRejection extends Error {
 
 function toManifestResult(analysis: ScormPackageAnalysis): ScormManifestResult {
   return {
-    standard: analysis.manifest.version === "1.2" ? "scorm_1_2" : "scorm_2004",
+    standard: analysis.manifest.version === "1.2"
+      ? "scorm_1_2"
+      : analysis.manifest.version === "2004-3rd" ? "scorm_2004_3rd" : "scorm_2004_4th",
     manifestIdentifier: analysis.manifest.identifier,
     title: analysis.manifest.title,
     launchPath: analysis.manifest.launchPath,

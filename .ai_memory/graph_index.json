@@ -33,7 +33,9 @@
     { "id": "scorm-package-validator", "path": "standards/scorm/src/index.ts", "kind": "standards-entry" },
     { "id": "scorm-package-tests", "path": "standards/scorm/tests/scorm.test.ts", "kind": "security-test" },
     { "id": "scorm-ingestion-worker", "path": "services/worker/src/scorm-ingestion.ts", "kind": "background-job" },
-    { "id": "scorm-ingestion-migration", "path": "supabase/migrations/202609280001_v3_scorm_ingestion_jobs.sql", "kind": "database-job-contract" }
+    { "id": "scorm-ingestion-migration", "path": "supabase/migrations/202609280001_v3_scorm_ingestion_jobs.sql", "kind": "database-job-contract" },
+    { "id": "golms-scorm-storage-bridge", "path": "supabase/migrations/202609280002_v3_golms_scorm_asset_bridge.sql", "kind": "cross-domain-command" },
+    { "id": "golms-scorm-storage-bridge-tests", "path": "products/golms/tests/scorm-asset-bridge-db.test.ts", "kind": "tenant-security-test" }
   ],
   "edges": [
     { "from": "tracker", "to": "architecture", "relation": "tasks follow boundaries" },
@@ -68,6 +70,9 @@
     { "from": "golms-domain", "to": "scorm-package-validator", "relation": "consumes validated package metadata for content versions" },
     { "from": "scorm-ingestion-worker", "to": "scorm-package-validator", "relation": "analyzes integrity checked quarantine downloads" },
     { "from": "scorm-ingestion-worker", "to": "scorm-ingestion-migration", "relation": "claims leased jobs and records immutable manifest results" },
-    { "from": "scorm-ingestion-migration", "to": "storage-migration", "relation": "queues clean approved SCORM asset versions idempotently" }
+    { "from": "scorm-ingestion-migration", "to": "storage-migration", "relation": "queues clean approved SCORM asset versions idempotently" },
+    { "from": "golms-scorm-storage-bridge", "to": "scorm-ingestion-migration", "relation": "binds validated manifest and queues immutable publication" },
+    { "from": "golms-scorm-storage-bridge", "to": "golms-migration", "relation": "gates LMS publication on ready storage publication" },
+    { "from": "golms-scorm-storage-bridge-tests", "to": "golms-scorm-storage-bridge", "relation": "proves idempotency tenant isolation and publication gate" }
   ]
 }
