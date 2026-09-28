@@ -23,6 +23,7 @@ export async function analyzeScormPackageFile(filePath: string, limits?: ScormAr
 }
 
 export * from "./archive";
+export * from "./extraction";
 export * from "./manifest";
 export * from "./path-policy";
 export * from "./types";

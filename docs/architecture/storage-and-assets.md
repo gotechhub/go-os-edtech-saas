@@ -49,6 +49,8 @@ Kuyruk işleri en fazla beş denemeye, 30–900 saniyelik lease (iş sahipliği 
 
 Doğrulanmış SCORM asset'i eğitim sürümüne bağlamak ayrı bir GOLMS komutudur. Komut tenant, ürün hakkı, yönetim yetkisi, dosya hakkı, SHA-256 ve kesin SCORM edition değerini yeniden doğrular; aynı eğitim sürümünü ikinci asset'e bağlamaz. Bağlama yalnız `scorm_publication` işi açar. Asset sürümü `published` ve yayın kaydı `ready` olmadan GOLMS eğitim sürümü yayımlanamaz.
 
+Yayın worker'ı paketi yeniden analiz eder ve özel, tek kullanımlık çalışma dizinine açar. Normalize edilmiş dosya listesi ilk analizle tam eşleşmelidir. Manifest launch yolu değişmişse veya arşiv açma sırasında yeni/eksik dosya görülürse işlem kalıcı reddedilir. Nesne deposu kesintisi geçici hata sayılır ve aynı değişmez hedef anahtarlarıyla yeniden denenir. Başarı sonucu bildirilen dosya sayısı manifest kaydıyla ve launch object key yayın prefix'iyle veritabanında tekrar eşleştirilir.
+
 İlk API amacı `golms-learning-content` ile sınırlandırılmıştır. Learner görev kanıtı, GOAUTHOR kaynakları ve GOFACTORY teslimleri kendi ürün/hizmet yetki sözleşmeleri tamamlanmadan bu genel uç noktadan açılamaz.
 
 ## Saklama ve geri dönüş

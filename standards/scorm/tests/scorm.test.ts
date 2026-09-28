@@ -1,7 +1,10 @@
 import { Buffer } from "node:buffer";
+import { mkdtemp, readFile, rm, writeFile } from "node:fs/promises";
+import { tmpdir } from "node:os";
+import { join } from "node:path";
 import yazl from "yazl";
 import { describe, expect, it } from "vitest";
-import { analyzeScormPackage, ScormValidationError } from "../src";
+import { analyzeScormPackage, extractScormPackageFile, ScormValidationError } from "../src";
 
 const MANIFEST_2004 = `<?xml version="1.0" encoding="UTF-8"?>
 <manifest identifier="course-001" xmlns:adlcp="http://www.adlnet.org/xsd/adlcp_v1p3">
@@ -82,6 +85,24 @@ describe("SCORM package analysis", () => {
       ["content/index.html", "A".repeat(200_000)],
     ]), { maxEntries: 20, maxEntryBytes: 500_000, maxExpandedBytes: 600_000, maxCompressionRatio: 5, maxManifestBytes: 50_000 }))
       .rejects.toMatchObject({ code: "SCORM_COMPRESSION_RATIO_EXCEEDED" });
+  });
+
+  it("extracts an already validated package into a private clean directory", async () => {
+    const root = await mkdtemp(join(tmpdir(), "respongo-extract-"));
+    const archivePath = join(root, "course.zip");
+    const outputPath = join(root, "clean");
+    try {
+      await writeFile(archivePath, await createZip([
+        ["imsmanifest.xml", MANIFEST_2004],
+        ["content/index.html", "<!doctype html><title>Safe</title>"],
+      ]));
+      const extracted = await extractScormPackageFile(archivePath, outputPath);
+      expect(extracted.files).toEqual(["content/index.html", "imsmanifest.xml"]);
+      expect(extracted.analysis.manifest.launchPath).toBe("content/index.html");
+      expect(await readFile(join(outputPath, "content", "index.html"), "utf8")).toContain("Safe");
+    } finally {
+      await rm(root, { recursive: true, force: true });
+    }
   });
 });
 

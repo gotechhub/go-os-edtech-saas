@@ -10,4 +10,6 @@ Sınırlar:
 - Analiz sonucu paketi yayınlamaz ve GOLMS öğrenme nesnesine otomatik bağlamaz.
 - Geçici dosya başarı ve hata durumunda temizlenir.
 
-Veri sözleşmesi `202609280001_v3_scorm_ingestion_jobs.sql`, paket güvenliği `standards/scorm` tarafından yönetilir.
+Doğrulanmış asset bir GOLMS eğitim sürümüne bağlandığında ayrı `scorm_publication` işi açılır. Yayın worker'ı ZIP'i yeniden doğrular, özel geçici dizine güvenli açar, manifest launch yolunun değişmediğini kontrol eder ve yalnız değişmez `published/.../versions/.../` prefix'ine aktarır. Veritabanı tam dosya sayısı ve launch object key eşleşmeden yayını `ready` yapmaz.
+
+Veri sözleşmesi `202609280001_v3_scorm_ingestion_jobs.sql` ve `202609280002_v3_golms_scorm_asset_bridge.sql`; paket güvenliği `standards/scorm` tarafından yönetilir.

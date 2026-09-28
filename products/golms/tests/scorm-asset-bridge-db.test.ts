@@ -19,6 +19,12 @@ async function asUser<T>(operation: () => Promise<T>) {
   try { return await operation(); } finally { await db.exec("reset role"); }
 }
 
+async function asService<T>(operation: () => Promise<T>) {
+  await db.query("select set_config('request.jwt.claim.role','service_role',false)");
+  await db.exec("set role service_role");
+  try { return await operation(); } finally { await db.exec("reset role"); }
+}
+
 beforeAll(async () => {
   db = new PGlite({ extensions: { pgcrypto } });
   await db.exec(`
@@ -83,9 +89,14 @@ describe("GOLMS validated SCORM asset bridge", () => {
     await expect(asUser(() => db.query("select * from public.v3_golms_publish_learning_object($1)", [courseId])))
       .rejects.toThrow(/READY_PUBLISHED_SCORM_REQUIRED/);
 
-    await db.query("update v3_storage.asset_versions set publication_status='published',published_at=now() where id=$1", [VERSION]);
-    await db.query("update v3_storage.assets set state='published' where id=$1", [ASSET]);
-    await db.query("update v3_storage.scorm_publications set status='ready',ready_at=now(),launch_object_key=published_prefix||'content/index.html' where asset_version_id=$1", [VERSION]);
+    const claim = await asService(() => db.query<{ job_id: string; published_prefix: string; expected_launch_path: string }>(
+      "select * from public.v3_storage_claim_scorm_publication($1,$2)", ["worker-publication",600],
+    ));
+    expect(claim.rows).toHaveLength(1);
+    const launchKey = `${claim.rows[0].published_prefix}${claim.rows[0].expected_launch_path}`;
+    await asService(() => db.query("select public.v3_storage_finish_scorm_publication($1,$2,$3,$4,$5,$6)", [
+      claim.rows[0].job_id,"worker-publication","succeeded",null,launchKey,2,
+    ]));
     const published = await asUser(() => db.query<{ status: string }>("select * from public.v3_golms_publish_learning_object($1)", [courseId]));
     expect(published.rows[0].status).toBe("published");
   });

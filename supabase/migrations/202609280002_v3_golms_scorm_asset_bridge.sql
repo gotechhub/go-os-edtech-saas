@@ -113,8 +113,90 @@ begin
 end;
 $$;
 
+create function public.v3_storage_claim_scorm_publication(worker_id text, lease_seconds integer default 600)
+returns table (
+  job_id uuid, publication_id uuid, tenant_id uuid, asset_version_id uuid, bucket_name text, object_key text,
+  s3_version_id text, expected_size_bytes bigint, expected_sha256 text, published_prefix text, expected_launch_path text
+)
+language plpgsql security definer set search_path = '' as $$
+declare claimed v3_storage.processing_jobs;
+begin
+  if (select auth.role()) <> 'service_role' then raise exception 'SERVICE_ROLE_REQUIRED' using errcode='42501'; end if;
+  if length(trim(worker_id)) < 3 or lease_seconds not between 60 and 1800 then raise exception 'WORKER_LEASE_INVALID' using errcode='22023'; end if;
+  select * into claimed from v3_storage.processing_jobs
+    where job_type='scorm_publication'
+      and (status='queued' or (status in ('failed','processing') and coalesce(lease_expires_at,'-infinity'::timestamptz)<now()))
+      and attempt_count<5
+    order by created_at for update skip locked limit 1;
+  if claimed.id is null then return; end if;
+  update v3_storage.processing_jobs set status='processing',attempt_count=attempt_count+1,locked_by=worker_id,
+    lease_expires_at=now()+make_interval(secs=>lease_seconds),updated_at=now(),error_code=null where id=claimed.id;
+  update v3_storage.scorm_publications set status='processing',error_code=null
+    where id=(claimed.result->>'publicationId')::uuid;
+  return query
+    select claimed.id,p.id,v.tenant_id,v.id,v.bucket_name,v.object_key,v.s3_version_id,v.size_bytes,v.sha256,
+      p.published_prefix,m.launch_path
+    from v3_storage.scorm_publications p
+    join v3_storage.asset_versions v on v.id=p.asset_version_id and v.tenant_id=p.tenant_id
+    join v3_storage.package_manifests m on m.asset_version_id=v.id and m.tenant_id=v.tenant_id
+    where p.id=(claimed.result->>'publicationId')::uuid and v.scan_status='clean' and v.validation_status='valid';
+end;
+$$;
+
+create function public.v3_storage_finish_scorm_publication(
+  target_job uuid,
+  worker_id text,
+  outcome text,
+  outcome_code text,
+  published_launch_key text default null,
+  published_file_count integer default null
+) returns void
+language plpgsql security definer set search_path = '' as $$
+declare
+  job_row v3_storage.processing_jobs;
+  publication_row v3_storage.scorm_publications;
+  version_row v3_storage.asset_versions;
+  manifest_row v3_storage.package_manifests;
+begin
+  if (select auth.role()) <> 'service_role' then raise exception 'SERVICE_ROLE_REQUIRED' using errcode='42501'; end if;
+  if outcome not in ('succeeded','rejected','failed') then raise exception 'JOB_OUTCOME_INVALID' using errcode='22023'; end if;
+  select * into job_row from v3_storage.processing_jobs where id=target_job for update;
+  if job_row.id is null or job_row.job_type<>'scorm_publication' or job_row.status<>'processing'
+    or job_row.locked_by<>worker_id or job_row.lease_expires_at<now() then raise exception 'JOB_LEASE_INVALID' using errcode='55000'; end if;
+  select * into publication_row from v3_storage.scorm_publications where id=(job_row.result->>'publicationId')::uuid for update;
+  select * into version_row from v3_storage.asset_versions where id=job_row.asset_version_id for update;
+  select * into manifest_row from v3_storage.package_manifests where asset_version_id=job_row.asset_version_id;
+  if publication_row.id is null or publication_row.asset_version_id<>job_row.asset_version_id then raise exception 'PUBLICATION_JOB_INVALID' using errcode='55000'; end if;
+
+  if outcome='succeeded' then
+    if published_file_count<>manifest_row.entry_count or published_launch_key<>publication_row.published_prefix||manifest_row.launch_path then
+      raise exception 'PUBLICATION_RESULT_MISMATCH' using errcode='22000';
+    end if;
+    update v3_storage.scorm_publications set status='ready',launch_object_key=published_launch_key,ready_at=now(),error_code=null
+      where id=publication_row.id;
+    update v3_storage.asset_versions set publication_status='published',published_at=now() where id=version_row.id;
+    update v3_storage.assets set state='published',updated_at=now() where id=version_row.asset_id;
+  elsif outcome='rejected' then
+    update v3_storage.scorm_publications set status='failed',error_code=outcome_code where id=publication_row.id;
+    update v3_storage.asset_versions set validation_status='invalid' where id=version_row.id;
+    update v3_storage.assets set state='rejected',updated_at=now() where id=version_row.asset_id;
+  else
+    update v3_storage.scorm_publications set status='failed',error_code=outcome_code where id=publication_row.id;
+  end if;
+
+  update v3_storage.processing_jobs set status=outcome,error_code=outcome_code,locked_by=null,lease_expires_at=null,
+    updated_at=now(),completed_at=case when outcome in ('succeeded','rejected') then now() else null end where id=job_row.id;
+  insert into v3_audit.events(tenant_id,correlation_id,action,object_type,object_id,reason)
+    values(job_row.tenant_id,job_row.id,'asset.scorm_publication_'||outcome,'asset_version',job_row.asset_version_id::text,outcome_code);
+end;
+$$;
+
 revoke all on v3_storage.scorm_publications from anon,authenticated;
 revoke all on function public.v3_golms_bind_scorm_asset(uuid,uuid) from public,anon;
 grant execute on function public.v3_golms_bind_scorm_asset(uuid,uuid) to authenticated;
+revoke all on function public.v3_storage_claim_scorm_publication(text,integer) from public,anon,authenticated;
+revoke all on function public.v3_storage_finish_scorm_publication(uuid,text,text,text,text,integer) from public,anon,authenticated;
+grant execute on function public.v3_storage_claim_scorm_publication(text,integer) to service_role;
+grant execute on function public.v3_storage_finish_scorm_publication(uuid,text,text,text,text,integer) to service_role;
 
 commit;

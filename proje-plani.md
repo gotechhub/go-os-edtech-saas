@@ -2,7 +2,7 @@
 
 **Kaynak tarihi:** 2026-09-28 · **Durum:** Uygulama başladı · **Aktif faz:** F0 Araştırma ve mimari
 
-**Doğrulanmış ilerleme:** %2 · **Görev:** 11/465 tamamlandı, 454 kaldı · **Modül:** 155 · **Engel:** 0
+**Doğrulanmış ilerleme:** %3 · **Görev:** 12/465 tamamlandı, 453 kaldı · **Modül:** 155 · **Engel:** 0
 **Dil hedefi:** 10 dil; 2 temel (Türkçe varsayılan + İngilizce), 8 ek lisans. Paketler [Respongo HQ](operations/respongo-hq/language-control.md) tarafından yönetilir.
 
 > Bu oran yalnızca tarihli kabul kanıtı bulunan görevlerden hesaplanır. Tarihsel V1/V2 oranları ve taslak dosyalar Respongo OS tamamlanması sayılmaz.
@@ -19,7 +19,7 @@
 |---|---|---:|---:|
 | F0 · Araştırma ve mimari | Ürün sınırları, kaynaklar, güvenlik, deneyim ve kabul ölçütleri | 5 | 0/15 |
 | F1 · Ortak platform ve yönetim | Kimlik, tenant, deneme, Control Center ve Respongo HQ | 34 | 8/102 |
-| F2 · Tasarım ve öğrenme çekirdeği | Yeni deneyim, öğrenme operasyonu, SCORM ve rapor | 27 | 3/81 |
+| F2 · Tasarım ve öğrenme çekirdeği | Yeni deneyim, öğrenme operasyonu, SCORM ve rapor | 27 | 4/81 |
 | F3 · Üretim ve içerik hizmeti | GOAUTHOR AI ve GOFACTORY müşteri/üretim akışı | 18 | 0/54 |
 | F4 · Deneyim ve katalog | GOLXP, içerik keşfi, hak ve lisans | 18 | 0/54 |
 | F5 · Performans ve zekâ | GOPM ve izin kontrollü GOAI Engine | 27 | 0/81 |
@@ -41,7 +41,7 @@
 | GOCATALOG · içerik kataloğu | 9 | 0/27 | [Modüller](products/gocatalog/modules.md) |
 | GOPM · performans ve gelişim | 9 | 0/27 | [Modüller](products/gopm/modules.md) |
 | GOAI Engine · ortak zekâ | 18 | 0/54 | [Modüller](intelligence/goai-engine/modules.md) |
-| Dosya, medya ve S3 varlık platformu | 6 | 7/18 | [Modüller](platform/storage/modules.md) |
+| Dosya, medya ve S3 varlık platformu | 6 | 8/18 | [Modüller](platform/storage/modules.md) |
 | Standartlar ve entegrasyon | 4 | 0/12 | [Modüller](standards/modules.md) |
 | Yayın ve operasyon | 7 | 3/21 | [Modüller](docs/architecture/release-modules.md) |
 
