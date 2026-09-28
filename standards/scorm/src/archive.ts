@@ -26,6 +26,15 @@ export function inspectScormArchive(buffer: Buffer, limits: ScormArchiveLimits =
   });
 }
 
+export function inspectScormArchiveFile(filePath: string, limits: ScormArchiveLimits = DEFAULT_SCORM_ARCHIVE_LIMITS): Promise<InspectedArchive> {
+  return new Promise((resolve, reject) => {
+    yauzl.open(filePath, { lazyEntries: true, autoClose: false, decodeStrings: true, validateEntrySizes: true }, (openError, zipFile) => {
+      if (openError || !zipFile) return reject(validationError(openError, "SCORM_INVALID_ZIP"));
+      inspectOpenArchive(zipFile, limits).then(resolve, reject).finally(() => zipFile.close());
+    });
+  });
+}
+
 async function inspectOpenArchive(zipFile: ZipFile, limits: ScormArchiveLimits): Promise<InspectedArchive> {
   const entries: ScormArchiveEntry[] = [];
   const seen = new Set<string>();

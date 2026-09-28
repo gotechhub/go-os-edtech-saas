@@ -31,7 +31,9 @@
     { "id": "storage-api", "path": "apps/web/src/lib/storage-runtime.ts", "kind": "api-integration" },
     { "id": "storage-iac", "path": "infra/aws/storage/vercel-oidc-roles.yaml", "kind": "infrastructure-template" },
     { "id": "scorm-package-validator", "path": "standards/scorm/src/index.ts", "kind": "standards-entry" },
-    { "id": "scorm-package-tests", "path": "standards/scorm/tests/scorm.test.ts", "kind": "security-test" }
+    { "id": "scorm-package-tests", "path": "standards/scorm/tests/scorm.test.ts", "kind": "security-test" },
+    { "id": "scorm-ingestion-worker", "path": "services/worker/src/scorm-ingestion.ts", "kind": "background-job" },
+    { "id": "scorm-ingestion-migration", "path": "supabase/migrations/202609280001_v3_scorm_ingestion_jobs.sql", "kind": "database-job-contract" }
   ],
   "edges": [
     { "from": "tracker", "to": "architecture", "relation": "tasks follow boundaries" },
@@ -63,6 +65,9 @@
     { "from": "storage-iac", "to": "storage-contract", "relation": "defines OIDC role boundary" },
     { "from": "scorm-package-validator", "to": "storage-domain", "relation": "validates quarantined GOLMS packages before publication" },
     { "from": "scorm-package-tests", "to": "scorm-package-validator", "relation": "proves ZIP and manifest rejection gates" },
-    { "from": "golms-domain", "to": "scorm-package-validator", "relation": "consumes validated package metadata for content versions" }
+    { "from": "golms-domain", "to": "scorm-package-validator", "relation": "consumes validated package metadata for content versions" },
+    { "from": "scorm-ingestion-worker", "to": "scorm-package-validator", "relation": "analyzes integrity checked quarantine downloads" },
+    { "from": "scorm-ingestion-worker", "to": "scorm-ingestion-migration", "relation": "claims leased jobs and records immutable manifest results" },
+    { "from": "scorm-ingestion-migration", "to": "storage-migration", "relation": "queues clean approved SCORM asset versions idempotently" }
   ]
 }

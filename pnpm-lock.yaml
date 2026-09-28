@@ -76,6 +76,19 @@ importers:
 
   products/golms: {}
 
+  services/worker:
+    dependencies:
+      '@respongo-os/scorm':
+        specifier: workspace:*
+        version: link:../../standards/scorm
+    devDependencies:
+      '@types/yazl':
+        specifier: 3.3.0
+        version: 3.3.0
+      yazl:
+        specifier: 3.3.1
+        version: 3.3.1
+
   standards/scorm:
     dependencies:
       fast-xml-parser:

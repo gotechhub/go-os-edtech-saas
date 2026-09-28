@@ -41,8 +41,11 @@ Bucket adı `prefix + ortam + bölge + SHA-256(tenant-id)` ile üretilir. Tenant
 1. `POST /api/v1/platform/assets/upload-intents` metadata'yı doğrular, DB'de idempotent intent açar ve imzalı `PUT` döndürür.
 2. Tarayıcı dosyayı doğrudan özel tenant bucket'ındaki karantinaya yükler.
 3. `POST /api/v1/platform/assets/{assetId}/complete` S3 metadata'sını doğrular ve tarama kuyruğu için kayıt hazırlar.
-4. Worker tarama/format/hak kontrolünü tamamlar, temiz içeriği değişmez yayın anahtarına kopyalar ve audit olayı üretir.
-5. `GET /api/v1/platform/assets/{assetId}/download` yalnız temiz ve yayımlanmış sürüm için kısa ömürlü URL üretir.
+4. Temiz tarama olayı `provider + provider_event_id` ile bir kez işlenir. Hakları onaylı SCORM ZIP için kiralı ve yeniden denenebilir analiz işi açılır. Worker nesneyi geçici dosyaya indirir; boyut/SHA-256, ZIP güvenliği ve manifesti doğrular. Sonuç `package_manifests` içinde varlık sürümüne bağlı değişmez kayıt olur.
+5. Ayrı yayın komutu doğrulanmış paketi değişmez yayın anahtarına açar/kopyalar ve audit olayı üretir. Analiz başarısı tek başına öğrenene yayın yetkisi vermez.
+6. `GET /api/v1/platform/assets/{assetId}/download` yalnız temiz ve yayımlanmış sürüm için kısa ömürlü URL üretir.
+
+Kuyruk işleri en fazla beş denemeye, 30–900 saniyelik lease (iş sahipliği süresi) aralığına ve `FOR UPDATE SKIP LOCKED` eşzamanlılık kontrolüne sahiptir. Doğrulama reddi terminal durumdur; ağ/S3 gibi işletim hataları yeniden denenebilir. Aynı asset sürümü ve iş türü için veritabanı yalnız bir iş kabul eder.
 
 İlk API amacı `golms-learning-content` ile sınırlandırılmıştır. Learner görev kanıtı, GOAUTHOR kaynakları ve GOFACTORY teslimleri kendi ürün/hizmet yetki sözleşmeleri tamamlanmadan bu genel uç noktadan açılamaz.
 

@@ -1,0 +1,16 @@
+{
+  "name": "@respongo-os/worker",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "exports": {
+    ".": "./src/index.ts"
+  },
+  "dependencies": {
+    "@respongo-os/scorm": "workspace:*"
+  },
+  "devDependencies": {
+    "@types/yazl": "3.3.0",
+    "yazl": "3.3.1"
+  }
+}
