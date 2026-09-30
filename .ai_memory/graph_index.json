@@ -44,7 +44,9 @@
     { "id": "scorm-player-runtime", "path": "apps/web/src/lib/scorm-player-runtime.ts", "kind": "isolated-player-boundary" },
     { "id": "scorm-player-shell", "path": "apps/web/src/lib/scorm-player-shell.ts", "kind": "browser-runtime-adapter" },
     { "id": "golms-enrollment-next-step", "path": "supabase/migrations/202609280004_v3_golms_enrollment_next_step.sql", "kind": "learner-read-model" },
-    { "id": "golms-program-report", "path": "apps/web/src/app/[locale]/golms/admin/programlar/[programId]/rapor/page.tsx", "kind": "report-surface" }
+    { "id": "golms-program-report", "path": "apps/web/src/app/[locale]/golms/admin/programlar/[programId]/rapor/page.tsx", "kind": "report-surface" },
+    { "id": "scorm-admin-workflow", "path": "supabase/migrations/202609280005_v3_scorm_admin_workflow.sql", "kind": "admin-import-contract" },
+    { "id": "scorm-content-library", "path": "apps/web/src/app/[locale]/golms/admin/icerikler/page.tsx", "kind": "admin-surface" }
   ],
   "edges": [
     { "from": "tracker", "to": "architecture", "relation": "tasks follow boundaries" },
@@ -94,6 +96,9 @@
     { "from": "scorm-player-runtime", "to": "storage-domain", "relation": "proxies only resolved immutable publication objects" },
     { "from": "scorm-player-shell", "to": "scorm-player-runtime", "relation": "bridges SCORM 1.2 and 2004 calls to normalized evidence" },
     { "from": "golms-enrollment-next-step", "to": "golms-read-models", "relation": "adds the next authorized actionable step" },
-    { "from": "golms-program-report", "to": "golms-application", "relation": "shows role-authorized attempt evidence" }
+    { "from": "golms-program-report", "to": "golms-application", "relation": "shows role-authorized attempt evidence" },
+    { "from": "scorm-admin-workflow", "to": "golms-scorm-storage-bridge", "relation": "persists imports and exposes tenant-safe processing state" },
+    { "from": "scorm-content-library", "to": "scorm-admin-workflow", "relation": "creates uploads resumes processing and requests explicit publication" },
+    { "from": "scorm-content-library", "to": "storage-api", "relation": "uploads directly to private quarantine with integrity headers" }
   ]
 }

@@ -1,4 +1,4 @@
-import { GolmsApplicationService, type EnrollmentSummary, type ProgramReportRow, type ProgramSummary } from "@respongo-os/golms/application";
+import { GolmsApplicationService, type EnrollmentSummary, type ProgramReportRow, type ProgramSummary, type ScormContentSummary } from "@respongo-os/golms/application";
 import { SupabaseGolmsGateway } from "@/infrastructure/supabase-golms-gateway";
 import { resolveRequestContext } from "./request-context";
 import { createSupabaseServerClient } from "./supabase/server";
@@ -17,6 +17,12 @@ export async function loadPrograms(locale: string): Promise<PageData<ProgramSumm
   const current = await runtime(locale);
   if (current.state !== "ready") return { state: current.state, data: [] };
   try { return { state: "ready", data: (await current.service.listPrograms(current.context)).data }; } catch { return { state: "error", data: [] }; }
+}
+
+export async function loadScormContent(locale: string): Promise<PageData<ScormContentSummary>> {
+  const current = await runtime(locale);
+  if (current.state !== "ready") return { state: current.state, data: [] };
+  try { return { state: "ready", data: (await current.service.listScormContent(current.context)).data }; } catch { return { state: "error", data: [] }; }
 }
 
 export async function loadEnrollments(locale: string): Promise<PageData<EnrollmentSummary>> {

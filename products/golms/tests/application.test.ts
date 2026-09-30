@@ -4,7 +4,7 @@ import { ApplicationError, GolmsApplicationService, type GolmsGateway, type Requ
 const context: RequestContext = { requestId: "req-1", tenantId: "92000000-0000-4000-8000-000000000001", actorId: "91000000-0000-4000-8000-000000000001", locale: "tr-TR", idempotencyKey: "idem-1" };
 const record = { id: "94000000-0000-4000-8000-000000000001", tenantId: context.tenantId, status: "draft" };
 const gateway = (): GolmsGateway => ({
-  createScormDraft: vi.fn(async () => record), publishLearningObject: vi.fn(async () => record), createProgramDraft: vi.fn(async () => record),
+  createScormDraft: vi.fn(async () => record), registerScormImport: vi.fn(async () => undefined), bindScormAsset: vi.fn(async (context, command) => ({ learningObjectVersionId: command.learningObjectVersionId, assetVersionId: command.assetVersionId, standard: "scorm_2004_4th" as const, status: "bound" as const })), publishLearningObject: vi.fn(async () => record), listScormContent: vi.fn(async () => []), createProgramDraft: vi.fn(async () => record),
   addProgramStep: vi.fn(async () => record), publishProgram: vi.fn(async () => record), assignProgram: vi.fn(async () => record),
   listPrograms: vi.fn(async () => []), listMyEnrollments: vi.fn(async () => []),
   getProgramReport: vi.fn(async () => []),
@@ -23,6 +23,14 @@ describe("GOLMS application boundary", () => {
     const port = gateway();
     await expect(new GolmsApplicationService(port).publishProgram(context, "not-a-uuid")).rejects.toBeInstanceOf(ApplicationError);
     expect(port.publishProgram).not.toHaveBeenCalled();
+  });
+
+  it("validates both identifiers before binding a SCORM asset", async () => {
+    const port = gateway();
+    const service = new GolmsApplicationService(port);
+    await service.bindScormAsset(context, { learningObjectVersionId: record.id, assetVersionId: "93000000-0000-4000-8000-000000000001" });
+    expect(port.bindScormAsset).toHaveBeenCalledOnce();
+    await expect(service.bindScormAsset(context, { learningObjectVersionId: "bad", assetVersionId: record.id })).rejects.toBeInstanceOf(ApplicationError);
   });
 
   it("rejects a due date that is not after availability", async () => {

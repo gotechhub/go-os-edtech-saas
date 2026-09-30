@@ -38,12 +38,14 @@ Bucket adı `prefix + ortam + bölge + SHA-256(tenant-id)` ile üretilir. Tenant
 
 ## API akışı
 
-1. `POST /api/v1/platform/assets/upload-intents` metadata'yı doğrular, DB'de idempotent intent açar ve imzalı `PUT` döndürür.
-2. Tarayıcı dosyayı doğrudan özel tenant bucket'ındaki karantinaya yükler.
-3. `POST /api/v1/platform/assets/{assetId}/complete` S3 metadata'sını doğrular ve tarama kuyruğu için kayıt hazırlar.
+1. GOLMS yöneticisi `POST /api/v1/golms/scorm/courses` ile içerik sürümünü, upload intent ile özel varlık kaydını oluşturur. `v3_golms.scorm_imports` iki kaydı kalıcı eşler; tarayıcı kapansa da işlem kaybolmaz.
+2. `POST /api/v1/platform/assets/upload-intents` metadata'yı doğrular, DB'de idempotent intent açar ve imzalı `PUT` döndürür. Tarayıcı dosyayı Vercel üzerinden geçirmeden özel tenant bucket'ındaki karantinaya yükler.
+3. `POST /api/v1/platform/assets/{assetId}/complete` kullanım hakkı beyanını audit kaydına alır, S3 boyut/checksum/VersionId değerini doğrular ve tarama için varlık sürümünü oluşturur. Beyan veya bütünlük kanıtı yoksa tamamlanma reddedilir.
 4. Temiz tarama olayı `provider + provider_event_id` ile bir kez işlenir. Hakları onaylı SCORM ZIP için kiralı ve yeniden denenebilir analiz işi açılır. Worker nesneyi geçici dosyaya indirir; boyut/SHA-256, ZIP güvenliği ve manifesti doğrular. Sonuç `package_manifests` içinde varlık sürümüne bağlı değişmez kayıt olur.
 5. Ayrı yayın komutu doğrulanmış paketi değişmez yayın anahtarına açar/kopyalar ve audit olayı üretir. Analiz başarısı tek başına öğrenene yayın yetkisi vermez.
 6. `GET /api/v1/platform/assets/{assetId}/download` yalnız temiz ve yayımlanmış sürüm için kısa ömürlü URL üretir.
+
+Yönetici arayüzü `GET /api/v1/platform/assets/{assetId}/status` ile yalnız temizlenmiş durum alanlarını okur; bucket, nesne anahtarı ve sağlayıcı olay ayrıntısı istemciye çıkmaz. Tarama ve doğrulama tamamlanınca içerik sürümü asset sürümüne bağlanır, değişmez yayın işi bittiğinde ayrıca yönetici onayıyla GOLMS'te yayımlanır. İlk web yükleme arayüzü tarayıcı belleğinde SHA-256 ürettiği için 256 MB ile sınırlıdır; platformun 2 GB sözleşmesi ancak çok parçalı ve akış tabanlı istemci eklendiğinde arayüzden kullanılacaktır.
 
 Öğrenen SCORM başlatmasında LMS oturumu 60 saniyelik tek kullanımlık bir bilet üretir ve veritabanında yalnız SHA-256 özetini saklar. Ayrı player origin bileti bir kez değiştirerek sekiz saatlik, ilgili deneme ve yayınla sınırlı HttpOnly oturum alır. İçerik isteği yalnız yayın prefix'i altındaki normalize edilmiş göreli yolları S3'ten sunar; bucket ve object key tarayıcıya verilmez. Runtime olayları aynı oturumdan, sıra ve idempotency kontrolüyle kaydedilir; son CMI state snapshot'ı bir megabayt sınırıyla suspend/resume için korunur. Yeni başlatma aynı denemenin önceki aktif player oturumunu iptal eder.
 

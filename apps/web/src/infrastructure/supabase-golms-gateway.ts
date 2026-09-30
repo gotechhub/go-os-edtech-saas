@@ -1,4 +1,4 @@
-import { ApplicationError, type AddProgramStepCommand, type AssignProgramCommand, type CreateProgramDraftCommand, type CreateScormDraftCommand, type EnrollmentSummary, type GolmsGateway, type GolmsRecord, type IssueScormLaunchCommand, type ProgramSummary, type RequestContext, type ScormLaunchTicket } from "@respongo-os/golms/application";
+import { ApplicationError, type AddProgramStepCommand, type AssignProgramCommand, type BindScormAssetCommand, type CreateProgramDraftCommand, type CreateScormDraftCommand, type EnrollmentSummary, type GolmsGateway, type GolmsRecord, type IssueScormLaunchCommand, type ProgramSummary, type RegisterScormImportCommand, type RequestContext, type ScormBinding, type ScormContentSummary, type ScormLaunchTicket } from "@respongo-os/golms/application";
 import type { SupabaseClient } from "@supabase/supabase-js";
 
 type RpcRow = Record<string, unknown>;
@@ -12,7 +12,8 @@ const one = (data: unknown): RpcRow => {
 const fail = (error: { message?: string; code?: string } | null) => {
   if (!error) return;
   const source = `${error.code ?? ""} ${error.message ?? ""}`;
-  if (/42501|FORBIDDEN|REQUIRED/.test(source)) throw new ApplicationError("FORBIDDEN", "Bu işlem için yetkiniz veya aktif ürün hakkınız yok.", 403);
+  if (/READY_PUBLISHED_SCORM_REQUIRED|CLEAN_VALIDATED_SCORM_REQUIRED/.test(source)) throw new ApplicationError("CONFLICT", "İçerik henüz tarama, doğrulama veya güvenli yayın aşamasını tamamlamadı.", 409);
+  if (/42501|FORBIDDEN/.test(source)) throw new ApplicationError("FORBIDDEN", "Bu işlem için yetkiniz veya aktif ürün hakkınız yok.", 403);
   if (/23505|CONFLICT|IMMUTABLE|OUT_OF_ORDER/.test(source)) throw new ApplicationError("CONFLICT", "Kayıt güncellendi veya işlem daha önce tamamlandı.", 409);
   throw new ApplicationError("DEPENDENCY_UNAVAILABLE", "Öğrenme servisine şu anda ulaşılamıyor.", 503);
 };
@@ -25,8 +26,27 @@ export class SupabaseGolmsGateway implements GolmsGateway {
   async createScormDraft(context: RequestContext, command: CreateScormDraftCommand) {
     const { data, error } = await this.client.rpc("v3_golms_create_scorm_draft", { target_tenant: context.tenantId, course_title: command.title, course_locale: command.locale, course_hash: command.contentHash }); fail(error); return record(one(data));
   }
+  async bindScormAsset(_context: RequestContext, command: BindScormAssetCommand): Promise<ScormBinding> {
+    const { data, error } = await this.client.rpc("v3_golms_bind_scorm_asset", { version_id: command.learningObjectVersionId, target_asset_version: command.assetVersionId }); fail(error);
+    const item = one(data);
+    return { learningObjectVersionId: String(item.learning_object_version_id), assetVersionId: String(item.asset_version_id), standard: String(item.standard) as ScormBinding["standard"], status: "bound" };
+  }
+  async registerScormImport(_context: RequestContext, command: RegisterScormImportCommand): Promise<void> {
+    const { error } = await this.client.rpc("v3_golms_register_scorm_import", { version_id: command.learningObjectVersionId, target_asset: command.assetId }); fail(error);
+  }
   async publishLearningObject(_context: RequestContext, versionId: string) {
     const { data, error } = await this.client.rpc("v3_golms_publish_learning_object", { version_id: versionId }); fail(error); return record(one(data));
+  }
+  async listScormContent(context: RequestContext): Promise<readonly ScormContentSummary[]> {
+    const { data, error } = await this.client.rpc("v3_golms_list_scorm_content", { target_tenant: context.tenantId }); fail(error);
+    return (data ?? []).map((item: RpcRow) => ({
+      id: String(item.id), title: String(item.title), locale: String(item.locale), version: Number(item.version), status: String(item.status), assetId: item.asset_id ? String(item.asset_id) : null,
+      assetVersionId: item.asset_version_id ? String(item.asset_version_id) : null,
+      standard: item.standard ? String(item.standard) as ScormContentSummary["standard"] : null,
+      scanStatus: item.scan_status ? String(item.scan_status) : null,
+      validationStatus: item.validation_status ? String(item.validation_status) : null,
+      publicationStatus: item.publication_status ? String(item.publication_status) : null,
+    }));
   }
   async createProgramDraft(context: RequestContext, command: CreateProgramDraftCommand) {
     const { data, error } = await this.client.rpc("v3_golms_create_program_draft", { target_tenant: context.tenantId, program_title: command.title, program_locale: command.locale, is_sequential: command.sequential }); fail(error); return record(one(data));

@@ -1,5 +1,5 @@
 import type { GolmsGateway } from "./ports";
-import { ApplicationError, type AddProgramStepCommand, type ApiEnvelope, type AssignProgramCommand, type CreateProgramDraftCommand, type CreateScormDraftCommand, type EnrollmentSummary, type GolmsRecord, type IssueScormLaunchCommand, type ProgramReportRow, type ProgramSummary, type RequestContext, type ScormLaunchTicket } from "./types";
+import { ApplicationError, type AddProgramStepCommand, type ApiEnvelope, type AssignProgramCommand, type BindScormAssetCommand, type CreateProgramDraftCommand, type CreateScormDraftCommand, type EnrollmentSummary, type GolmsRecord, type IssueScormLaunchCommand, type ProgramReportRow, type ProgramSummary, type RegisterScormImportCommand, type RequestContext, type ScormBinding, type ScormContentSummary, type ScormLaunchTicket } from "./types";
 import { hash, instant, text, uuid } from "./validation";
 
 export class GolmsApplicationService {
@@ -12,6 +12,28 @@ export class GolmsApplicationService {
   async createScormDraft(context: RequestContext, input: CreateScormDraftCommand): Promise<ApiEnvelope<GolmsRecord>> {
     const command = { title: text(input.title, "Eğitim adı"), locale: text(input.locale, "Dil", 35), contentHash: hash(input.contentHash) };
     return this.envelope(context, await this.gateway.createScormDraft(context, command));
+  }
+
+  async bindScormAsset(context: RequestContext, input: BindScormAssetCommand): Promise<ApiEnvelope<ScormBinding>> {
+    const command = {
+      learningObjectVersionId: uuid(input.learningObjectVersionId, "İçerik sürümü"),
+      assetVersionId: uuid(input.assetVersionId, "Dosya sürümü"),
+    };
+    return this.envelope(context, await this.gateway.bindScormAsset(context, command));
+  }
+
+  async registerScormImport(context: RequestContext, input: RegisterScormImportCommand): Promise<ApiEnvelope<{ registered: true }>> {
+    const command = { learningObjectVersionId: uuid(input.learningObjectVersionId, "İçerik sürümü"), assetId: uuid(input.assetId, "Dosya") };
+    await this.gateway.registerScormImport(context, command);
+    return this.envelope(context, { registered: true });
+  }
+
+  async publishLearningObject(context: RequestContext, versionId: string): Promise<ApiEnvelope<GolmsRecord>> {
+    return this.envelope(context, await this.gateway.publishLearningObject(context, uuid(versionId, "İçerik sürümü")));
+  }
+
+  async listScormContent(context: RequestContext): Promise<ApiEnvelope<readonly ScormContentSummary[]>> {
+    return this.envelope(context, await this.gateway.listScormContent(context));
   }
 
   async createProgramDraft(context: RequestContext, input: CreateProgramDraftCommand): Promise<ApiEnvelope<GolmsRecord>> {

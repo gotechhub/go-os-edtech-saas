@@ -14,6 +14,37 @@ export interface CreateScormDraftCommand {
   contentHash: string;
 }
 
+export interface BindScormAssetCommand {
+  learningObjectVersionId: string;
+  assetVersionId: string;
+}
+
+export interface RegisterScormImportCommand {
+  learningObjectVersionId: string;
+  assetId: string;
+}
+
+export interface ScormBinding {
+  learningObjectVersionId: string;
+  assetVersionId: string;
+  standard: "scorm_1_2" | "scorm_2004_3rd" | "scorm_2004_4th";
+  status: "bound";
+}
+
+export interface ScormContentSummary {
+  id: string;
+  title: string;
+  locale: string;
+  version: number;
+  status: string;
+  assetId: string | null;
+  assetVersionId: string | null;
+  standard: ScormBinding["standard"] | null;
+  scanStatus: string | null;
+  validationStatus: string | null;
+  publicationStatus: string | null;
+}
+
 export interface CreateProgramDraftCommand {
   title: string;
   locale: LocaleCode;

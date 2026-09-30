@@ -53,6 +53,7 @@ beforeAll(async () => {
     "202609280002_v3_golms_scorm_asset_bridge.sql",
     "202609280003_v3_scorm_launch_sessions.sql",
     "202609280004_v3_golms_enrollment_next_step.sql",
+    "202609280005_v3_scorm_admin_workflow.sql",
   ]) await db.exec(readFileSync(`supabase/migrations/${migration}`, "utf8"));
 
   await db.exec(`
@@ -84,6 +85,10 @@ describe("GOLMS validated SCORM asset bridge", () => {
       "select * from public.v3_golms_create_scorm_draft($1,$2,$3,$4)", [TENANT,"SCORM Köprü Testi","tr-TR",HASH],
     ));
     courseId = draft.rows[0].id;
+    const registered = await asUser(() => db.query<{ asset_id: string }>(
+      "select * from public.v3_golms_register_scorm_import($1,$2)", [courseId,ASSET],
+    ));
+    expect(registered.rows[0].asset_id).toBe(ASSET);
     const first = await asUser(() => db.query<{ asset_version_id: string; standard: string }>(
       "select * from public.v3_golms_bind_scorm_asset($1,$2)", [courseId,VERSION],
     ));
@@ -96,6 +101,23 @@ describe("GOLMS validated SCORM asset bridge", () => {
       select (select count(*)::int from v3_storage.scorm_publications) publications,
              (select count(*)::int from v3_storage.processing_jobs where job_type='scorm_publication') jobs`);
     expect(counts.rows[0]).toEqual({ publications: 1, jobs: 1 });
+
+    const library = await asUser(() => db.query<{ id: string; asset_id: string; standard: string; publication_status: string }>(
+      "select * from public.v3_golms_list_scorm_content($1)", [TENANT],
+    ));
+    expect(library.rows[0]).toMatchObject({ id: courseId, asset_id: ASSET, standard: "scorm_2004_4th", publication_status: "queued" });
+  });
+
+  it("exposes sanitized processing state only to a tenant content manager", async () => {
+    await asUser(() => db.query("select public.v3_storage_approve_asset_rights($1)", [ASSET]));
+    const status = await asUser(() => db.query<Record<string, unknown>>(
+      "select * from public.v3_storage_get_asset_processing_status($1)", [ASSET],
+    ));
+    expect(status.rows[0]).toMatchObject({ asset_id: ASSET, asset_version_id: VERSION, rights_status: "approved", scan_status: "clean", validation_status: "valid" });
+    expect(status.rows[0]).not.toHaveProperty("bucket_name");
+    expect(status.rows[0]).not.toHaveProperty("object_key");
+    await expect(asLearner(() => db.query("select * from public.v3_storage_get_asset_processing_status($1)", [ASSET])))
+      .rejects.toThrow(/ASSET_STATUS_FORBIDDEN/);
   });
 
   it("blocks LMS publication until immutable S3 publication is ready", async () => {
@@ -128,8 +150,21 @@ describe("GOLMS validated SCORM asset bridge", () => {
     const draft = await asUser(() => db.query<{ id: string }>(
       "select * from public.v3_golms_create_scorm_draft($1,$2,$3,$4)", [TENANT,"Tenant sınırı","tr-TR",HASH],
     ));
+    await expect(asUser(() => db.query("select * from public.v3_golms_register_scorm_import($1,$2)", [draft.rows[0].id,foreignAsset])))
+      .rejects.toThrow(/SCORM_IMPORT_SCOPE_MISMATCH/);
     await expect(asUser(() => db.query("select * from public.v3_golms_bind_scorm_asset($1,$2)", [draft.rows[0].id,foreignVersion])))
       .rejects.toThrow(/SCORM_ASSET_TENANT_MISMATCH/);
+    await expect(asUser(() => db.query("select * from public.v3_golms_list_scorm_content($1)", [OTHER])))
+      .rejects.toThrow(/GOLMS_CONTENT_LIST_FORBIDDEN/);
+  });
+
+  it("keeps read access but blocks SCORM administration after trial expiry", async () => {
+    await db.query("update v3_platform.product_entitlements set ends_at=now()-interval '1 second' where tenant_id=$1 and product_key='golms'", [TENANT]);
+    const readable = await asUser(() => db.query<{ id: string }>("select * from public.v3_golms_list_scorm_content($1)", [TENANT]));
+    expect(readable.rows.some((row) => row.id === courseId)).toBe(true);
+    await expect(asUser(() => db.query("select public.v3_storage_approve_asset_rights($1)", [ASSET])))
+      .rejects.toThrow(/ASSET_RIGHTS_FORBIDDEN/);
+    await db.query("update v3_platform.product_entitlements set ends_at=now()+interval '13 days' where tenant_id=$1 and product_key='golms'", [TENANT]);
   });
 
   it("resumes one attempt and exchanges only the latest one-time launch ticket", async () => {

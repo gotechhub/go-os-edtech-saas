@@ -7,6 +7,7 @@ export async function POST(request: Request, context: { params: Promise<{ assetI
   const requestId = request.headers.get("x-request-id") ?? randomUUID();
   try {
     const { assetId } = await context.params;
-    return NextResponse.json(await completeUpload(assetId));
+    const input = await request.json().catch(() => ({})) as { rightsConfirmed?: unknown };
+    return NextResponse.json(await completeUpload(assetId, input.rightsConfirmed === true));
   } catch (error) { return apiError(error, requestId); }
 }
