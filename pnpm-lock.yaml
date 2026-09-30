@@ -78,9 +78,15 @@ importers:
 
   services/worker:
     dependencies:
+      '@aws-sdk/client-s3':
+        specifier: 3.888.0
+        version: 3.888.0
       '@respongo-os/scorm':
         specifier: workspace:*
         version: link:../../standards/scorm
+      '@supabase/supabase-js':
+        specifier: 2.117.1
+        version: 2.117.1
     devDependencies:
       '@types/yazl':
         specifier: 3.3.0

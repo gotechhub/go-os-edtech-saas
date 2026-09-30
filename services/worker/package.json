@@ -7,7 +7,9 @@
     ".": "./src/index.ts"
   },
   "dependencies": {
-    "@respongo-os/scorm": "workspace:*"
+    "@aws-sdk/client-s3": "3.888.0",
+    "@respongo-os/scorm": "workspace:*",
+    "@supabase/supabase-js": "2.117.1"
   },
   "devDependencies": {
     "@types/yazl": "3.3.0",

@@ -13,3 +13,5 @@ Sınırlar:
 Doğrulanmış asset bir GOLMS eğitim sürümüne bağlandığında ayrı `scorm_publication` işi açılır. Yayın worker'ı ZIP'i yeniden doğrular, özel geçici dizine güvenli açar, manifest launch yolunun değişmediğini kontrol eder ve yalnız değişmez `published/.../versions/.../` prefix'ine aktarır. Veritabanı tam dosya sayısı ve launch object key eşleşmeden yayını `ready` yapmaz.
 
 Veri sözleşmesi `202609280001_v3_scorm_ingestion_jobs.sql` ve `202609280002_v3_golms_scorm_asset_bridge.sql`; paket güvenliği `standards/scorm` tarafından yönetilir.
+
+Üretim adaptörleri `src/adapters.ts` içinde Supabase lease RPC'lerini tam worker kimliğiyle çağırır, S3'ten kaydedilmiş `VersionId` nesnesini stream ederek indirir ve dosya SHA-256 özetini hesaplar. Yayın yeniden denendiğinde var olan nesne yalnız boyut ve `sha256-hex` metadata'sı aynıysa kabul edilir; farklı içerik değişmez sürüm çatışmasıdır. `runScormWorkerCycle` bir analiz ve bir yayın işi işler. Canlı worker kalıcı AWS anahtarı kullanmaz; AWS görev rolünün geçici kimlik zinciri ve sunucuya özel Supabase service role kullanır.
