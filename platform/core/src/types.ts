@@ -106,3 +106,61 @@ export interface AuthorizationDecision {
   activeRoles: readonly WorkspaceRole[];
   readOnly: boolean;
 }
+
+export type AssuranceLevel = "aal1" | "aal2";
+export type InternalControlPlane = "os_core" | "super_admin";
+export type OsCoreRole = "platform_operator" | "security_operator" | "release_manager" | "infrastructure_operator" | "data_governance";
+export type SuperAdminRole = "customer_ops" | "support" | "billing" | "commercial";
+export type InternalRole = OsCoreRole | SuperAdminRole;
+
+export type OsCorePermission =
+  | "core.read"
+  | "core.system.manage"
+  | "core.jobs.manage"
+  | "core.integrations.manage"
+  | "core.security.manage"
+  | "core.audit.read"
+  | "core.sessions.revoke"
+  | "core.release.manage"
+  | "core.migrations.manage"
+  | "core.flags.manage"
+  | "core.infrastructure.manage"
+  | "core.providers.manage"
+  | "core.storage.manage"
+  | "core.data.manage"
+  | "core.recovery.manage";
+
+export type SuperAdminPermission =
+  | "hq.read"
+  | "hq.customer.manage"
+  | "hq.portal.manage"
+  | "hq.trial.manage"
+  | "hq.support.manage"
+  | "hq.support_session.manage"
+  | "hq.entitlement.manage"
+  | "hq.billing.manage";
+
+export type InternalPermission = OsCorePermission | SuperAdminPermission;
+
+export interface InternalRoleGrant {
+  role: InternalRole;
+  startsAt: string;
+  endsAt: string | null;
+}
+
+export interface InternalAuthorizationInput {
+  controlPlane: InternalControlPlane;
+  assuranceLevel: AssuranceLevel;
+  operatorActive: boolean;
+  grants: readonly InternalRoleGrant[];
+  permission: InternalPermission;
+  now: string;
+}
+
+export type InternalAuthorizationReason = "allowed" | "mfa_required" | "operator_inactive" | "role_inactive" | "wrong_control_plane" | "permission_missing";
+
+export interface InternalAuthorizationDecision {
+  allowed: boolean;
+  reason: InternalAuthorizationReason;
+  activeRoles: readonly InternalRole[];
+}

@@ -15,6 +15,7 @@ Bu harita *hangi bilginin nerede olduğunu* gösterir. Her görevde yalnızca k�
 | [`../.ai_memory/session_state.md`](../.ai_memory/session_state.md) | Son çalışma ve sıradaki iş | Uzun aradan sonra |
 | [`../docs/architecture/localization-white-label.md`](../docs/architecture/localization-white-label.md) | HQ dil paketi, lisans, tenant overlay ve sürüm sözleşmesi | Her ürünün görünen metni veya dil hakkı değişirken |
 | [`../docs/architecture/delivery-roadmap.md`](../docs/architecture/delivery-roadmap.md) | OS Core → Super Admin → Control Center → ürün dalgaları uygulama sırası | Faz veya öncelik değişirken |
+| [`../docs/architecture/internal-control-planes.md`](../docs/architecture/internal-control-planes.md) | OS Core, Super Admin ve tenant kimlik/rol/izin ayrımı | İç rol, MFA, destek erişimi veya ayrıcalıklı komut değişirken |
 | [`../docs/architecture/f0-readiness.md`](../docs/architecture/f0-readiness.md) | F0 kanıt matrisi ve kapanmamış görevler | F0 durumu veya kabul kanıtı değişirken |
 | [`../docs/architecture/threat-model.md`](../docs/architecture/threat-model.md) | Güven sınırları, veri sınıfları, tehdit ve test eşlemesi | Veri, yetki, dosya, AI veya operasyon sınırı değişirken |
 | [`../docs/architecture/capacity-cost-baseline.md`](../docs/architecture/capacity-cost-baseline.md) | Beta yük profili, maliyet defteri ve AWS geçiş kapıları | Kapasite, bütçe veya barındırma kararı değişirken |

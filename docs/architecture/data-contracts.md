@@ -8,7 +8,7 @@ Bu dosya alanların **tasarım sözleşmesidir**. Tenant/üyelik/rol/entitlement
 |---|---|---|
 | `tenants`, `portals`, `industry_packs` | Platform: id, durum, bölge, sektör/sürüm, deneyim/marka | Tenant kapatma/veri silme ayrı süreç; slug yetki kaynağı değil |
 | `identities`, `memberships`, `teams`, `role_grants` | Platform: auth id, tenant, ekip, kapsam, başlangıç/bitiş | Kimlik birden çok tenant üyesi olabilir; tüm komutlar aktif bağlam doğrular |
-| `operator_accounts`, `support_sessions` | HQ: ayrı iç kayıt, MFA, gerekçe, süre, hedef tenant | Müşteri rolünden türetilemez; destek oturumu audit zorunlu |
+| `v3_core.operators/roles/role_grants`, `v3_hq.operators/roles/role_grants`, `support_sessions` | OS Core teknik kimlikleri ve Super Admin müşteri operasyon kimlikleri ayrı şemalarda; MFA, süreli grant, gerekçe ve hedef tenant | Tenant rolünden veya birbirinden türetilemez; destek oturumu ve ayrıcalıklı komut audit zorunlu |
 | `product_releases`, `entitlements`, `trials` | Platform: ürün, durum, başlangıç/bitiş UTC, kota, sözleşme | Tek tenant deneme saati; yeniden başlatma yok; iç demo hariç |
 | `v3_storage.locations`, `assets`, `asset_versions`, `upload_intents`, `scan_events`, `processing_jobs`, `package_manifests`, `scorm_publications` | Platform: tenant bucket envanteri, S3 anahtar, hash, hak, karantina/tarama/yayın ve iş durumu | Migration 004–006 yerel akışında uygulanmıştır; ham nesne tarama, bütünlük, hak ve manifest doğrulaması olmadan yayımlanmaz |
 | `audit_events`, `outbox_events`, `idempotency_keys` | Platform: aktör, tenant, neden, olay sürümü, sonuç | Tekrarlanan istek güvenli; denetim izi değiştirilemez kayıt modeli |

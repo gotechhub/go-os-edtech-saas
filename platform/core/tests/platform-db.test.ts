@@ -8,6 +8,7 @@ const SUPPORT = "81000000-0000-4000-8000-000000000002";
 const OWNER = "81000000-0000-4000-8000-000000000003";
 const LEARNER = "81000000-0000-4000-8000-000000000004";
 const OUTSIDER = "81000000-0000-4000-8000-000000000005";
+const SECURITY = "81000000-0000-4000-8000-000000000006";
 const CUSTOMER = "82000000-0000-4000-8000-000000000001";
 const OTHER = "82000000-0000-4000-8000-000000000002";
 const DEMO = "82000000-0000-4000-8000-000000000003";
@@ -36,7 +37,7 @@ beforeAll(async () => {
   await db.exec(`
     insert into auth.users(id,email) values
       ('${OPERATOR}','operator@test.local'),('${SUPPORT}','support@test.local'),('${OWNER}','owner@test.local'),
-      ('${LEARNER}','learner@test.local'),('${OUTSIDER}','outsider@test.local');
+      ('${LEARNER}','learner@test.local'),('${OUTSIDER}','outsider@test.local'),('${SECURITY}','security@test.local');
     insert into v3_platform.tenants(id,legal_name,display_name,mode,status) values
       ('${CUSTOMER}','Customer A','Customer A','customer','active'),
       ('${OTHER}','Customer B','Customer B','customer','active'),
@@ -51,18 +52,46 @@ beforeAll(async () => {
       ('83000000-0000-4000-8000-000000000001','tenant_owner'),
       ('83000000-0000-4000-8000-000000000002','learner'),
       ('83000000-0000-4000-8000-000000000003','tenant_owner');
-    insert into v3_hq.operators(user_id,role_key) values ('${OPERATOR}','operator'),('${SUPPORT}','support');
+    insert into v3_hq.operators(user_id,role_key) values ('${OPERATOR}','operator'),('${SUPPORT}','support'),('${SECURITY}','security');
     insert into v3_platform.product_entitlements(tenant_id,product_key,kind,starts_at) values ('${DEMO}','golms','internal',now());
   `);
+  await db.exec(readFileSync("supabase/migrations/202609300001_v3_internal_control_planes.sql", "utf8"));
 });
 
 afterAll(async () => db?.close());
 
 describe("Respongo OS platform migration and RLS", () => {
   it("requires an HQ operator with MFA to activate a customer trial", async () => {
-    await expect(asUser(OWNER, "aal2", () => db.query("select * from public.v3_activate_trial($1)", [CUSTOMER]))).rejects.toThrow("HQ_OPERATOR_MFA_REQUIRED");
-    await expect(asUser(OPERATOR, "aal1", () => db.query("select * from public.v3_activate_trial($1)", [CUSTOMER]))).rejects.toThrow("HQ_OPERATOR_MFA_REQUIRED");
-    await expect(asUser(SUPPORT, "aal2", () => db.query("select * from public.v3_activate_trial($1)", [CUSTOMER]))).rejects.toThrow("HQ_OPERATOR_MFA_REQUIRED");
+    await expect(asUser(OWNER, "aal2", () => db.query("select * from public.v3_activate_trial($1)", [CUSTOMER]))).rejects.toThrow("HQ_TRIAL_PERMISSION_MFA_REQUIRED");
+    await expect(asUser(OPERATOR, "aal1", () => db.query("select * from public.v3_activate_trial($1)", [CUSTOMER]))).rejects.toThrow("HQ_TRIAL_PERMISSION_MFA_REQUIRED");
+    await expect(asUser(SUPPORT, "aal2", () => db.query("select * from public.v3_activate_trial($1)", [CUSTOMER]))).rejects.toThrow("HQ_TRIAL_PERMISSION_MFA_REQUIRED");
+    await expect(asUser(SECURITY, "aal2", () => db.query("select * from public.v3_activate_trial($1)", [CUSTOMER]))).rejects.toThrow("HQ_TRIAL_PERMISSION_MFA_REQUIRED");
+  });
+
+  it("migrates legacy internal roles into separate OS Core and Super Admin namespaces", async () => {
+    const hq = await asUser(OPERATOR, "aal2", () => db.query<{ control_plane: string; role_key: string; permission_key: string }>("select * from public.v3_my_internal_access()"));
+    expect(hq.rows).toContainEqual({ control_plane: "super_admin", role_key: "customer_ops", permission_key: "hq.portal.manage" });
+    expect(hq.rows.some((row) => row.permission_key.startsWith("core."))).toBe(false);
+
+    const core = await asUser(SECURITY, "aal2", () => db.query<{ control_plane: string; role_key: string; permission_key: string }>("select * from public.v3_my_internal_access()"));
+    expect(core.rows).toContainEqual({ control_plane: "os_core", role_key: "security_operator", permission_key: "core.security.manage" });
+    expect(core.rows.some((row) => row.permission_key.startsWith("hq."))).toBe(false);
+
+    const tenant = await asUser(OWNER, "aal2", () => db.query("select * from public.v3_my_internal_access()"));
+    expect(tenant.rows).toEqual([]);
+  });
+
+  it("requires MFA and active grants for both internal control planes", async () => {
+    const coreAal1 = await asUser(SECURITY, "aal1", () => db.query<{ allowed: boolean }>("select v3_core.has_permission('core.security.manage') allowed"));
+    expect(coreAal1.rows[0].allowed).toBe(false);
+    const coreAal2 = await asUser(SECURITY, "aal2", () => db.query<{ allowed: boolean }>("select v3_core.has_permission('core.security.manage') allowed"));
+    expect(coreAal2.rows[0].allowed).toBe(true);
+    const crossPlane = await asUser(OPERATOR, "aal2", () => db.query<{ allowed: boolean }>("select v3_core.has_permission('core.read') allowed"));
+    expect(crossPlane.rows[0].allowed).toBe(false);
+
+    await db.query("update v3_core.role_grants set starts_at=now()-interval '2 days',ends_at=now()-interval '1 day' where user_id=$1", [SECURITY]);
+    const expired = await asUser(SECURITY, "aal2", () => db.query<{ allowed: boolean }>("select v3_core.has_permission('core.read') allowed"));
+    expect(expired.rows[0].allowed).toBe(false);
   });
 
   it("starts one clock, grants only released products and stays idempotent", async () => {

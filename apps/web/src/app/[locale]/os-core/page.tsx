@@ -1,0 +1,44 @@
+import type { Metadata } from "next";
+import { DataState } from "@/components/data-state";
+import { InternalShell } from "@/components/internal-shell";
+import { loadOsCoreAccess } from "@/lib/internal-access";
+
+export const metadata: Metadata = { title: "Respongo OS Core" };
+
+const stateCopy = {
+  unconfigured: ["Platform bağlantısı bekleniyor", "Supabase ortamı yapılandırılmadan OS Core yetkileri doğrulanamaz."],
+  unauthenticated: ["Ayrıcalıklı giriş gerekli", "Respongo teknik operatör hesabınızla güvenli giriş yapın."],
+  mfa_required: ["Çok faktörlü doğrulama gerekli", "OS Core erişimi için oturum güvence seviyesini MFA ile yükseltin."],
+  forbidden: ["OS Core yetkiniz yok", "Müşteri, ürün veya Super Admin rolü bu teknik alana erişim sağlamaz."],
+  migration_required: ["OS Core şeması henüz yayımlanmadı", "İç kontrol düzlemleri migration'ı hosted Supabase ortamında doğrulanmalıdır."],
+  error: ["Yetki durumu alınamadı", "Kimlik veya platform servisi geçici olarak yanıt vermiyor."],
+} as const;
+
+const modules = [
+  ["Sistem komuta merkezi", "Servis sağlığı, SLO, kritik olaylar ve sıradaki operasyon işi", "core.system.manage"],
+  ["Güvenlik ve audit", "Olay müdahalesi, oturum iptali ve değişmez işlem izi", "core.security.manage"],
+  ["Sürüm ve migration", "Yayın matrisi, pilot rollout, geri alma ve özellik bayrakları", "core.release.manage"],
+  ["Altyapı ve depolama", "Vercel, Supabase, S3, CloudFront, kapasite ve bölge görünümü", "core.infrastructure.manage"],
+  ["İş ve entegrasyon kuyruğu", "Worker, dead-letter, webhook ve güvenli yeniden oynatma", "core.jobs.manage"],
+  ["Veri yönetişimi", "Saklama, silme, yedek, geri yükleme ve taşınabilirlik", "core.data.manage"],
+] as const;
+
+export default async function OsCorePage({ params }: { params: Promise<{ locale: string }> }) {
+  const { locale } = await params;
+  const access = await loadOsCoreAccess();
+  return <InternalShell locale={locale}><main className="content-page">
+    <div className="page-heading"><div><span className="eyebrow">RESPONGO İÇ TEKNİK İŞLETİM</span><h1>Sistem komuta merkezi</h1><p>Platform sağlığı, güvenlik, sürüm, altyapı ve sağlayıcı operasyonları için ayrıcalıklı çalışma alanı.</p></div></div>
+    {access.state !== "ready" ? <DataState title={stateCopy[access.state][0]} message={stateCopy[access.state][1]} /> : <>
+      <section className="metric-strip core-metrics" aria-label="OS Core erişim özeti">
+        <article><span>Etkin Core rolü</span><strong>{access.roles.length}</strong></article>
+        <article><span>İzin kapsamı</span><strong>{access.permissions.length}</strong></article>
+        <article><span>Güvence seviyesi</span><strong>AAL2</strong></article>
+      </section>
+      <div className="inline-alert core-security-note" role="status"><strong>Gerçek yetki doğrulandı</strong><span>Bu görünüm tenant veya Super Admin rolünden üretilemez. Her ayrıcalıklı komut ayrıca gerekçe ve audit gerektirir.</span></div>
+      <section className="core-module-grid" aria-label="OS Core modülleri">{modules.map(([title, description, permission]) => {
+        const enabled = access.permissions.includes(permission);
+        return <article key={permission} className="core-module-card"><div><span className={`status ${enabled ? "status-published" : "status-draft"}`}>{enabled ? "Yetki hazır" : "Rol kapsamı dışında"}</span><h2>{title}</h2><p>{description}</p></div><small>{permission}</small></article>;
+      })}</section>
+    </>}
+  </main></InternalShell>;
+}

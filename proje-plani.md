@@ -1,8 +1,8 @@
 # Respongo OS · proje yol haritası
 
-**Kaynak tarihi:** 2026-09-30 · **Durum:** Uygulama başladı · **Aktif faz:** F0 Hazırlık ve mimari kapısı
+**Kaynak tarihi:** 2026-10-01 · **Durum:** Uygulama başladı · **Aktif faz:** F0 Hazırlık ve mimari kapısı
 
-**Doğrulanmış ilerleme:** %3 · **Görev:** 16/495 tamamlandı, 28 aktif, 479 doğrulanmayı bekliyor · **Modül:** 165 · **Engel:** 0
+**Doğrulanmış ilerleme:** %3 · **Görev:** 17/495 tamamlandı, 29 aktif, 478 doğrulanmayı bekliyor · **Modül:** 165 · **Engel:** 0
 **Dil hedefi:** 10 dil; 2 temel (Türkçe varsayılan + İngilizce), 8 ek lisans. Teknik paket yayını OS Core'da, müşteri lisans/ataması [Super Admin](operations/respongo-hq/language-control.md) alanındadır.
 
 > Bu oran yalnızca tarihli kabul kanıtı bulunan görevlerden hesaplanır. Tarihsel V1/V2 oranları ve taslak dosyalar Respongo OS tamamlanması sayılmaz.
@@ -40,7 +40,7 @@
 | Faz | Hedef | Modül | Aktif | Doğrulanan/görev | Faz ilerlemesi |
 |---|---|---:|---:|---:|---:|
 | F0 · Hazırlık ve mimari kapısı | Ürün sahipliği, kullanıcı görevi, veri, güvenlik, UX ve kabul sözleşmelerini doğrulamak | 5 | 2 | 4/15 | %27 |
-| F1 · Respongo OS Core ve güvenli platform omurgası | Kimlik, tenant, rol, deneme, audit ve depolama temelini kurup teknik işletim ekranlarını yalnız yetkili Respongo ekibine açmak | 38 | 12 | 11/114 | %10 |
+| F1 · Respongo OS Core ve güvenli platform omurgası | Kimlik, tenant, rol, deneme, audit ve depolama temelini kurup teknik işletim ekranlarını yalnız yetkili Respongo ekibine açmak | 38 | 13 | 12/114 | %11 |
 | F2 · Super Admin · müşteri ve portal filosu | Müşteri 360, portal fabrikası, demo, lisans, sektör paketi, destek ve tenant rollout yönetimini kurmak | 11 | 0 | 0/33 | %0 |
 | F3 · Control Center ve ortak deneyim | Müşterinin kuruluş, kullanıcı, marka, dil ve hak sahibi olduğu ürünleri yönetmesini sağlayan ortak deneyimi kurmak | 17 | 6 | 0/51 | %0 |
 | F4 · GOLMS · öğrenme operasyonu | İçerik, program, atama, uyum, ölçme, SCORM, rapor ve beş rol akışlarını tamamlamak | 22 | 7 | 1/66 | %2 |
@@ -56,7 +56,7 @@
 |---|---:|---:|---|
 | Araştırma ve mimari | 4 | 4/12 | [Modüller](docs/architecture/foundation-modules.md) |
 | Ortak SaaS platformu | 15 | 0/45 | [Modüller](platform/modules.md) |
-| Respongo OS Core · sistem işletim konsolu | 10 | 0/30 | [Modüller](operations/os-core/modules.md) |
+| Respongo OS Core · sistem işletim konsolu | 10 | 1/30 | [Modüller](operations/os-core/modules.md) |
 | Super Admin · müşteri ve portal yönetimi | 11 | 0/33 | [Modüller](operations/respongo-hq/modules.md) |
 | Control Center · müşteri yönetimi | 11 | 0/33 | [Modüller](platform/control-center/modules.md) |
 | Tasarım sistemi ve deneyim | 6 | 0/18 | [Modüller](design/modules.md) |

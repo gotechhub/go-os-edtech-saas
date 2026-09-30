@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updatedAt": "2026-09-30",
+  "updatedAt": "2026-10-01",
   "baseline": "Respongo OS temiz kanonik mimarisi; tarihsel V1/V2 tamamlanma oranları buraya taşınmaz.",
   "executionRules": [
     "F0 hazırlık kapısıdır; ürün araştırması, sahiplik, tehdit/veri modeli ve kabul ölçütleri uygulanacak alan için yeterli kanıta ulaşmadan geri döndürülmesi pahalı karar alınmaz.",
@@ -60,7 +60,7 @@
     },
     {
       "id": "OSCORE", "name": "Respongo OS Core · sistem işletim konsolu", "kind": "operations", "path": "operations/os-core", "modules": [
-        { "id": "CORE-01", "phase": "F1", "title": "İç operatör kimliği ve ayrıcalıklı erişim", "features": ["İç operatör hesabı ve MFA", "Görev ayrılığı", "Süreli destek oturumu", "Break-glass ve audit"], "acceptance": "Müşteri rolü Core'a erişemez; ayrıcalıklı işlem gerekçe, süre ve aktör kanıtıyla tamamlanır." },
+        { "id": "CORE-01", "phase": "F1", "title": "İç operatör kimliği ve ayrıcalıklı erişim", "features": ["İç operatör hesabı ve MFA", "Görev ayrılığı", "Süreli destek oturumu", "Break-glass ve audit"], "acceptance": "Müşteri rolü Core'a erişemez; ayrıcalıklı işlem gerekçe, süre ve aktör kanıtıyla tamamlanır.", "gates": { "definition": { "status": "verified", "verifiedAt": "2026-10-01", "evidence": "docs/architecture/internal-control-planes.md OS Core, Super Admin ve tenant kimlik/rol/izin sınırını; AAL2, süreli grant, destek erişimi, audit ve geri alma sözleşmesini tanımlar." }, "implementation": { "status": "active", "evidence": "Migration 202609300001, typed internal-access policy, negatif PGlite testleri ve /os-core güvenli durum ekranı yerelde hazır; hosted migration, break-glass, iki kişili onay ve destek oturumu komutları eksik." } } },
         { "id": "CORE-02", "phase": "F1", "title": "Sistem komuta merkezi", "features": ["Küresel sağlık ve SLO", "Kritik olay ve alarm", "Bölge/servis durumu", "Sıradaki operasyon işi"], "acceptance": "Operatör sistem durumunu tek ekranda görür; bozuk veya eski veri canlı gibi gösterilmez." },
         { "id": "CORE-03", "phase": "F1", "title": "Tenant ve portal teknik envanteri", "features": ["Tenant/portal teknik kimliği", "Ortam ve bölge", "Şema/sürüm/özellik görünümü", "Salt okunur ilişki haritası"], "acceptance": "Operatör her portalın teknik durumunu görür; müşteri verisine destek oturumu olmadan girmez." },
         { "id": "CORE-04", "phase": "F1", "title": "Sürüm, migration ve özellik bayrağı", "features": ["Web/API/DB sürüm matrisi", "Migration ve rollback", "Pilot/kademeli rollout", "Kill switch"], "acceptance": "Sürüm önce pilot kapsamda açılır; sağlık gerilerse tenant verisini bozmadan geri alınır." },
