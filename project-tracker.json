@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updatedAt": "2026-09-28",
+  "updatedAt": "2026-09-30",
   "baseline": "Respongo OS temiz kanonik mimarisi; tarihsel V1/V2 tamamlanma oranları buraya taşınmaz.",
   "gateNames": { "definition": "Tanım ve araştırma", "implementation": "Uygulama", "acceptance": "Kabul ve kanıt" },
   "phases": [

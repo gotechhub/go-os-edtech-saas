@@ -1,4 +1,4 @@
-import { ApplicationError, type AddProgramStepCommand, type AssignProgramCommand, type CreateProgramDraftCommand, type CreateScormDraftCommand, type EnrollmentSummary, type GolmsGateway, type GolmsRecord, type ProgramSummary, type RequestContext } from "@respongo-os/golms/application";
+import { ApplicationError, type AddProgramStepCommand, type AssignProgramCommand, type CreateProgramDraftCommand, type CreateScormDraftCommand, type EnrollmentSummary, type GolmsGateway, type GolmsRecord, type IssueScormLaunchCommand, type ProgramSummary, type RequestContext, type ScormLaunchTicket } from "@respongo-os/golms/application";
 import type { SupabaseClient } from "@supabase/supabase-js";
 
 type RpcRow = Record<string, unknown>;
@@ -46,6 +46,15 @@ export class SupabaseGolmsGateway implements GolmsGateway {
   }
   async listMyEnrollments(context: RequestContext): Promise<readonly EnrollmentSummary[]> {
     const { data, error } = await this.client.rpc("v3_golms_my_enrollments", { target_tenant: context.tenantId }); fail(error);
-    return (data ?? []).map((item: RpcRow) => ({ id: String(item.id), programVersionId: String(item.program_version_id), programTitle: String(item.program_title), status: String(item.status), required: Boolean(item.required), availableAt: String(item.available_at), dueAt: item.due_at ? String(item.due_at) : null, progressPercent: Number(item.progress_percent) }));
+    return (data ?? []).map((item: RpcRow) => ({ id: String(item.id), programVersionId: String(item.program_version_id), programTitle: String(item.program_title), status: String(item.status), required: Boolean(item.required), availableAt: String(item.available_at), dueAt: item.due_at ? String(item.due_at) : null, progressPercent: Number(item.progress_percent), nextStepId: item.next_step_id ? String(item.next_step_id) : null, nextStepKind: item.next_step_kind ? String(item.next_step_kind) : null }));
+  }
+  async issueScormLaunch(_context: RequestContext, command: IssueScormLaunchCommand): Promise<ScormLaunchTicket> {
+    const { data, error } = await this.client.rpc("v3_golms_issue_scorm_launch", { enrollment_key: command.enrollmentId, step_key: command.stepId, launch_ticket_hash: command.ticketHash }); fail(error);
+    const item = one(data);
+    return { sessionId: String(item.session_id), attemptId: String(item.attempt_id), standard: String(item.standard) as ScormLaunchTicket["standard"], expiresAt: String(item.expires_at) };
+  }
+  async getProgramReport(_context: RequestContext, programVersionId: string) {
+    const { data, error } = await this.client.rpc("v3_golms_program_report", { version_id: programVersionId }); fail(error);
+    return (data ?? []).map((item: RpcRow) => ({ learnerId: String(item.learner_id), enrollmentStatus: String(item.enrollment_status), startedAt: item.started_at ? String(item.started_at) : null, completedAt: item.completed_at ? String(item.completed_at) : null, attemptCount: Number(item.attempt_count), bestScore: item.best_score === null || item.best_score === undefined ? null : Number(item.best_score) }));
   }
 }

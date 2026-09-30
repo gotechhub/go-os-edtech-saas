@@ -4,6 +4,7 @@ import { readFileSync } from "node:fs";
 import { afterAll, beforeAll, describe, expect, it } from "vitest";
 
 const OWNER = "81000000-0000-4000-8000-000000000001";
+const LEARNER = "81000000-0000-4000-8000-000000000002";
 const TENANT = "82000000-0000-4000-8000-000000000001";
 const OTHER = "82000000-0000-4000-8000-000000000002";
 const HASH = "c".repeat(64);
@@ -14,6 +15,13 @@ let courseId: string;
 
 async function asUser<T>(operation: () => Promise<T>) {
   await db.query("select set_config('request.jwt.claim.sub',$1,false)", [OWNER]);
+  await db.query("select set_config('request.jwt.claim.aal','aal1',false)");
+  await db.exec("set role authenticated");
+  try { return await operation(); } finally { await db.exec("reset role"); }
+}
+
+async function asLearner<T>(operation: () => Promise<T>) {
+  await db.query("select set_config('request.jwt.claim.sub',$1,false)", [LEARNER]);
   await db.query("select set_config('request.jwt.claim.aal','aal1',false)");
   await db.exec("set role authenticated");
   try { return await operation(); } finally { await db.exec("reset role"); }
@@ -39,19 +47,24 @@ beforeAll(async () => {
   for (const migration of [
     "202609270001_v3_platform_foundation.sql",
     "202609270002_v3_golms_learning_core.sql",
+    "202609270003_v3_golms_read_models.sql",
     "202609270004_v3_storage_foundation.sql",
     "202609280001_v3_scorm_ingestion_jobs.sql",
     "202609280002_v3_golms_scorm_asset_bridge.sql",
+    "202609280003_v3_scorm_launch_sessions.sql",
+    "202609280004_v3_golms_enrollment_next_step.sql",
   ]) await db.exec(readFileSync(`supabase/migrations/${migration}`, "utf8"));
 
   await db.exec(`
-    insert into auth.users(id,email) values ('${OWNER}','owner@test.local');
+    insert into auth.users(id,email) values ('${OWNER}','owner@test.local'),('${LEARNER}','learner@test.local');
     insert into v3_platform.tenants(id,legal_name,display_name,mode,status) values
       ('${TENANT}','Tenant A','Tenant A','customer','active'),('${OTHER}','Tenant B','Tenant B','customer','active');
     insert into v3_platform.memberships(id,tenant_id,user_id,status)
-      values('85000000-0000-4000-8000-000000000001','${TENANT}','${OWNER}','active');
+      values('85000000-0000-4000-8000-000000000001','${TENANT}','${OWNER}','active'),
+            ('85000000-0000-4000-8000-000000000002','${TENANT}','${LEARNER}','active');
     insert into v3_platform.role_grants(membership_id,role_key)
-      values('85000000-0000-4000-8000-000000000001','tenant_owner');
+      values('85000000-0000-4000-8000-000000000001','tenant_owner'),
+            ('85000000-0000-4000-8000-000000000002','learner');
     insert into v3_platform.product_entitlements(tenant_id,product_key,kind,starts_at,ends_at,updated_by)
       values('${TENANT}','golms','trial',now()-interval '1 day',now()+interval '13 days','${OWNER}');
     insert into v3_storage.assets(id,tenant_id,product_key,resource_type,original_filename,media_type,expected_bytes,expected_sha256,rights_status,state,created_by)
@@ -117,5 +130,62 @@ describe("GOLMS validated SCORM asset bridge", () => {
     ));
     await expect(asUser(() => db.query("select * from public.v3_golms_bind_scorm_asset($1,$2)", [draft.rows[0].id,foreignVersion])))
       .rejects.toThrow(/SCORM_ASSET_TENANT_MISMATCH/);
+  });
+
+  it("resumes one attempt and exchanges only the latest one-time launch ticket", async () => {
+    const program = await asUser(() => db.query<{ id: string }>("select * from public.v3_golms_create_program_draft($1,$2,$3,true)", [TENANT,"SCORM Programı","tr-TR"]));
+    const step = await asUser(() => db.query<{ id: string }>("select * from public.v3_golms_add_program_step($1,$2,1,true,'complete')", [program.rows[0].id,courseId]));
+    const blockedStep = await asUser(() => db.query<{ id: string }>("select * from public.v3_golms_add_program_step($1,$2,2,true,'complete')", [program.rows[0].id,courseId]));
+    await asUser(() => db.query("select * from public.v3_golms_publish_program($1)", [program.rows[0].id]));
+    const enrollment = await asUser(() => db.query<{ id: string }>("select * from public.v3_golms_assign_program($1,$2,true,now(),now()+interval '1 day')", [program.rows[0].id,LEARNER]));
+    const firstHash = "1".repeat(64);
+    const secondHash = "2".repeat(64);
+    const accessHash = "3".repeat(64);
+    await expect(asLearner(() => db.query("select * from public.v3_golms_issue_scorm_launch($1,$2,$3)", [enrollment.rows[0].id,blockedStep.rows[0].id,"8".repeat(64)])))
+      .rejects.toThrow(/SCORM_PREREQUISITE_INCOMPLETE/);
+    const learnerList = await asLearner(() => db.query<{ next_step_id: string; next_step_kind: string }>("select * from public.v3_golms_my_enrollments($1)", [TENANT]));
+    expect(learnerList.rows[0]).toMatchObject({ next_step_id: step.rows[0].id, next_step_kind: "scorm" });
+    const first = await asLearner(() => db.query<{ session_id: string; attempt_id: string }>("select * from public.v3_golms_issue_scorm_launch($1,$2,$3)", [enrollment.rows[0].id,step.rows[0].id,firstHash]));
+    const second = await asLearner(() => db.query<{ session_id: string; attempt_id: string }>("select * from public.v3_golms_issue_scorm_launch($1,$2,$3)", [enrollment.rows[0].id,step.rows[0].id,secondHash]));
+    expect(second.rows[0].attempt_id).toBe(first.rows[0].attempt_id);
+    await expect(asService(() => db.query("select * from public.v3_golms_exchange_scorm_launch($1,$2,$3)", [first.rows[0].session_id,firstHash,accessHash])))
+      .rejects.toThrow(/LAUNCH_TICKET_INVALID/);
+    await expect(asService(() => db.query("select * from public.v3_golms_exchange_scorm_launch($1,$2,$3)", [second.rows[0].session_id,"9".repeat(64),accessHash])))
+      .rejects.toThrow(/LAUNCH_TICKET_INVALID/);
+    const exchanged = await asService(() => db.query<{ attempt_id: string; launch_path: string; standard: string }>("select * from public.v3_golms_exchange_scorm_launch($1,$2,$3)", [second.rows[0].session_id,secondHash,accessHash]));
+    expect(exchanged.rows[0]).toMatchObject({ attempt_id: second.rows[0].attempt_id, standard: "scorm_2004_4th" });
+    expect(exchanged.rows[0].launch_path).toBe("content/index.html");
+    await expect(asService(() => db.query("select * from public.v3_golms_exchange_scorm_launch($1,$2,$3)", [second.rows[0].session_id,secondHash,accessHash])))
+      .rejects.toThrow(/LAUNCH_TICKET_INVALID/);
+
+    await expect(asService(() => db.query("select * from public.v3_golms_resolve_scorm_object($1,$2,$3)", [second.rows[0].session_id,"4".repeat(64),"content/index.html"])))
+      .rejects.toThrow(/PLAYER_ACCESS_INVALID/);
+    await expect(asService(() => db.query("select * from public.v3_golms_resolve_scorm_object($1,$2,$3)", [second.rows[0].session_id,accessHash,"../secret"])))
+      .rejects.toThrow(/PLAYER_OBJECT_PATH_INVALID/);
+    const resolved = await asService(() => db.query<{ bucket_name: string; object_key: string }>("select * from public.v3_golms_resolve_scorm_object($1,$2,$3)", [second.rows[0].session_id,accessHash,"content/index.html"]));
+    expect(resolved.rows[0]).toMatchObject({ bucket_name: "respongo-test-bucket" });
+    expect(resolved.rows[0].object_key).toMatch(/published\/golms\/course\/.+\/versions\/.+\/content\/index\.html$/);
+
+    const evidenceHash = "a".repeat(64);
+    const event = await asService(() => db.query<{ id: string; last_sequence: number }>(
+      "select * from public.v3_golms_record_player_runtime_event($1,$2,'player-evt-1',1,'initialized',now(),null,null,0,null,null,0,$3,$4::jsonb)",
+      [second.rows[0].session_id,accessHash,evidenceHash,JSON.stringify({ "cmi.location": "chapter-2", "cmi.suspend_data": "resume-me" })],
+    ));
+    expect(event.rows[0]).toMatchObject({ id: second.rows[0].attempt_id, last_sequence: 1 });
+    const duplicate = await asService(() => db.query<{ last_sequence: number }>(
+      "select * from public.v3_golms_record_player_runtime_event($1,$2,'player-evt-1',1,'initialized',now(),null,null,0,null,null,0,$3)",
+      [second.rows[0].session_id,accessHash,evidenceHash],
+    ));
+    expect(duplicate.rows[0].last_sequence).toBe(1);
+    const persisted = await db.query<{ scorm_state: Record<string,string> }>("select scorm_state from v3_golms.attempts where id=$1", [second.rows[0].attempt_id]);
+    expect(persisted.rows[0].scorm_state).toMatchObject({ "cmi.location": "chapter-2", "cmi.suspend_data": "resume-me" });
+    await expect(asService(() => db.query(
+      "select * from public.v3_golms_record_player_runtime_event($1,$2,'player-evt-3',3,'progressed',now(),null,null,.5,null,null,5,$3)",
+      [second.rows[0].session_id,accessHash,evidenceHash],
+    ))).rejects.toThrow(/RUNTIME_EVENT_OUT_OF_ORDER/);
+
+    await db.query("update v3_golms.launch_sessions set access_expires_at=now()-interval '1 second' where id=$1", [second.rows[0].session_id]);
+    await expect(asService(() => db.query("select * from public.v3_golms_resolve_scorm_object($1,$2,$3)", [second.rows[0].session_id,accessHash,"content/index.html"])))
+      .rejects.toThrow(/PLAYER_ACCESS_INVALID/);
   });
 });

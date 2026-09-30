@@ -7,6 +7,6 @@ Standart adaptörleri ürünlerden ayrıdır; GOLMS çalışma zamanı ve GOAUTH
 - **cmi5:** paketleme/launch ve xAPI profili; [ADL rehberi](https://www.adlnet.gov/assets/uploads/cmi5%20Best%20Practices%20Guide%20-%20From%20Conception%20to%20Conformance.pdf).
 - **LTI 1.3/Advantage:** dış araç güvenli açılışı, rol/derin bağlantı/not hizmetleri; [1EdTech](https://www.1edtech.org/standards/lti).
 
-İlk uygulama dilimi [`scorm/`](scorm/) altında bulunur. ZIP ve manifest güvenlik kapıları ile SCORM 1.2/2004 launch doğrulaması uygulanmıştır; player, sequencing ve resmî uygunluk iddiası henüz yoktur.
+İlk uygulama dilimi [`scorm/`](scorm/) altında bulunur. ZIP ve manifest güvenlik kapıları, SCORM 1.2/2004 launch doğrulaması, ayrı origin oyuncu kabuğu, tek kullanımlık başlatma bileti, süreli HttpOnly oturum, temel `API`/`API_1484_11` adaptörü ve suspend/resume durum kaydı yerelde uygulanmıştır. Program içi sıralı ön koşul sunucu tarafında korunur. ADL resmî uygunluk testi, SCORM 2004'ün paket içi ayrıntılı sequencing davranışı ve gerçek S3/CloudFront kabulü tamamlanmadan ürün “tam uyumlu” diye sunulmaz.
 
 Her standart için test paketi, dış sistem çapraz testi, hata matrisi ve desteklenen sürüm kaydı gerekir. [Modüller](modules.md).

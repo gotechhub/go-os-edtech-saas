@@ -1,4 +1,4 @@
-import type { AddProgramStepCommand, AssignProgramCommand, CreateProgramDraftCommand, CreateScormDraftCommand, EnrollmentSummary, GolmsRecord, ProgramSummary, RequestContext } from "./types";
+import type { AddProgramStepCommand, AssignProgramCommand, CreateProgramDraftCommand, CreateScormDraftCommand, EnrollmentSummary, GolmsRecord, IssueScormLaunchCommand, ProgramReportRow, ProgramSummary, RequestContext, ScormLaunchTicket } from "./types";
 
 export interface GolmsGateway {
   createScormDraft(context: RequestContext, command: CreateScormDraftCommand): Promise<GolmsRecord>;
@@ -9,4 +9,6 @@ export interface GolmsGateway {
   assignProgram(context: RequestContext, command: AssignProgramCommand): Promise<GolmsRecord>;
   listPrograms(context: RequestContext): Promise<readonly ProgramSummary[]>;
   listMyEnrollments(context: RequestContext): Promise<readonly EnrollmentSummary[]>;
+  issueScormLaunch(context: RequestContext, command: IssueScormLaunchCommand): Promise<ScormLaunchTicket>;
+  getProgramReport(context: RequestContext, programVersionId: string): Promise<readonly ProgramReportRow[]>;
 }

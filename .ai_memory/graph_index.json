@@ -37,7 +37,13 @@
     { "id": "golms-scorm-storage-bridge", "path": "supabase/migrations/202609280002_v3_golms_scorm_asset_bridge.sql", "kind": "cross-domain-command" },
     { "id": "golms-scorm-storage-bridge-tests", "path": "products/golms/tests/scorm-asset-bridge-db.test.ts", "kind": "tenant-security-test" },
     { "id": "scorm-safe-extraction", "path": "standards/scorm/src/extraction.ts", "kind": "security-boundary" },
-    { "id": "scorm-publication-worker", "path": "services/worker/src/scorm-publication.ts", "kind": "background-job" }
+    { "id": "scorm-publication-worker", "path": "services/worker/src/scorm-publication.ts", "kind": "background-job" },
+    { "id": "scorm-launch-sessions", "path": "supabase/migrations/202609280003_v3_scorm_launch_sessions.sql", "kind": "player-security-contract" },
+    { "id": "scorm-launch-api", "path": "apps/web/src/app/api/v1/golms/scorm/launch/route.ts", "kind": "learner-command" },
+    { "id": "scorm-player-runtime", "path": "apps/web/src/lib/scorm-player-runtime.ts", "kind": "isolated-player-boundary" },
+    { "id": "scorm-player-shell", "path": "apps/web/src/lib/scorm-player-shell.ts", "kind": "browser-runtime-adapter" },
+    { "id": "golms-enrollment-next-step", "path": "supabase/migrations/202609280004_v3_golms_enrollment_next_step.sql", "kind": "learner-read-model" },
+    { "id": "golms-program-report", "path": "apps/web/src/app/[locale]/golms/admin/programlar/[programId]/rapor/page.tsx", "kind": "report-surface" }
   ],
   "edges": [
     { "from": "tracker", "to": "architecture", "relation": "tasks follow boundaries" },
@@ -78,6 +84,13 @@
     { "from": "golms-scorm-storage-bridge-tests", "to": "golms-scorm-storage-bridge", "relation": "proves idempotency tenant isolation and publication gate" },
     { "from": "scorm-safe-extraction", "to": "scorm-package-validator", "relation": "revalidates then extracts normalized immutable file set" },
     { "from": "scorm-publication-worker", "to": "scorm-safe-extraction", "relation": "publishes only revalidated files and exact launch path" },
-    { "from": "scorm-publication-worker", "to": "golms-scorm-storage-bridge", "relation": "claims publication lease and records ready or failed result" }
+    { "from": "scorm-publication-worker", "to": "golms-scorm-storage-bridge", "relation": "claims publication lease and records ready or failed result" },
+    { "from": "scorm-launch-sessions", "to": "golms-scorm-storage-bridge", "relation": "issues one-time tickets only for ready published packages" },
+    { "from": "scorm-launch-api", "to": "scorm-launch-sessions", "relation": "hashes plaintext ticket before database issuance" },
+    { "from": "scorm-player-runtime", "to": "scorm-launch-sessions", "relation": "exchanges tickets and scopes content plus evidence access" },
+    { "from": "scorm-player-runtime", "to": "storage-domain", "relation": "proxies only resolved immutable publication objects" },
+    { "from": "scorm-player-shell", "to": "scorm-player-runtime", "relation": "bridges SCORM 1.2 and 2004 calls to normalized evidence" },
+    { "from": "golms-enrollment-next-step", "to": "golms-read-models", "relation": "adds the next authorized actionable step" },
+    { "from": "golms-program-report", "to": "golms-application", "relation": "shows role-authorized attempt evidence" }
   ]
 }

@@ -1,6 +1,6 @@
 # Respongo OS · proje yol haritası
 
-**Kaynak tarihi:** 2026-09-28 · **Durum:** Uygulama başladı · **Aktif faz:** F0 Araştırma ve mimari
+**Kaynak tarihi:** 2026-09-30 · **Durum:** Uygulama başladı · **Aktif faz:** F0 Araştırma ve mimari
 
 **Doğrulanmış ilerleme:** %3 · **Görev:** 12/465 tamamlandı, 453 kaldı · **Modül:** 155 · **Engel:** 0
 **Dil hedefi:** 10 dil; 2 temel (Türkçe varsayılan + İngilizce), 8 ek lisans. Paketler [Respongo HQ](operations/respongo-hq/language-control.md) tarafından yönetilir.

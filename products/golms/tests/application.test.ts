@@ -7,6 +7,8 @@ const gateway = (): GolmsGateway => ({
   createScormDraft: vi.fn(async () => record), publishLearningObject: vi.fn(async () => record), createProgramDraft: vi.fn(async () => record),
   addProgramStep: vi.fn(async () => record), publishProgram: vi.fn(async () => record), assignProgram: vi.fn(async () => record),
   listPrograms: vi.fn(async () => []), listMyEnrollments: vi.fn(async () => []),
+  getProgramReport: vi.fn(async () => []),
+  issueScormLaunch: vi.fn(async () => ({ sessionId: "95000000-0000-4000-8000-000000000001", attemptId: "96000000-0000-4000-8000-000000000001", standard: "scorm_2004_4th" as const, expiresAt: "2026-09-30T12:00:00.000Z" })),
 });
 
 describe("GOLMS application boundary", () => {
@@ -26,5 +28,18 @@ describe("GOLMS application boundary", () => {
   it("rejects a due date that is not after availability", async () => {
     const service = new GolmsApplicationService(gateway());
     await expect(service.assignProgram(context, { programVersionId: record.id, learnerId: "91000000-0000-4000-8000-000000000002", required: true, availableAt: "2026-09-28T10:00:00Z", dueAt: "2026-09-28T09:00:00Z" })).rejects.toThrow("INVALID_ASSIGNMENT_DUE_AT");
+  });
+
+  it("validates launch identifiers and hashes before issuing a one-time ticket", async () => {
+    const port = gateway();
+    const service = new GolmsApplicationService(port);
+    await service.issueScormLaunch(context, {
+      enrollmentId: "97000000-0000-4000-8000-000000000001",
+      stepId: "98000000-0000-4000-8000-000000000001",
+      ticketHash: "a".repeat(64),
+    });
+    expect(port.issueScormLaunch).toHaveBeenCalledOnce();
+    await expect(service.issueScormLaunch(context, { enrollmentId: "bad", stepId: record.id, ticketHash: "x" }))
+      .rejects.toBeInstanceOf(ApplicationError);
   });
 });

@@ -36,6 +36,19 @@ export interface AssignProgramCommand {
   dueAt: string | null;
 }
 
+export interface IssueScormLaunchCommand {
+  enrollmentId: string;
+  stepId: string;
+  ticketHash: string;
+}
+
+export interface ScormLaunchTicket {
+  sessionId: string;
+  attemptId: string;
+  standard: "scorm_1_2" | "scorm_2004_3rd" | "scorm_2004_4th";
+  expiresAt: string;
+}
+
 export interface GolmsRecord {
   id: string;
   tenantId: string;
@@ -61,6 +74,17 @@ export interface EnrollmentSummary {
   availableAt: string;
   dueAt: string | null;
   progressPercent: number;
+  nextStepId: string | null;
+  nextStepKind: string | null;
+}
+
+export interface ProgramReportRow {
+  learnerId: string;
+  enrollmentStatus: string;
+  startedAt: string | null;
+  completedAt: string | null;
+  attemptCount: number;
+  bestScore: number | null;
 }
 
 export interface ApiEnvelope<T> {

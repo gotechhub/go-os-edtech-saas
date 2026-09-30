@@ -45,6 +45,8 @@ Bucket adı `prefix + ortam + bölge + SHA-256(tenant-id)` ile üretilir. Tenant
 5. Ayrı yayın komutu doğrulanmış paketi değişmez yayın anahtarına açar/kopyalar ve audit olayı üretir. Analiz başarısı tek başına öğrenene yayın yetkisi vermez.
 6. `GET /api/v1/platform/assets/{assetId}/download` yalnız temiz ve yayımlanmış sürüm için kısa ömürlü URL üretir.
 
+Öğrenen SCORM başlatmasında LMS oturumu 60 saniyelik tek kullanımlık bir bilet üretir ve veritabanında yalnız SHA-256 özetini saklar. Ayrı player origin bileti bir kez değiştirerek sekiz saatlik, ilgili deneme ve yayınla sınırlı HttpOnly oturum alır. İçerik isteği yalnız yayın prefix'i altındaki normalize edilmiş göreli yolları S3'ten sunar; bucket ve object key tarayıcıya verilmez. Runtime olayları aynı oturumdan, sıra ve idempotency kontrolüyle kaydedilir; son CMI state snapshot'ı bir megabayt sınırıyla suspend/resume için korunur. Yeni başlatma aynı denemenin önceki aktif player oturumunu iptal eder.
+
 Kuyruk işleri en fazla beş denemeye, 30–900 saniyelik lease (iş sahipliği süresi) aralığına ve `FOR UPDATE SKIP LOCKED` eşzamanlılık kontrolüne sahiptir. Doğrulama reddi terminal durumdur; ağ/S3 gibi işletim hataları yeniden denenebilir. Aynı asset sürümü ve iş türü için veritabanı yalnız bir iş kabul eder.
 
 Doğrulanmış SCORM asset'i eğitim sürümüne bağlamak ayrı bir GOLMS komutudur. Komut tenant, ürün hakkı, yönetim yetkisi, dosya hakkı, SHA-256 ve kesin SCORM edition değerini yeniden doğrular; aynı eğitim sürümünü ikinci asset'e bağlamaz. Bağlama yalnız `scorm_publication` işi açar. Asset sürümü `published` ve yayın kaydı `ready` olmadan GOLMS eğitim sürümü yayımlanamaz.

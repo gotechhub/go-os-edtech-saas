@@ -1,5 +1,5 @@
 import type { GolmsGateway } from "./ports";
-import type { AddProgramStepCommand, ApiEnvelope, AssignProgramCommand, CreateProgramDraftCommand, CreateScormDraftCommand, EnrollmentSummary, GolmsRecord, ProgramSummary, RequestContext } from "./types";
+import { ApplicationError, type AddProgramStepCommand, type ApiEnvelope, type AssignProgramCommand, type CreateProgramDraftCommand, type CreateScormDraftCommand, type EnrollmentSummary, type GolmsRecord, type IssueScormLaunchCommand, type ProgramReportRow, type ProgramSummary, type RequestContext, type ScormLaunchTicket } from "./types";
 import { hash, instant, text, uuid } from "./validation";
 
 export class GolmsApplicationService {
@@ -43,5 +43,15 @@ export class GolmsApplicationService {
 
   async listMyEnrollments(context: RequestContext): Promise<ApiEnvelope<readonly EnrollmentSummary[]>> {
     return this.envelope(context, await this.gateway.listMyEnrollments(context));
+  }
+
+  async issueScormLaunch(context: RequestContext, input: IssueScormLaunchCommand): Promise<ApiEnvelope<ScormLaunchTicket>> {
+    if (!/^[0-9a-f]{64}$/.test(input.ticketHash)) throw new ApplicationError("VALIDATION_FAILED", "Başlatma bileti geçersiz.", 400);
+    const command = { enrollmentId: uuid(input.enrollmentId, "Kayıt"), stepId: uuid(input.stepId, "Program adımı"), ticketHash: input.ticketHash };
+    return this.envelope(context, await this.gateway.issueScormLaunch(context, command));
+  }
+
+  async getProgramReport(context: RequestContext, programVersionId: string): Promise<ApiEnvelope<readonly ProgramReportRow[]>> {
+    return this.envelope(context, await this.gateway.getProgramReport(context, uuid(programVersionId, "Program")));
   }
 }
