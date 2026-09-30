@@ -6,10 +6,10 @@
 |---|---|---|---|
 | STOR-01 | F1 | Tenant bucket provisioning ve envanter | 1/3 |
 | STOR-02 | F1 | Upload intent ve karantina | 2/3 |
-| STOR-03 | F2 | Tarama, validasyon ve değişmez yayın | 2/3 |
-| STOR-04 | F2 | Yetkili indirme ve CloudFront teslimi | 1/3 |
+| STOR-03 | F1 | Tarama, validasyon ve değişmez yayın | 2/3 |
+| STOR-04 | F1 | Yetkili indirme ve CloudFront teslimi | 1/3 |
 | STOR-05 | F1 | Sistem asset manifesti ve aktarım aracı | 2/3 |
-| STOR-06 | F6 | Saklama, yaşam döngüsü ve BYOS hazırlığı | 0/3 |
+| STOR-06 | F10 | Saklama, yaşam döngüsü ve BYOS hazırlığı | 0/3 |
 
 ## STOR-01 · Tenant bucket provisioning ve envanter
 
@@ -25,13 +25,13 @@ Faz: **F1**. Alt modüller: Rol/ürün/deneme/kota kapısı; MIME/boyut/SHA-256 
 
 ## STOR-03 · Tarama, validasyon ve değişmez yayın
 
-Faz: **F2**. Alt modüller: Malware olayı; SCORM ZIP güvenliği; Hak/manifest doğrulama; Immutable yayın sürümü.
+Faz: **F1**. Alt modüller: Malware olayı; SCORM ZIP güvenliği; Hak/manifest doğrulama; Immutable yayın sürümü.
 
 **Kabul senaryosu:** Tarama bekleyen, zararlı, zip-bomb veya geçersiz paket yayımlanmaz; yinelenen tarama olayı ikinci sürüm oluşturmaz.
 
 ## STOR-04 · Yetkili indirme ve CloudFront teslimi
 
-Faz: **F2**. Alt modüller: Kısa ömürlü imzalı GET; Özel S3 origin; SCORM ayrı origin/CSP; Audit ve geri çekme.
+Faz: **F1**. Alt modüller: Kısa ömürlü imzalı GET; Özel S3 origin; SCORM ayrı origin/CSP; Audit ve geri çekme.
 
 **Kabul senaryosu:** Yalnız temiz, yayımlanmış ve yetkili sürüm açılır; başka tenant ve geri çekilmiş sürüm teslim edilmez.
 
@@ -43,6 +43,6 @@ Faz: **F1**. Alt modüller: Manifest allowlist; Dry-run varsayılanı; Checksum 
 
 ## STOR-06 · Saklama, yaşam döngüsü ve BYOS hazırlığı
 
-Faz: **F6**. Alt modüller: Karantina/multipart temizliği; KVKK/GDPR/hukukî tutma; Deneme sonrası salt okunur; Cross-account role/external ID BYOS.
+Faz: **F10**. Alt modüller: Karantina/multipart temizliği; KVKK/GDPR/hukukî tutma; Deneme sonrası salt okunur; Cross-account role/external ID BYOS.
 
 **Kabul senaryosu:** Deneme bitişi veriyi silmez; saklama ve BYOS erişimi tenant, sözleşme ve audit sınırında uygulanır.

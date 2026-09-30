@@ -1,12 +1,12 @@
-# Respongo HQ · Dil Kontrol Merkezi
+# Respongo Super Admin · dil lisansı ve portal dağıtımı
 
-**Tek platform sahibi Respongo'dur.** HQ dil paketlerini oluşturur, doğrular, lisanslanabilir ürün olarak yayımlar, portallara dağıtır ve gerektiğinde geri alır. Control Center müşterinin hakkı olan paketi kullanıp kendi görünen terimlerini özelleştirir; küresel temel paketi değiştiremez. Bu belge plan ve komut sınırıdır, çalışan HQ ekranı değildir.
+**Tek platform sahibi Respongo'dur.** OS Core dil paketinin teknik sürümünü, doğrulamasını, kademeli yayınını ve geri almasını yönetir. Super Admin paketi lisanslanabilir teklif olarak yönetir ve portallara kullanım hakkı atar. Control Center müşterinin hakkı olan paketi kullanıp kendi görünen terimlerini özelleştirir; küresel temel paketi değiştiremez. Bu belge plan ve komut sınırıdır, çalışan ekran değildir.
 
 ## Paket modeli ve yaşam döngüsü
 
 `locale.<BCP47>` dil paketi; paket kimliği, locale/yön, semantik sürüm, ürün ad alanları, mesaj tanımları, onaylı çeviriler, font/RTL uyumu, checksum, kaynak/çevirmen, QA kanıtı ve yayın durumunu taşır. Durumlar: **taslak → otomatik öneri/çeviri taslağı → insan incelemesi → QA → kademeli yayın → etkin → geri alınmış/arşiv**. AI önerisi hiçbir zaman tek başına müşteriye açık paket olmaz.
 
-Türkçe ve İngilizce `included` (temel pakete dahil); diğer sekiz hedef dil `addon` (ek lisans). [Dil kaydı](../../platform/locales.json) kaynak listedir. HQ yeni BCP 47 dili ileride ekleyebilir; yerel veri, font, RTL, çevirmen ve ürün kapsamı QA tamamlanmadan “hazır” veya marketplace'de etkin gösterilmez. Bir dil paketinin lisansı tenant düzeyindedir ve yayımlanan ürünlerde aynı dil kimliğini kullanır; yeni ürünün çevirisi hazır olduğunda mevcut dil hakkına eklenir, aynı dil için yeniden lisans satın aldırılmaz.
+Türkçe ve İngilizce `included` (temel pakete dahil); diğer sekiz hedef dil `addon` (ek lisans). [Dil kaydı](../../platform/locales.json) kaynak listedir. OS Core yeni BCP 47 dili ve teknik paketini ekleyebilir; Super Admin yalnız hazır/onaylı paketi marketplace ve tenant lisansına açabilir. Yerel veri, font, RTL, çevirmen ve ürün kapsamı QA tamamlanmadan paket “hazır” gösterilmez.
 
 ## Yüzlerce portal için sürüm ve dağıtım
 
@@ -18,6 +18,6 @@ Türkçe ve İngilizce `included` (temel pakete dahil); diğer sekiz hedef dil `
 
 ## Komut ve güvenlik sınırı
 
-HQ operatörü `language-pack.create/edit/review/publish/rollout/rollback`, `tenant-locale.grant/revoke` ve `translation-job.request` komutlarını ayrı izin ve MFA ile kullanır. Yayın ile lisans atama farklı yetkilerdir. `tenant-locale.grant` ürün lisansı veya müşteri rızası gerektiren eylemi atlamaz. Her komut aktör/gerekçe/önce-sonra sürümü/tenant kümesi ve iş kimliğiyle audit'e girer. Toplu rollout idempotent arka plan işiyle yürür; yüzlerce portal isteğinde tek transaction veya müşteri ekranı beklemesi kullanılmaz.
+OS Core operatörü `language-pack.create/edit/review/publish/rollout/rollback` ve teknik `translation-job.request` komutlarını; Super Admin ise `tenant-locale.grant/revoke` komutlarını ayrı izin ve MFA ile kullanır. Yayın ile lisans atama farklı yetkilerdir. `tenant-locale.grant` ürün lisansı veya müşteri rızası gerektiren eylemi atlamaz. Her komut aktör/gerekçe/önce-sonra sürümü/tenant kümesi ve iş kimliğiyle audit'e girer. Toplu rollout idempotent arka plan işiyle yürür.
 
-**Kabul:** TR/EN dahil; bir ek dil HQ'dan yayımlanıp iki tenant'a farklı hakla atanır; biri kendi üç etiketi değiştirir; yeni ürün sürümü iki yeni mesaj ekler; her iki tenant yeni metinleri alır, yalnız özelleştirenin üç metni korunur; çakışma görünür; paket geri alınır; başka tenant/HQ etkilenmez. API/RLS, mobil, e-posta, cache ve deneme bitişi negatif testleri geçer.
+**Kabul:** TR/EN dahil; bir ek dil OS Core'dan yayımlanır ve Super Admin tarafından iki tenant'a farklı hakla atanır; biri kendi üç etiketi değiştirir; yeni ürün sürümü iki yeni mesaj ekler; her iki tenant yeni metinleri alır, yalnız özelleştirenin üç metni korunur; çakışma görünür; paket geri alınır; başka tenant etkilenmez. API/RLS, mobil, e-posta, cache ve deneme bitişi negatif testleri geçer.

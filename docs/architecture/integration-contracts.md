@@ -4,7 +4,7 @@
 
 Her komut `actor_id`, `tenant_id`, `product_id`, `correlation_id`, `idempotency_key` ve yetkili işlem kapsamıyla çalışır. Olaylar `event_id`, `schema_version`, `occurred_at`, `source` ve sınıflandırılmış payload taşır. Ürün özel tabloya başka ürün doğrudan yazmaz; sürümlü komut veya outbox olayı kullanır. Dışa verilen okuma modeli izin verilen alanları ve verinin tazeliğini bildirir.
 
-Arayüz okuması ayrıca `locale`, `direction`, `basePackageVersion`, `tenantOverlayVersion`, `licenseStatus` ve kullanılan fallback bilgisini taşır. Bildirim/sertifika olaylarında alıcı dili ile şablon sürümü saklanır. Görünen etiketler API kimliği veya yetki adı yerine geçmez; temel paketi HQ, müşteri overlay'ini yalnızca yetkili [platform yerelleştirme sözleşmesi](localization-white-label.md) yayımlar. Ürün yeni mesaj anahtarı eklediğinde ad alanlı sürüm olayı HQ çeviri kuyruğunu tetikler; yeni temel paket tenant override'ının üzerine yazmaz.
+Arayüz okuması ayrıca `locale`, `direction`, `basePackageVersion`, `tenantOverlayVersion`, `licenseStatus` ve kullanılan fallback bilgisini taşır. Bildirim/sertifika olaylarında alıcı dili ile şablon sürümü saklanır. Görünen etiketler API kimliği veya yetki adı yerine geçmez; temel paketi OS Core, müşteri overlay'ini yalnızca yetkili [platform yerelleştirme sözleşmesi](localization-white-label.md) yayımlar. Ürün yeni mesaj anahtarı eklediğinde ad alanlı sürüm olayı OS Core çeviri kuyruğunu tetikler; yeni temel paket tenant override'ının üzerine yazmaz.
 
 | Üreten | Tüketen | En az sözleşme |
 |---|---|---|
@@ -13,7 +13,8 @@ Arayüz okuması ayrıca `locale`, `direction`, `basePackageVersion`, `tenantOve
 | GOLMS | GOLXP, GOPM, GOAI | Tamamlama/puan/sertifika ve doğrulama kaynağı; kişisel veri alan izni |
 | GOPM | GOLXP | Kullanıcı/onay kapsamlı gelişim ihtiyacı; gizli performans notu varsayılan olarak aktarılmaz |
 | GOAI Engine | Ürün sahipleri | Öneri, açıklama/kaynak ve önerilen eylem; yazma için ürün onayı |
-| Respongo HQ | Platform | Tenant oluşturma, ürün hakkı, destek oturumu ve audit; tenant admin komutlarından ayrı |
+| Respongo OS Core | Platform | Sistem sürümü, teknik rollout, altyapı, güvenlik ve sağlayıcı komutları; Super Admin ve tenant komutlarından ayrı |
+| Respongo Super Admin | Platform | Tenant oluşturma, ürün hakkı, destek oturumu ve audit; tenant admin komutlarından ayrı |
 
 ## Dış entegrasyon listesi
 

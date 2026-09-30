@@ -1,11 +1,18 @@
 # Respongo OS · proje yol haritası
 
-**Kaynak tarihi:** 2026-09-30 · **Durum:** Uygulama başladı · **Aktif faz:** F0 Araştırma ve mimari
+**Kaynak tarihi:** 2026-09-30 · **Durum:** Uygulama başladı · **Aktif faz:** F0 Araştırma, kapsam ve mimari kapısı
 
-**Doğrulanmış ilerleme:** %3 · **Görev:** 12/465 tamamlandı, 453 kaldı · **Modül:** 155 · **Engel:** 0
-**Dil hedefi:** 10 dil; 2 temel (Türkçe varsayılan + İngilizce), 8 ek lisans. Paketler [Respongo HQ](operations/respongo-hq/language-control.md) tarafından yönetilir.
+**Doğrulanmış ilerleme:** %2 · **Görev:** 12/495 tamamlandı, 483 kaldı · **Modül:** 165 · **Engel:** 0
+**Dil hedefi:** 10 dil; 2 temel (Türkçe varsayılan + İngilizce), 8 ek lisans. Teknik paket yayını OS Core'da, müşteri lisans/ataması [Super Admin](operations/respongo-hq/language-control.md) alanındadır.
 
 > Bu oran yalnızca tarihli kabul kanıtı bulunan görevlerden hesaplanır. Tarihsel V1/V2 oranları ve taslak dosyalar Respongo OS tamamlanması sayılmaz.
+
+## Uygulama düzeni
+
+1. F0-F4 sıralı temel kapılardır; OS Core, Super Admin ve Control Center yetki sınırları doğrulanmadan ürün beta kabulüne geçilmez.
+2. F5-F8 ürün dalgaları sırayla yürür; sonraki ürünün araştırma ve sözleşme işi paralel olabilir ancak uygulama kapısı önceki dalganın çekirdek kabulünden sonra açılır.
+3. GOAI, güvenlik, veri, yerelleştirme, tasarım sistemi ve yayın mühendisliği çapraz akışlardır; ürün komutlarının sahipliğini devralmadan ilgili fazla eşzamanlı ilerler.
+4. Her faz çıkışı çalışan kod, migration, rol/tenant/deneme negatif testi, erişilebilirlik ve tarihli kabul kanıtı gerektirir.
 
 ## Sıradaki üç görev
 
@@ -17,13 +24,17 @@
 
 | Faz | Hedef | Modül | Doğrulanan/görev |
 |---|---|---:|---:|
-| F0 · Araştırma ve mimari | Ürün sınırları, kaynaklar, güvenlik, deneyim ve kabul ölçütleri | 5 | 0/15 |
-| F1 · Ortak platform ve yönetim | Kimlik, tenant, deneme, Control Center ve Respongo HQ | 34 | 8/102 |
-| F2 · Tasarım ve öğrenme çekirdeği | Yeni deneyim, öğrenme operasyonu, SCORM ve rapor | 27 | 4/81 |
-| F3 · Üretim ve içerik hizmeti | GOAUTHOR AI ve GOFACTORY müşteri/üretim akışı | 18 | 0/54 |
-| F4 · Deneyim ve katalog | GOLXP, içerik keşfi, hak ve lisans | 18 | 0/54 |
-| F5 · Performans ve zekâ | GOPM ve izin kontrollü GOAI Engine | 27 | 0/81 |
-| F6 · Küresel beta ve yayın | Standartlar, entegrasyon, operasyon, mobil ve kabul | 26 | 0/78 |
+| F0 · Araştırma, kapsam ve mimari kapısı | Ürün sahipliği, kullanıcı görevi, veri, güvenlik, UX ve kabul sözleşmelerini kesinleştirmek | 5 | 0/15 |
+| F1 · Respongo OS çekirdek platformu | Kimlik, tenant, rol, lisans/deneme, depolama, audit, dil, kuyruk ve API temelini kurmak | 28 | 11/84 |
+| F2 · Respongo OS Core konsolu | Respongo teknik ekibinin sistem, güvenlik, yayın, iş kuyruğu, maliyet ve altyapıyı yönetmesi | 10 | 0/30 |
+| F3 · Super Admin · müşteri ve portal filosu | Müşteri 360, portal fabrikası, demo, lisans, sektör paketi, destek ve tenant rollout yönetimi | 11 | 0/33 |
+| F4 · Control Center ve ortak deneyim | Müşteri yönetimi, onboarding, markalama, dil, ortak tasarım sistemi ve rol kabukları | 17 | 0/51 |
+| F5 · GOLMS · öğrenme operasyonu | İçerik, program, atama, uyum, ölçme, SCORM, rapor ve beş rol akışlarını tamamlamak | 22 | 1/66 |
+| F6 · CREATE · GOAUTHOR AI ve GOFACTORY | Müşteri yazarlığı ile Respongo yönetilen üretim hizmetini ayrı fakat bağlantılı kurmak | 20 | 0/60 |
+| F7 · LEARN · GOLXP ve GOCATALOG | Deneyim, beceri, sosyal öğrenme, katalog, tedarikçi, hak ve lisans akışlarını kurmak | 20 | 0/60 |
+| F8 · PERFORM · GOPM | Hedef, performans, 360 derece geri bildirim ve gelişim planlarını öğrenme kanıtına bağlamak | 9 | 0/27 |
+| F9 · GOAI ve ekosistem orkestrasyonu | İzinli agent, öneri, kaynaklı arama, rapor, onay ve çapraz ürün otomasyonlarını olgunlaştırmak | 7 | 0/21 |
+| F10 · Küresel beta ve kurumsal yayın | Mobil, entegrasyon, erişilebilirlik, performans, gözlem, felaket kurtarma ve müşteri kabulü | 16 | 0/48 |
 
 ## Ürün ve alanlar
 
@@ -31,7 +42,8 @@
 |---|---:|---:|---|
 | Araştırma ve mimari | 4 | 0/12 | [Modüller](docs/architecture/foundation-modules.md) |
 | Ortak SaaS platformu | 15 | 0/45 | [Modüller](platform/modules.md) |
-| Respongo HQ · iç yönetim | 11 | 0/33 | [Modüller](operations/respongo-hq/modules.md) |
+| Respongo OS Core · sistem işletim konsolu | 10 | 0/30 | [Modüller](operations/os-core/modules.md) |
+| Super Admin · müşteri ve portal yönetimi | 11 | 0/33 | [Modüller](operations/respongo-hq/modules.md) |
 | Control Center · müşteri yönetimi | 11 | 0/33 | [Modüller](platform/control-center/modules.md) |
 | Tasarım sistemi ve deneyim | 6 | 0/18 | [Modüller](design/modules.md) |
 | GOLMS · öğrenme yönetimi | 24 | 1/72 | [Modüller](products/golms/modules.md) |

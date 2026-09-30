@@ -4,6 +4,10 @@
   "nodes": [
     { "id": "decisions", "path": "context/kararlar.md", "kind": "decision-log" },
     { "id": "architecture", "path": "docs/architecture/README.md", "kind": "boundary" },
+    { "id": "delivery-roadmap", "path": "docs/architecture/delivery-roadmap.md", "kind": "execution-order" },
+    { "id": "os-core", "path": "operations/os-core/README.md", "kind": "privileged-control-plane" },
+    { "id": "super-admin", "path": "operations/respongo-hq/README.md", "kind": "customer-fleet-control-plane" },
+    { "id": "control-center", "path": "platform/control-center/README.md", "kind": "tenant-control-plane" },
     { "id": "tracker", "path": "project-tracker.json", "kind": "acceptance-source" },
     { "id": "research", "path": "research/competitive-landscape.md", "kind": "research" },
     { "id": "lms-audit", "path": "research/invince-upsidelms-screenshot-audit.md", "kind": "research-evidence" },
@@ -50,6 +54,10 @@
   ],
   "edges": [
     { "from": "tracker", "to": "architecture", "relation": "tasks follow boundaries" },
+    { "from": "tracker", "to": "delivery-roadmap", "relation": "generates phase order and evidence progress" },
+    { "from": "os-core", "to": "architecture", "relation": "owns privileged technical operations" },
+    { "from": "super-admin", "to": "os-core", "relation": "requests technical action without inheriting privileged command" },
+    { "from": "control-center", "to": "super-admin", "relation": "escalates tenant commercial and support operations" },
     { "from": "design", "to": "decisions", "relation": "uses product decisions" },
     { "from": "research", "to": "decisions", "relation": "informs proposals, not authority" },
     { "from": "lms-audit", "to": "golms-architecture", "relation": "informs scope, not visual design" },

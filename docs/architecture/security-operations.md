@@ -21,7 +21,7 @@
 ## GOAI işletim ayrımı
 
 - Control Center müşteriye yalnız kendi tenant agent/knowledge/bütçe/izin/onay/audit ayarını sunar.
-- Respongo HQ provider secret, global model route, gerçek provider maliyeti, eval, feature flag ve kill switch yönetir.
+- Respongo OS Core provider secret, global model route, gerçek provider maliyeti, eval, feature flag ve kill switch yönetir; Super Admin yalnız tenant planı, kredi ve kullanım operasyonunu yönetir.
 - HQ operatörü süreli destek oturumu olmadan tenant konuşma veya belge içeriğini açamaz; filo analitiği varsayılan olarak redakte/toplulaştırılmıştır.
 - Provider fallback veri sınıfı, bölge veya sözleşme politikasını düşüremez. Düşük güvenli sağlayıcıya sessiz geçiş yerine güvenli hata verilir.
 - AI run, araç çağrısı, onay, kredi hareketi ve ürün sonucu ortak trace/request kimliğiyle bağlanır; loglarda secret ve gereksiz kişisel veri bulunmaz.

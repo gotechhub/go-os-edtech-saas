@@ -31,7 +31,8 @@ GOAI yönetimi tek ekranda bütün yetkileri birleştirmez.
 |---|---|---|---|
 | Ürün içi deneyim | learner, instructor, manager, product admin | Mevcut rolü içindeki konuşma, öneri, taslak ve izinli araç | Rolünü aşan veri veya komut |
 | Control Center · Tenant AI Governance | tenant owner/admin, AI admin, security admin | Tenant agent etkinliği, bilgi kaynağı, bütçe, izin, onay kuyruğu, tenant audit görünümü | Global sağlayıcı sırrı, başka tenant, platform maliyeti |
-| Respongo HQ · GOAI Operations | platform admin, AI operations, security operations | Sağlayıcı kasası, global model rotası, sağlık, maliyet, eval, rollout ve kill switch | Süreli destek oturumu olmadan tenant içeriği |
+| Respongo Super Admin · Tenant AI Operations | customer operations, commercial operations | Tenant AI planı, kredi/bütçe ataması, uygun ürün özelliği ve kullanım görünümü | Provider secret, global rota, eval veya teknik rollout |
+| Respongo OS Core · GOAI Operations | platform admin, AI operations, security operations | Sağlayıcı kasası, global model rotası, sağlık, maliyet, eval, rollout ve kill switch | Süreli destek oturumu olmadan tenant içeriği |
 
 `tenant_admin` hiçbir zaman `platform_admin` değildir. HQ müdahalesi MFA, gerekçe, kapsam, süre ve audit kaydı ister.
 
@@ -46,7 +47,8 @@ intelligence/goai-engine/
 
 packages/goai-ui/      web/native ortak durum ve bileşen sözleşmesi
 platform/control-center/ tenant AI governance yüzeyi
-operations/respongo-hq/  iç GOAI operations yüzeyi
+operations/respongo-hq/  tenant plan/kredi ve müşteri operasyon yüzeyi
+operations/os-core/      ayrıcalıklı global GOAI operations yüzeyi
 ```
 
 Başlangıç modüler monolittir. Uzun agent, medya ve indeksleme işleri kuyruk/worker üzerinden çalışır. Ölçülmüş kapasite, veri bölgesi veya bağımsız yayın gereksinimi oluşmadan mikroservis ayrımı yapılmaz.
@@ -229,7 +231,13 @@ interface GOAIProductRegistration {
 - bekleyen onaylar;
 - tenant audit ve saklama politikası görünümü.
 
-### Respongo HQ → GOAI Operations
+### Respongo Super Admin → Tenant AI Operations
+
+- tenant AI planı, ürün özellik hakkı ve kredi/bütçe ataması;
+- müşteri kullanım, limit ve ticari anomali görünümü;
+- teknik model veya provider değişikliğini OS Core'a talep/devir.
+
+### Respongo OS Core → GOAI Operations
 
 - provider secret referansları ve sağlık;
 - model kataloğu, global rota ve bölge politikası;
@@ -277,6 +285,6 @@ GOAI mimarisi ancak aşağıdakiler birlikte kanıtlandığında tamamlanmış s
 - R2–R4 eylemler doğru onay ve ürün komutundan geçer;
 - provider/model değişebilir ve veri bölgesi politikası korunur;
 - kaynak, araç, onay, maliyet ve sonuç aynı run izinde doğrulanır;
-- Control Center ile Respongo HQ yetkileri karışmaz;
+- Control Center, Super Admin ve OS Core yetkileri karışmaz;
 - kritik eval gerilemesi yayını durdurur.
 
