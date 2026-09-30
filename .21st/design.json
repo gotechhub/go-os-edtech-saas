@@ -1,13 +1,13 @@
 {
   "version": 1,
   "project": {
-    "name": "respongo-one",
+    "name": "respongo-os",
     "productType": "multi-tenant enterprise learning operating system",
     "stack": ["Next.js", "React", "TypeScript", "Supabase", "CSS tokens"]
   },
   "sources": {
-    "tokens": [],
-    "components": [],
+    "tokens": ["packages/design-tokens/src/tokens.css"],
+    "components": ["packages/ui-web", "packages/goai-ui"],
     "assets": [
       "assets"
     ],
@@ -38,6 +38,16 @@
   "decisions": [
     { "date": "2026-09-27", "decision": "Use a restrained deep-teal enterprise direction with warm amber focus and sans-serif typography.", "reason": "Supports learner motivation and dense admin work without copying the archived V1/V2 UI." },
     { "date": "2026-09-27", "decision": "Use one semantic token contract for light/dark web and future native surfaces.", "reason": "Keeps tenant branding and accessibility behavior consistent." }
+  ],
+  "explorations": [
+    {
+      "date": "2026-09-30",
+      "status": "candidate-not-selected",
+      "directions": ["Calm Command", "Guided Momentum", "Adaptive Workbench"],
+      "recommendedBase": "Calm Command with role-adaptive Guided Momentum and constrained Workbench patterns",
+      "evidence": "design/experience-directions.md",
+      "selectionGate": "Comparable prototypes plus five-role task tests and accessibility review"
+    }
   ],
   "evidence": [
     {

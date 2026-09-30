@@ -10,4 +10,4 @@ V1/V2 fontu, marka görünümü veya Oguz ekranı tasarım başlangıcı değild
 
 **21st.dev:** [resmî MCP/CLI akışı](https://21st.dev/blog/introducing-agents-cli) ile tasarım yönü ve bileşen araması. Her öneri tasarım sistemi, lisans, bağımlılık, erişilebilirlik, performans ve gerçek kullanıcı işiyle denetlenir; müşteri verisi isteme girmez, Respongo varlıkları yayımlanmaz. API anahtarı yalnızca işletim sistemi gizli değişkeninde tutulur; kredi yoksa tasarım ilerlemesi durmaz.
 
-[Rol ekranları](role-flows.md) · [UX/UI ve ön yüz kalite sözleşmesi](experience-engineering.md) · [21st brief](21st-brief.md) · [asset planı](asset-plan.md) · [modül/kabul listesi](modules.md).
+[Rol ekranları](role-flows.md) · [Üç UX yönü](experience-directions.md) · [UX/UI ve ön yüz kalite sözleşmesi](experience-engineering.md) · [21st brief](21st-brief.md) · [asset planı](asset-plan.md) · [modül/kabul listesi](modules.md).

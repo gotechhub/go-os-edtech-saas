@@ -5,9 +5,9 @@
 | ID | Faz | Modül | Durum |
 |---|---|---|---|
 | FOUND-01 | F0 | Ürün araştırması ve görev doğrulaması | 0/3 |
-| FOUND-02 | F0 | Alan sahipliği ve mimari kararlar | 0/3 |
-| FOUND-03 | F0 | Küresel güvenlik ve veri planı | 0/3 |
-| FOUND-04 | F0 | Bütçe, ölçek ve yayın planı | 0/3 |
+| FOUND-02 | F0 | Alan sahipliği ve mimari kararlar | 2/3 |
+| FOUND-03 | F0 | Küresel güvenlik ve veri planı | 1/3 |
+| FOUND-04 | F0 | Bütçe, ölçek ve yayın planı | 1/3 |
 
 ## FOUND-01 · Ürün araştırması ve görev doğrulaması
 

@@ -15,6 +15,9 @@ Bu harita *hangi bilginin nerede olduğunu* gösterir. Her görevde yalnızca k�
 | [`../.ai_memory/session_state.md`](../.ai_memory/session_state.md) | Son çalışma ve sıradaki iş | Uzun aradan sonra |
 | [`../docs/architecture/localization-white-label.md`](../docs/architecture/localization-white-label.md) | HQ dil paketi, lisans, tenant overlay ve sürüm sözleşmesi | Her ürünün görünen metni veya dil hakkı değişirken |
 | [`../docs/architecture/delivery-roadmap.md`](../docs/architecture/delivery-roadmap.md) | OS Core → Super Admin → Control Center → ürün dalgaları uygulama sırası | Faz veya öncelik değişirken |
+| [`../docs/architecture/f0-readiness.md`](../docs/architecture/f0-readiness.md) | F0 kanıt matrisi ve kapanmamış görevler | F0 durumu veya kabul kanıtı değişirken |
+| [`../docs/architecture/threat-model.md`](../docs/architecture/threat-model.md) | Güven sınırları, veri sınıfları, tehdit ve test eşlemesi | Veri, yetki, dosya, AI veya operasyon sınırı değişirken |
+| [`../docs/architecture/capacity-cost-baseline.md`](../docs/architecture/capacity-cost-baseline.md) | Beta yük profili, maliyet defteri ve AWS geçiş kapıları | Kapasite, bütçe veya barındırma kararı değişirken |
 | [`../operations/os-core/README.md`](../operations/os-core/README.md) | İç teknik işletim konsolu ve Super Admin sınırı | Sistem, güvenlik, yayın veya altyapı ekranı değişirken |
 | [`../intelligence/goai-engine/product-architecture.md`](../intelligence/goai-engine/product-architecture.md) | GOAI ürün içi deneyim, motorlar, risk/onay ve iki yönetim düzlemi | AI, agent, RAG, araç, MCP veya kredi değişirken |
 

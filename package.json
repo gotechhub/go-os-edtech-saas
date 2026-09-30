@@ -12,7 +12,8 @@
     "tracker:update": "node scripts/update-project-tracker.mjs",
     "tracker:check": "node scripts/update-project-tracker.mjs --check",
     "structure:check": "node scripts/check-structure.mjs",
-    "check": "corepack pnpm tracker:check && corepack pnpm structure:check && corepack pnpm test && corepack pnpm typecheck && corepack pnpm build"
+    "architecture:check": "node scripts/check-architecture-boundaries.mjs",
+    "check": "corepack pnpm tracker:check && corepack pnpm structure:check && corepack pnpm architecture:check && corepack pnpm test && corepack pnpm typecheck && corepack pnpm build"
   },
   "devDependencies": {
     "@electric-sql/pglite": "0.5.8",

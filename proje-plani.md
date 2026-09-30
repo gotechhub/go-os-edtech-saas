@@ -2,7 +2,7 @@
 
 **Kaynak tarihi:** 2026-09-30 · **Durum:** Uygulama başladı · **Aktif faz:** F0 Araştırma, kapsam ve mimari kapısı
 
-**Doğrulanmış ilerleme:** %2 · **Görev:** 12/495 tamamlandı, 483 kaldı · **Modül:** 165 · **Engel:** 0
+**Doğrulanmış ilerleme:** %3 · **Görev:** 16/495 tamamlandı, 479 kaldı · **Modül:** 165 · **Engel:** 0
 **Dil hedefi:** 10 dil; 2 temel (Türkçe varsayılan + İngilizce), 8 ek lisans. Teknik paket yayını OS Core'da, müşteri lisans/ataması [Super Admin](operations/respongo-hq/language-control.md) alanındadır.
 
 > Bu oran yalnızca tarihli kabul kanıtı bulunan görevlerden hesaplanır. Tarihsel V1/V2 oranları ve taslak dosyalar Respongo OS tamamlanması sayılmaz.
@@ -17,14 +17,14 @@
 ## Sıradaki üç görev
 
 1. **FOUND-01** Ürün araştırması ve görev doğrulaması — Tanım ve araştırma (F0).
-2. **FOUND-02** Alan sahipliği ve mimari kararlar — Tanım ve araştırma (F0).
-3. **UX-01** Deneyim araştırması ve 21st yönleri — Tanım ve araştırma (F0).
+2. **UX-01** Deneyim araştırması ve 21st yönleri — Tanım ve araştırma (F0).
+3. **FOUND-02** Alan sahipliği ve mimari kararlar — Kabul ve kanıt (F0).
 
 ## Fazlar
 
 | Faz | Hedef | Modül | Doğrulanan/görev |
 |---|---|---:|---:|
-| F0 · Araştırma, kapsam ve mimari kapısı | Ürün sahipliği, kullanıcı görevi, veri, güvenlik, UX ve kabul sözleşmelerini kesinleştirmek | 5 | 0/15 |
+| F0 · Araştırma, kapsam ve mimari kapısı | Ürün sahipliği, kullanıcı görevi, veri, güvenlik, UX ve kabul sözleşmelerini kesinleştirmek | 5 | 4/15 |
 | F1 · Respongo OS çekirdek platformu | Kimlik, tenant, rol, lisans/deneme, depolama, audit, dil, kuyruk ve API temelini kurmak | 28 | 11/84 |
 | F2 · Respongo OS Core konsolu | Respongo teknik ekibinin sistem, güvenlik, yayın, iş kuyruğu, maliyet ve altyapıyı yönetmesi | 10 | 0/30 |
 | F3 · Super Admin · müşteri ve portal filosu | Müşteri 360, portal fabrikası, demo, lisans, sektör paketi, destek ve tenant rollout yönetimi | 11 | 0/33 |
@@ -40,7 +40,7 @@
 
 | Alan | Modül | Doğrulanan/görev | Döküm |
 |---|---:|---:|---|
-| Araştırma ve mimari | 4 | 0/12 | [Modüller](docs/architecture/foundation-modules.md) |
+| Araştırma ve mimari | 4 | 4/12 | [Modüller](docs/architecture/foundation-modules.md) |
 | Ortak SaaS platformu | 15 | 0/45 | [Modüller](platform/modules.md) |
 | Respongo OS Core · sistem işletim konsolu | 10 | 0/30 | [Modüller](operations/os-core/modules.md) |
 | Super Admin · müşteri ve portal yönetimi | 11 | 0/33 | [Modüller](operations/respongo-hq/modules.md) |
