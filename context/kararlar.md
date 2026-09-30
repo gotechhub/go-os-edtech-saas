@@ -1,0 +1,21 @@
+# Karar günlüğü
+
+| Tarih | ID | Karar | Gerekçe | Durum |
+|---|---|---|---|---|
+| 2026-09-27 | V3-001 | V1/V2 korunur; V3 temiz, sektör bağımsız mimari olarak başlar | Tarihsel kod/veri bağlarını taşımamak | Aktif |
+| 2026-09-27 | V3-002 | Müşteri yönetimi Control Center, iç süper yönetim ve CRM Respongo HQ | Müşteri ve iç yetkiyi ayırmak | Aktif |
+| 2026-09-27 | V3-003 | Beş SaaS ürün + ortak GOAI; GOFACTORY yönetilen hizmet; GOHR/GORECRUIT kapsam dışı | Ürün/hizmet sınırını açık tutmak | Aktif |
+| 2026-09-27 | V3-004 | Tek tenant bazlı 14 günlük deneme; iç demo hariç; bitişte yetkili okuma | Tutarlı ticari ve teknik kural | Aktif |
+| 2026-09-27 | V3-005 | Beta GitHub/Vercel/Supabase/özel S3; AWS tam geçişi ayrı program | Beta hızını ve taşınabilirliği dengelemek | Aktif |
+| 2026-09-27 | V3-006 | Codex ve Claude `CLAUDE.md` ve `context` üzerinden aynı kararlara bakar | Ayrı ajan hafızalarında çelişkiyi azaltmak | Aktif |
+| 2026-09-27 | V3-007 | 21st.dev yeni tasarımın araştırma/uyarlama aracı; üçüncü taraf kodu doğrudan ürün gerçeği sayılmaz | Lisans, kalite ve marka kontrolü | Aktif |
+| 2026-09-27 | V3-008 | V3 Türkçe varsayılan ve İngilizce + sekiz ek dil hedefiyle kurulacak; müşterinin Control Center'da ürünler arası terim/etiket sürümü yayımlaması desteklenecek | Kurumsal white label ve küresel kullanım; teknik/yetki kimlikleri sabit kalır | Aktif |
+| 2026-09-27 | V3-009 | Dil paketinin ve lisansının sahibi Respongo HQ; TR/EN dahil, diğer sekiz dil ek lisans. Müşteri dil paketini overlay ile özelleştirir; temel güncellemeler kendi değişikliklerini bozmadan senkronize olur | Yüzlerce portalda tek paket kontrolü ve güvenli white-label yükseltmesi | Aktif |
+| 2026-09-27 | V3-010 | Öğrenme işlemi ve resmî kanıt GOLMS'in; rol/organizasyon/yetkinlik sözlüğü Shared Platform'un; beceri pasaportu ve gelişim zekâsı GOLXP'in sahibidir. Respongo HQ filo operasyonu, Control Center müşteri yönetimidir | Rakipte aynı menüde görülen görevleri veri sahipliği ve yetki sınırı bozulmadan ayrıştırmak | Aktif |
+| 2026-09-27 | V3-011 | GOAI ayrı ürün/dashboard değildir; ürün içi ortak motor ve UI'dır. Tenant AI yönetişimi Control Center'da, global provider/secret/maliyet/eval/rollout Respongo HQ'dadır. Deterministik workflow ve ürün yazmaları ilgili platform/ürün komutunda kalır | AI deneyimini birleştirirken müşteri ve iç platform yetkisini, veri sahipliğini ve yüksek etkili eylem onayını ayırmak | Aktif |
+| 2026-09-27 | V3-012 | Kanonik beta kaynakları GitHub `gotechhub/go-os-edtech-saas`, Vercel `respongo/saas-edtech-platform-360` ve Supabase `qlglgtaktsxyerqacvdy` projesidir; aynı GitHub deposuna bağlı ikinci Vercel projesi tutulmaz | Dağıtım, ortam değişkeni ve canlı alan adı için tek sahip belirlemek; mükerrer yayın ve maliyet riskini önlemek | Aktif |
+| 2026-09-27 | V3-013 | Ortak sistem varlıkları tek özel S3 bucket'ında; her tenant verisi müşteri bilgisi içermeyen ayrı özel bucket'ta tutulur. Vercel erişimi OIDC uygulama rolüyle, bucket provisioning ayrı HQ rolüyle yapılır | Tenant izolasyonu, kalıcı anahtar riskini kaldırmak ve taşınabilir özel nesne depolaması sağlamak | Aktif |
+| 2026-09-28 | V3-014 | `go-os-edtech-saas` Respongo OS'nin kanonik monoreposudur; aktif kaynaklar depo kökünde tutulur ve ayrıca `v3/` sarmalayıcı klasörü kullanılmaz | Dosya yollarını sadeleştirmek, Vercel/pnpm/ajan bağlamında tek proje kökü oluşturmak ve sürüm adı karışıklığını kaldırmak | Aktif |
+| 2026-09-30 | V3-015 | SCORM içeriği LMS oturum alanında doğrudan çalıştırılmaz; ayrı player origin, tek kullanımlık bilet, süreli ve deneme/yayın kapsamlı HttpOnly oturum, path-safe S3 proxy ve sıralı runtime kanıtı kullanılır | Aktif içeriğin ana uygulama çerezlerine erişmesini engellemek, S3 ayrıntılarını gizlemek ve suspend/resume kanıtını aynı attempt üzerinde korumak | Aktif |
+
+Karar değişirse eski satırın durumunu `Değiştirildi` yapıp yeni satır ekle. Doğrulanmamış fikirleri bu tabloya koyma.

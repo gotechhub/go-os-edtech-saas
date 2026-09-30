@@ -1,0 +1,18 @@
+{
+  "version": 1,
+  "bucketEnvironmentVariable": "S3_SYSTEM_BUCKET",
+  "prefixMarkers": [
+    "system/brand/",
+    "system/industry-packs/",
+    "system/locales/",
+    "system/templates/email/",
+    "system/templates/certificate/",
+    "system/templates/onboarding/",
+    "system/assets/icons/",
+    "system/assets/illustrations/",
+    "system/assets/fonts/",
+    "system/assets/badges/",
+    "system/assets/banners/"
+  ],
+  "objects": []
+}

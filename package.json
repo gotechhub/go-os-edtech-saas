@@ -7,11 +7,11 @@
   "scripts": {
     "dev": "corepack pnpm --filter @respongo-os/web dev",
     "build": "corepack pnpm --filter @respongo-os/web build",
-    "typecheck": "tsc -p v3/tsconfig.json && corepack pnpm --filter @respongo-os/web typecheck",
-    "test": "vitest run --config v3/vitest.config.ts",
-    "tracker:update": "node v3/scripts/update-project-tracker.mjs",
-    "tracker:check": "node v3/scripts/update-project-tracker.mjs --check",
-    "structure:check": "node v3/scripts/check-structure.mjs",
+    "typecheck": "tsc -p tsconfig.json && corepack pnpm --filter @respongo-os/web typecheck",
+    "test": "vitest run --config vitest.config.ts",
+    "tracker:update": "node scripts/update-project-tracker.mjs",
+    "tracker:check": "node scripts/update-project-tracker.mjs --check",
+    "structure:check": "node scripts/check-structure.mjs",
     "check": "corepack pnpm tracker:check && corepack pnpm structure:check && corepack pnpm test && corepack pnpm typecheck && corepack pnpm build"
   },
   "devDependencies": {

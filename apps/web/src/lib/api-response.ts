@@ -1,0 +1,10 @@
+import { ApplicationError } from "@respongo-os/golms/application";
+import { NextResponse } from "next/server";
+
+export function apiError(error: unknown, requestId: string) {
+  if (error instanceof ApplicationError) return NextResponse.json({ schemaVersion: "2026-09-27", requestId, error: { code: error.code } }, { status: error.status });
+  if (error instanceof Error && "code" in error && "status" in error && typeof error.code === "string" && typeof error.status === "number") {
+    return NextResponse.json({ schemaVersion: "2026-09-27", requestId, error: { code: error.code } }, { status: error.status });
+  }
+  return NextResponse.json({ schemaVersion: "2026-09-27", requestId, error: { code: "INTERNAL_ERROR" } }, { status: 500 });
+}

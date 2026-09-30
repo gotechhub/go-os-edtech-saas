@@ -1,9 +1,10 @@
 packages:
-  - v3/apps/*
-  - v3/packages/*
-  - v3/platform/*
-  - v3/products/*
-  - v3/intelligence/*
-  - v3/standards/*
+  - apps/*
+  - packages/*
+  - platform/*
+  - products/*
+  - intelligence/*
+  - standards/*
+  - services/*
 allowBuilds:
   esbuild: true

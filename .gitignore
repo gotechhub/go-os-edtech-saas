@@ -8,5 +8,8 @@ playwright-report/
 .env*
 !.env.example
 .vercel/
-v3/supabase/.temp/
+supabase/.temp/
 *.log
+assets/payload/
+assets/local-transfer/
+*.scorm.zip
