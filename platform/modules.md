@@ -12,7 +12,7 @@
 | PLAT-06 | F1 | Bildirim ve iletişim | 0/3 |
 | PLAT-07 | F1 | İş akışı, kuyruk ve audit | 0/3 |
 | PLAT-08 | F1 | Destek ve bilgi merkezi | 0/3 |
-| PLAT-09 | F4 | Ortak web/mobil kabuk ve API | 0/3 |
+| PLAT-09 | F3 | Ortak web/mobil kabuk ve API | 0/3 |
 | PLAT-10 | F1 | 10 dilli mesaj ve terim altyapısı | 0/3 |
 | PLAT-11 | F1 | Dil paketi overlay ve otomatik senkron | 0/3 |
 | PLAT-12 | F1 | Kurum sözlüğü, rol ve yetkinlik çekirdeği | 0/3 |
@@ -70,7 +70,7 @@ Faz: **F1**. Alt modüller: Kullanıcı→müşteri admin→HQ aktarımı; SLA v
 
 ## PLAT-09 · Ortak web/mobil kabuk ve API
 
-Faz: **F4**. Alt modüller: Rol navigasyonu; Sürümleme ve API sözleşmesi; Çevrimdışı/yeniden bağlanma.
+Faz: **F3**. Alt modüller: Rol navigasyonu; Sürümleme ve API sözleşmesi; Çevrimdışı/yeniden bağlanma.
 
 **Kabul senaryosu:** Beş rolün kritik görevi web ve mobilde aynı yetkiyle erişilebilir.
 

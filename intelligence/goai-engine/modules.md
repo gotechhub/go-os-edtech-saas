@@ -5,14 +5,14 @@
 | ID | Faz | Modül | Durum |
 |---|---|---|---|
 | AI-01 | F1 | Model ağ geçidi ve politika | 0/3 |
-| AI-02 | F9 | Kaynaklı arama ve bilgi | 0/3 |
-| AI-03 | F9 | Öneri ve beceri zekâsı | 0/3 |
-| AI-04 | F9 | Doğal dille rapor ve agent işleri | 0/3 |
-| AI-05 | F10 | AI değerlendirme ve izleme | 0/3 |
-| AI-06 | F9 | Çok dilli AI ve çeviri güvenliği | 0/3 |
-| AI-07 | F9 | İçerik zekâsı ve metadata yardımcısı | 0/3 |
-| AI-08 | F9 | Ölçme ve değerlendirme yardımcısı | 0/3 |
-| AI-09 | F9 | Rol bazlı operasyon yardımcıları | 0/3 |
+| AI-02 | F8 | Kaynaklı arama ve bilgi | 0/3 |
+| AI-03 | F8 | Öneri ve beceri zekâsı | 0/3 |
+| AI-04 | F8 | Doğal dille rapor ve agent işleri | 0/3 |
+| AI-05 | F9 | AI değerlendirme ve izleme | 0/3 |
+| AI-06 | F8 | Çok dilli AI ve çeviri güvenliği | 0/3 |
+| AI-07 | F8 | İçerik zekâsı ve metadata yardımcısı | 0/3 |
+| AI-08 | F8 | Ölçme ve değerlendirme yardımcısı | 0/3 |
+| AI-09 | F8 | Rol bazlı operasyon yardımcıları | 0/3 |
 | AI-10 | F1 | Context Engine ve ürün kayıt sözleşmesi | 0/3 |
 | AI-11 | F1 | Tool Registry ve eylem risk modeli | 0/3 |
 | AI-12 | F1 | Approval Engine ve yüksek etkili eylem | 0/3 |
@@ -20,8 +20,8 @@
 | AI-14 | F1 | GO Credits ve maliyet defteri | 0/3 |
 | AI-15 | F1 | Konuşma, hafıza ve veri yaşam döngüsü | 0/3 |
 | AI-16 | F1 | AI orkestrasyonu ve deterministik workflow sınırı | 0/3 |
-| AI-17 | F10 | MCP ve dış AI istemci geçidi | 0/3 |
-| AI-18 | F4 | Shared GOAI UI ve bağlamsal deneyim | 0/3 |
+| AI-17 | F9 | MCP ve dış AI istemci geçidi | 0/3 |
+| AI-18 | F3 | Shared GOAI UI ve bağlamsal deneyim | 0/3 |
 
 ## AI-01 · Model ağ geçidi ve politika
 
@@ -31,49 +31,49 @@ Faz: **F1**. Alt modüller: Sağlayıcı soyutlama; Tenant/bölge izinleri; Kota
 
 ## AI-02 · Kaynaklı arama ve bilgi
 
-Faz: **F9**. Alt modüller: İzin kapsamlı indeks; Kaynak/provenans bağlantısı; Silme ve yeniden indeks.
+Faz: **F8**. Alt modüller: İzin kapsamlı indeks; Kaynak/provenans bağlantısı; Silme ve yeniden indeks.
 
 **Kabul senaryosu:** İki tenant arasında sonuç sızmaz; kaynak geri çağrılır.
 
 ## AI-03 · Öneri ve beceri zekâsı
 
-Faz: **F9**. Alt modüller: Neden gösterimi; İnsan onayı; Etkililik ölçümü.
+Faz: **F8**. Alt modüller: Neden gösterimi; İnsan onayı; Etkililik ölçümü.
 
 **Kabul senaryosu:** Öneri açıklanır, reddedilir ve ölçüm nedensellik iddia etmez.
 
 ## AI-04 · Doğal dille rapor ve agent işleri
 
-Faz: **F9**. Alt modüller: Yetkili sorgu planı; Onaylı aksiyon; Araç/audit sınırı.
+Faz: **F8**. Alt modüller: Yetkili sorgu planı; Onaylı aksiyon; Araç/audit sınırı.
 
 **Kabul senaryosu:** Serbest metin, rolü aşan veri veya yazma işlemi üretemez.
 
 ## AI-05 · AI değerlendirme ve izleme
 
-Faz: **F10**. Alt modüller: Kalite/güvenlik eval; Prompt/sürüm izi; Maliyet ve hata gözlemi.
+Faz: **F9**. Alt modüller: Kalite/güvenlik eval; Prompt/sürüm izi; Maliyet ve hata gözlemi.
 
 **Kabul senaryosu:** Kritik gerileme yayını durdurur; örneklerde müşteri sırrı yoktur.
 
 ## AI-06 · Çok dilli AI ve çeviri güvenliği
 
-Faz: **F9**. Alt modüller: Arayüz/kaynak/yanıt dili ayrımı; 10 dil kalite ve kaynaklılık eval'i; İzinli çeviri/insan onayı.
+Faz: **F8**. Alt modüller: Arayüz/kaynak/yanıt dili ayrımı; 10 dil kalite ve kaynaklılık eval'i; İzinli çeviri/insan onayı.
 
 **Kabul senaryosu:** Model yanıtı seçilen dilde kaynaklıdır; tenant verisi ve gizli yorum izin dışına çıkmaz.
 
 ## AI-07 · İçerik zekâsı ve metadata yardımcısı
 
-Faz: **F9**. Alt modüller: Özet/etiket/taksonomi taslağı; Beceri ve rol eşleme önerisi; Benzer/tekrar içerik sinyali; Kaynak ve güven skoru.
+Faz: **F8**. Alt modüller: Özet/etiket/taksonomi taslağı; Beceri ve rol eşleme önerisi; Benzer/tekrar içerik sinyali; Kaynak ve güven skoru.
 
 **Kabul senaryosu:** AI önerisi mevcut sözlüğe aday olarak düşer; insan onayı olmadan katalog veya beceri kimliği değiştirmez.
 
 ## AI-08 · Ölçme ve değerlendirme yardımcısı
 
-Faz: **F9**. Alt modüller: Öğrenme çıktısından soru taslağı; Zorluk/yanıltıcı/önyargı kontrolü; Madde analizi önerisi; Uzman onayı ve sürüm.
+Faz: **F8**. Alt modüller: Öğrenme çıktısından soru taslağı; Zorluk/yanıltıcı/önyargı kontrolü; Madde analizi önerisi; Uzman onayı ve sürüm.
 
 **Kabul senaryosu:** AI sorusu kaynak, hedef ve uzman onayı olmadan canlı sınava girmez; model çıktısı cevap anahtarının tek kanıtı değildir.
 
 ## AI-09 · Rol bazlı operasyon yardımcıları
 
-Faz: **F9**. Alt modüller: Admin/eğitmen/yönetici/öğrenen bağlamı; İzinli sıradaki iş önerisi; Önizleme-onay-uygulama; Araç kapsamı ve geri alma.
+Faz: **F8**. Alt modüller: Admin/eğitmen/yönetici/öğrenen bağlamı; İzinli sıradaki iş önerisi; Önizleme-onay-uygulama; Araç kapsamı ve geri alma.
 
 **Kabul senaryosu:** Yardımcı gerçek rolü aşamaz; yüksek etkili komut açık onay ve ürün API'si olmadan çalışmaz.
 
@@ -121,12 +121,12 @@ Faz: **F1**. Alt modüller: Plan/taslak üretimi; Kuyruk/worker/retry/iptal; Pla
 
 ## AI-17 · MCP ve dış AI istemci geçidi
 
-Faz: **F10**. Alt modüller: OAuth/OIDC ve tenant scope; Read/write ayrımı; Kararlı Tool Registry yayını; Rate limit/onay/audit.
+Faz: **F9**. Alt modüller: OAuth/OIDC ve tenant scope; Read/write ayrımı; Kararlı Tool Registry yayını; Rate limit/onay/audit.
 
 **Kabul senaryosu:** Dış istemci yalnız açık scope ve kararlı araçları kullanır; provider anahtarı veya iç servis yetkisi alamaz.
 
 ## AI-18 · Shared GOAI UI ve bağlamsal deneyim
 
-Faz: **F4**. Alt modüller: Web/native ortak panel; Product registration; Kaynak/araç ilerleme/onay kartı; Non-modal desktop ve mobile sheet.
+Faz: **F3**. Alt modüller: Web/native ortak panel; Product registration; Kaynak/araç ilerleme/onay kartı; Non-modal desktop ve mobile sheet.
 
 **Kabul senaryosu:** Ayrı GOAI learner/admin portalı olmadan aynı motor her üründe doğru bağlam, rol, kaynak ve onay deneyimiyle çalışır.

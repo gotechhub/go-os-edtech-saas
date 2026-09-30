@@ -1,18 +1,33 @@
 # Respongo OS · proje yol haritası
 
-**Kaynak tarihi:** 2026-09-30 · **Durum:** Uygulama başladı · **Aktif faz:** F0 Araştırma, kapsam ve mimari kapısı
+**Kaynak tarihi:** 2026-09-30 · **Durum:** Uygulama başladı · **Aktif faz:** F0 Hazırlık ve mimari kapısı
 
-**Doğrulanmış ilerleme:** %3 · **Görev:** 16/495 tamamlandı, 479 kaldı · **Modül:** 165 · **Engel:** 0
+**Doğrulanmış ilerleme:** %3 · **Görev:** 16/495 tamamlandı, 28 aktif, 479 doğrulanmayı bekliyor · **Modül:** 165 · **Engel:** 0
 **Dil hedefi:** 10 dil; 2 temel (Türkçe varsayılan + İngilizce), 8 ek lisans. Teknik paket yayını OS Core'da, müşteri lisans/ataması [Super Admin](operations/respongo-hq/language-control.md) alanındadır.
 
 > Bu oran yalnızca tarihli kabul kanıtı bulunan görevlerden hesaplanır. Tarihsel V1/V2 oranları ve taslak dosyalar Respongo OS tamamlanması sayılmaz.
 
+## Yönetim hiyerarşisi
+
+1. **Respongo OS Core** (F1) — Sistem, güvenlik, sürüm, altyapı, sağlayıcı, veri ve felaket kurtarma işletimi
+   - Kullanıcı: Yalnız Respongo teknik ve güvenlik ekibi
+2. **Respongo Super Admin** (F2) — Müşteri, portal, demo, lisans, sektör paketi, destek ve filo operasyonu
+   - Kullanıcı: Respongo müşteri, ticari ve destek ekipleri
+3. **Müşteri Control Center** (F3) — Kuruluş, kullanıcı, ekip, marka, dil, ürün ayarı, rapor ve destek yönetimi
+   - Kullanıcı: Tenant sahibi ve müşteri yöneticileri
+4. **Ürün çalışma alanları** (F4-F7) — GOLMS → CREATE → LEARN → PERFORM ürün dalgaları ve rol bazlı işler
+   - Kullanıcı: Ürün rollerine göre son kullanıcılar
+5. **GOAI ortak zekâ katmanı** (F1-F9) — Kaynaklı öneri, analiz, yardımcı ve onaylı otomasyon; ürün veri sahipliğini devralmaz
+   - Kullanıcı: İzin ve ürün bağlamı içinde bütün roller
+
 ## Uygulama düzeni
 
-1. F0-F4 sıralı temel kapılardır; OS Core, Super Admin ve Control Center yetki sınırları doğrulanmadan ürün beta kabulüne geçilmez.
-2. F5-F8 ürün dalgaları sırayla yürür; sonraki ürünün araştırma ve sözleşme işi paralel olabilir ancak uygulama kapısı önceki dalganın çekirdek kabulünden sonra açılır.
-3. GOAI, güvenlik, veri, yerelleştirme, tasarım sistemi ve yayın mühendisliği çapraz akışlardır; ürün komutlarının sahipliğini devralmadan ilgili fazla eşzamanlı ilerler.
-4. Her faz çıkışı çalışan kod, migration, rol/tenant/deneme negatif testi, erişilebilirlik ve tarihli kabul kanıtı gerektirir.
+1. F0 hazırlık kapısıdır; ürün araştırması, sahiplik, tehdit/veri modeli ve kabul ölçütleri uygulanacak alan için yeterli kanıta ulaşmadan geri döndürülmesi pahalı karar alınmaz.
+2. F1 ilk üretim hattıdır: zorunlu kimlik/tenant/rol/deneme/audit omurgası ile Respongo OS Core ekranları tek dikey dilim olarak kurulur; teknik yetki müşteriye veya Super Admin'e verilmez.
+3. F2 Super Admin, F3 Control Center'dır. Müşteri/portal yaşam döngüsü Super Admin'den; tenant içi yönetim yalnız Control Center'dan yürür.
+4. F4-F7 ürün dalgaları sırayla yürür: GOLMS → CREATE → LEARN → PERFORM. Sonraki dalganın araştırma ve sözleşmesi paralel olabilir; kalıcı uygulama önceki dalganın çekirdek kabulinden sonra açılır.
+5. GOAI, güvenlik, veri, yerelleştirme, tasarım sistemi, depolama ve yayın mühendisliği çapraz akışlardır; ürün komutlarının sahipliğini devralmadan ilgili fazla eşzamanlı ilerler.
+6. Her faz çıkışı çalışan kod, migration, rol/tenant/deneme negatif testi, erişilebilirlik ve tarihli kabul kanıtı gerektirir.
 
 ## Sıradaki üç görev
 
@@ -22,19 +37,18 @@
 
 ## Fazlar
 
-| Faz | Hedef | Modül | Doğrulanan/görev |
-|---|---|---:|---:|
-| F0 · Araştırma, kapsam ve mimari kapısı | Ürün sahipliği, kullanıcı görevi, veri, güvenlik, UX ve kabul sözleşmelerini kesinleştirmek | 5 | 4/15 |
-| F1 · Respongo OS çekirdek platformu | Kimlik, tenant, rol, lisans/deneme, depolama, audit, dil, kuyruk ve API temelini kurmak | 28 | 11/84 |
-| F2 · Respongo OS Core konsolu | Respongo teknik ekibinin sistem, güvenlik, yayın, iş kuyruğu, maliyet ve altyapıyı yönetmesi | 10 | 0/30 |
-| F3 · Super Admin · müşteri ve portal filosu | Müşteri 360, portal fabrikası, demo, lisans, sektör paketi, destek ve tenant rollout yönetimi | 11 | 0/33 |
-| F4 · Control Center ve ortak deneyim | Müşteri yönetimi, onboarding, markalama, dil, ortak tasarım sistemi ve rol kabukları | 17 | 0/51 |
-| F5 · GOLMS · öğrenme operasyonu | İçerik, program, atama, uyum, ölçme, SCORM, rapor ve beş rol akışlarını tamamlamak | 22 | 1/66 |
-| F6 · CREATE · GOAUTHOR AI ve GOFACTORY | Müşteri yazarlığı ile Respongo yönetilen üretim hizmetini ayrı fakat bağlantılı kurmak | 20 | 0/60 |
-| F7 · LEARN · GOLXP ve GOCATALOG | Deneyim, beceri, sosyal öğrenme, katalog, tedarikçi, hak ve lisans akışlarını kurmak | 20 | 0/60 |
-| F8 · PERFORM · GOPM | Hedef, performans, 360 derece geri bildirim ve gelişim planlarını öğrenme kanıtına bağlamak | 9 | 0/27 |
-| F9 · GOAI ve ekosistem orkestrasyonu | İzinli agent, öneri, kaynaklı arama, rapor, onay ve çapraz ürün otomasyonlarını olgunlaştırmak | 7 | 0/21 |
-| F10 · Küresel beta ve kurumsal yayın | Mobil, entegrasyon, erişilebilirlik, performans, gözlem, felaket kurtarma ve müşteri kabulü | 16 | 0/48 |
+| Faz | Hedef | Modül | Aktif | Doğrulanan/görev | Faz ilerlemesi |
+|---|---|---:|---:|---:|---:|
+| F0 · Hazırlık ve mimari kapısı | Ürün sahipliği, kullanıcı görevi, veri, güvenlik, UX ve kabul sözleşmelerini doğrulamak | 5 | 2 | 4/15 | %27 |
+| F1 · Respongo OS Core ve güvenli platform omurgası | Kimlik, tenant, rol, deneme, audit ve depolama temelini kurup teknik işletim ekranlarını yalnız yetkili Respongo ekibine açmak | 38 | 12 | 11/114 | %10 |
+| F2 · Super Admin · müşteri ve portal filosu | Müşteri 360, portal fabrikası, demo, lisans, sektör paketi, destek ve tenant rollout yönetimini kurmak | 11 | 0 | 0/33 | %0 |
+| F3 · Control Center ve ortak deneyim | Müşterinin kuruluş, kullanıcı, marka, dil ve hak sahibi olduğu ürünleri yönetmesini sağlayan ortak deneyimi kurmak | 17 | 6 | 0/51 | %0 |
+| F4 · GOLMS · öğrenme operasyonu | İçerik, program, atama, uyum, ölçme, SCORM, rapor ve beş rol akışlarını tamamlamak | 22 | 7 | 1/66 | %2 |
+| F5 · CREATE · GOAUTHOR AI ve GOFACTORY | Müşteri yazarlığı ile Respongo yönetilen üretim hizmetini ayrı fakat bağlantılı kurmak | 20 | 0 | 0/60 | %0 |
+| F6 · LEARN · GOLXP ve GOCATALOG | Deneyim, beceri, sosyal öğrenme, katalog, tedarikçi, hak ve lisans akışlarını kurmak | 20 | 0 | 0/60 | %0 |
+| F7 · PERFORM · GOPM | Hedef, performans, 360 derece geri bildirim ve gelişim planlarını öğrenme kanıtına bağlamak | 9 | 0 | 0/27 | %0 |
+| F8 · GOAI ve ekosistem orkestrasyonu | İzinli agent, öneri, kaynaklı arama, rapor, onay ve çapraz ürün otomasyonlarını olgunlaştırmak | 7 | 0 | 0/21 | %0 |
+| F9 · Küresel beta ve kurumsal yayın | Mobil, entegrasyon, erişilebilirlik, performans, gözlem, felaket kurtarma ve müşteri kabulünü tamamlamak | 16 | 1 | 0/48 | %0 |
 
 ## Ürün ve alanlar
 

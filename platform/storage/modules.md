@@ -9,7 +9,7 @@
 | STOR-03 | F1 | Tarama, validasyon ve değişmez yayın | 2/3 |
 | STOR-04 | F1 | Yetkili indirme ve CloudFront teslimi | 1/3 |
 | STOR-05 | F1 | Sistem asset manifesti ve aktarım aracı | 2/3 |
-| STOR-06 | F10 | Saklama, yaşam döngüsü ve BYOS hazırlığı | 0/3 |
+| STOR-06 | F9 | Saklama, yaşam döngüsü ve BYOS hazırlığı | 0/3 |
 
 ## STOR-01 · Tenant bucket provisioning ve envanter
 
@@ -43,6 +43,6 @@ Faz: **F1**. Alt modüller: Manifest allowlist; Dry-run varsayılanı; Checksum 
 
 ## STOR-06 · Saklama, yaşam döngüsü ve BYOS hazırlığı
 
-Faz: **F10**. Alt modüller: Karantina/multipart temizliği; KVKK/GDPR/hukukî tutma; Deneme sonrası salt okunur; Cross-account role/external ID BYOS.
+Faz: **F9**. Alt modüller: Karantina/multipart temizliği; KVKK/GDPR/hukukî tutma; Deneme sonrası salt okunur; Cross-account role/external ID BYOS.
 
 **Kabul senaryosu:** Deneme bitişi veriyi silmez; saklama ve BYOS erişimi tenant, sözleşme ve audit sınırında uygulanır.

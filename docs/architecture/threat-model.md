@@ -35,8 +35,8 @@
 
 Her tablo/asset/message bir sınıf ve saklama sahibine bağlanır. Log ve audit, gereksiz ham içerik yerine aktör, eylem, kapsam, karar ve korelasyon kimliği saklar.
 
-## F1/F10 doğrulama kapıları
+## F1/F9 doğrulama kapıları
 
 - F1: tehditlerin DB/API negatif test karşılığı, secret envanteri, bölge veri akışı ve olay sahipleri.
 - F2: OS Core ayrıcalıklı erişim, break-glass ve olay müdahalesi.
-- F10: bağımsız güvenlik incelemesi, geri yükleme/silme tatbikatı, bağımlılık/SBOM ve müşteri sözleşme kontrolü.
+- F9: bağımsız güvenlik incelemesi, geri yükleme/silme tatbikatı, bağımlılık/SBOM ve müşteri sözleşme kontrolü.

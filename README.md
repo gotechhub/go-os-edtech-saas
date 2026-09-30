@@ -1,6 +1,6 @@
 # Respongo OS · kurumsal EdTech ekosistemi
 
-**Durum: mimari temel + platform ve ilk GOLMS çekirdeği.** Bu depo Respongo OS'nin kanonik monoreposudur; ayrıca bir `v3` kaynak katmanı kullanılmaz. Tarihsel V1/V2 kodu bu depoya kopyalanmaz. Tenant/rol/14 günlük deneme temeli ile GOLMS içerik → program → atama → SCORM girişimi → rapor dikey dilimi domain kodu ve temiz migration zincirinde doğrulanır. Yol haritası önce OS Core, Super Admin ve Control Center yönetim katmanlarını kurar; mevcut GOLMS kodu F5 teknik başlangıcı olarak korunur. Gerçek yönetim ekranları, 10 dil çevirisi ve hosted kabul ayrı kapılardır.
+**Durum: mimari temel + platform ve ilk GOLMS çekirdeği.** Bu depo Respongo OS'nin kanonik monoreposudur; ayrıca bir `v3` kaynak katmanı kullanılmaz. Tarihsel V1/V2 kodu bu depoya kopyalanmaz. Tenant/rol/14 günlük deneme temeli ile GOLMS içerik → program → atama → SCORM girişimi → rapor dikey dilimi domain kodu ve temiz migration zincirinde doğrulanır. Yol haritası önce güvenli platform omurgasıyla OS Core'u, ardından Super Admin ve Control Center yönetim katmanlarını kurar; mevcut GOLMS kodu F4 teknik başlangıcı olarak korunur. Gerçek yönetim ekranları, 10 dil çevirisi ve hosted kabul ayrı kapılardır.
 
 | Katman | Alanlar |
 |---|---|
