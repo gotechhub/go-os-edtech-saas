@@ -2,6 +2,8 @@ import type { Metadata } from "next";
 import { DataState } from "@/components/data-state";
 import { InternalShell } from "@/components/internal-shell";
 import { loadOsCoreAccess } from "@/lib/internal-access";
+import { collectSystemHealth } from "@/lib/system-health";
+import { loadPortalInventory } from "@/lib/portal-inventory";
 
 export const metadata: Metadata = { title: "Respongo OS Core" };
 
@@ -26,6 +28,8 @@ const modules = [
 export default async function OsCorePage({ params }: { params: Promise<{ locale: string }> }) {
   const { locale } = await params;
   const access = await loadOsCoreAccess();
+  const health = access.state === "ready" && access.permissions.includes("core.read") ? await collectSystemHealth() : null;
+  const inventory = access.state === "ready" && access.permissions.includes("core.read") ? await loadPortalInventory() : null;
   return <InternalShell locale={locale}><main className="content-page">
     <div className="page-heading"><div><span className="eyebrow">RESPONGO İÇ TEKNİK İŞLETİM</span><h1>Sistem komuta merkezi</h1><p>Platform sağlığı, güvenlik, sürüm, altyapı ve sağlayıcı operasyonları için ayrıcalıklı çalışma alanı.</p></div></div>
     {access.state !== "ready" ? <DataState title={stateCopy[access.state][0]} message={stateCopy[access.state][1]} /> : <>
@@ -35,6 +39,8 @@ export default async function OsCorePage({ params }: { params: Promise<{ locale:
         <article><span>Güvence seviyesi</span><strong>AAL2</strong></article>
       </section>
       <div className="inline-alert core-security-note" role="status"><strong>Gerçek yetki doğrulandı</strong><span>Bu görünüm tenant veya Super Admin rolünden üretilemez. Her ayrıcalıklı komut ayrıca gerekçe ve audit gerektirir.</span></div>
+      {health ? <section className="data-panel health-panel" aria-labelledby="health-title"><div className="panel-heading"><div><h2 id="health-title">Platform sağlık görünümü</h2><p>Canlı olmayan veya doğrulanamayan kaynaklar açıkça işaretlenir.</p></div><span>Son gözlem: {new Intl.DateTimeFormat(locale, { dateStyle: "short", timeStyle: "short" }).format(new Date(health.observedAt))}</span></div><div className="health-grid">{health.services.map((service) => <article key={service.id}><div><span className={`health-dot health-${service.status}`} /><strong>{service.label}</strong></div><b>{service.status === "healthy" ? "Sağlıklı" : service.status === "degraded" ? "Dikkat" : service.status === "outage" ? "Kesinti" : "Doğrulanamadı"}</b><p>{service.detail}</p><small>{service.freshness === "live" ? "Canlı gözlem" : service.freshness === "stale" ? "Eski veri" : "Tazelik bilinmiyor"}</small></article>)}</div></section> : null}
+      {inventory?.state === "ready" ? <section className="data-panel inventory-panel" aria-labelledby="inventory-title"><div className="panel-heading"><div><h2 id="inventory-title">Tenant ve portal teknik envanteri</h2><p>Müşteri içeriği ve kullanıcı kayıtları bu projeksiyona alınmaz.</p></div><span>{inventory.items.length} portal</span></div><div className="responsive-table"><table><thead><tr><th>Tenant / portal</th><th>Tür</th><th>Durum</th><th>Bölge</th><th>Teknik kapsam</th></tr></thead><tbody>{inventory.items.map(item=><tr key={item.portal_id}><td><strong>{item.tenant_name}</strong><small>{item.tenant_id} · {item.portal_slug}</small></td><td>{item.tenant_mode==="internal_demo"?"İç demo":"Müşteri"}</td><td><span className={`status ${item.portal_status==="active"?"status-published":"status-draft"}`}>{item.portal_status}</span></td><td>{item.region??"Atanmadı"}</td><td><strong>{item.entitlement_count} ürün hakkı</strong><small>{item.industry_key} · {item.default_locale}</small></td></tr>)}</tbody></table></div></section> : inventory ? <div className="inline-alert" role="status"><strong>Teknik envanter hazır değil</strong><span>{inventory.state==="migration_required"?"Inventory migration hosted ortamda uygulanmalıdır.":"Teknik envanter şu anda alınamıyor."}</span></div> : null}
       <section className="core-module-grid" aria-label="OS Core modülleri">{modules.map(([title, description, permission]) => {
         const enabled = access.permissions.includes(permission);
         return <article key={permission} className="core-module-card"><div><span className={`status ${enabled ? "status-published" : "status-draft"}`}>{enabled ? "Yetki hazır" : "Rol kapsamı dışında"}</span><h2>{title}</h2><p>{description}</p></div><small>{permission}</small></article>;
