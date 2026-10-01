@@ -14,12 +14,20 @@ const VERSION_A = "a4000000-0000-4000-8000-000000000001";
 const VERSION_B = "a4000000-0000-4000-8000-000000000002";
 const JOB_A = "a5000000-0000-4000-8000-000000000001";
 const JOB_B = "a5000000-0000-4000-8000-000000000002";
+const CONNECTOR = "a7000000-0000-4000-8000-000000000001";
 let db: PGlite;
+let deliveryId: string;
 
 async function asUser<T>(id: string, aal: "aal1" | "aal2", operation: () => Promise<T>) {
   await db.query("select set_config('request.jwt.claim.sub',$1,false)", [id]);
   await db.query("select set_config('request.jwt.claim.aal',$1,false)", [aal]);
   await db.exec("set role authenticated");
+  try { return await operation(); } finally { await db.exec("reset role"); }
+}
+
+async function asService<T>(operation: () => Promise<T>) {
+  await db.query("select set_config('request.jwt.claim.role','service_role',false)");
+  await db.exec("set role service_role");
   try { return await operation(); } finally { await db.exec("reset role"); }
 }
 
@@ -31,6 +39,17 @@ async function approve(jobId: string) {
   await asUser(SECURITY, "aal2", () => db.query(
     "select public.v3_core_approve_privileged_action($1)",
     [request.rows[0].id],
+  ));
+  return request.rows[0].id;
+}
+
+async function approveIntegration(targetDelivery: string) {
+  const request = await asUser(OPERATOR, "aal2", () => db.query<{ id: string }>(
+    "select public.v3_core_request_privileged_action('core.integrations.manage','integration_delivery',$1,'Integration replay requires independent approval') id",
+    [targetDelivery],
+  ));
+  await asUser(SECURITY, "aal2", () => db.query(
+    "select public.v3_core_approve_privileged_action($1)", [request.rows[0].id],
   ));
   return request.rows[0].id;
 }
@@ -65,6 +84,7 @@ beforeAll(async () => {
   await db.exec(readFileSync("supabase/migrations/202609300001_v3_internal_control_planes.sql", "utf8"));
   await db.exec(readFileSync("supabase/migrations/202610010001_v3_core_privileged_approvals.sql", "utf8"));
   await db.exec(readFileSync("supabase/migrations/202610010005_v3_core_job_operations.sql", "utf8"));
+  await db.exec(readFileSync("supabase/migrations/202610010006_v3_integration_delivery_operations.sql", "utf8"));
   await db.exec(`
     insert into v3_core.operators(user_id) values ('${OPERATOR}');
     insert into v3_core.role_grants(user_id,role_key,reason)
@@ -78,6 +98,8 @@ beforeAll(async () => {
     insert into v3_storage.processing_jobs(id,tenant_id,asset_version_id,job_type,status,attempt_count,error_code) values
       ('${JOB_A}','${TENANT_A}','${VERSION_A}','scorm_ingestion','failed',5,'ARCHIVE_INVALID'),
       ('${JOB_B}','${TENANT_B}','${VERSION_B}','scorm_ingestion','failed',3,'MANIFEST_INVALID');
+    insert into v3_integrations.connectors(id,tenant_id,provider_key,capability,endpoint_reference,secret_reference,created_by)
+      values('${CONNECTOR}','${TENANT_A}','msteams','webhook.delivery','endpoint/tenant-a/teams','vault/tenant-a/teams','${CUSTOMER}');
   `);
 });
 
@@ -132,6 +154,21 @@ describe("OS Core job operations", () => {
     ))).rejects.toThrow("CORE_JOB_APPROVAL_SCOPE_MISMATCH");
   });
 
+  it("quarantines a failed job once and keeps it out of worker claim states", async () => {
+    const ticket = await approve(JOB_B);
+    const first = await asUser(OPERATOR, "aal2", () => db.query<{ id: string }>(
+      "select public.v3_core_control_processing_job($1,'quarantine','Repeated manifest failure requires review',$2,'job-control-0001') id",
+      [JOB_B, ticket],
+    ));
+    const replay = await asUser(OPERATOR, "aal2", () => db.query<{ id: string }>(
+      "select public.v3_core_control_processing_job($1,'quarantine','Repeated manifest failure requires review',$2,'job-control-0001') id",
+      [JOB_B, ticket],
+    ));
+    expect(replay.rows[0].id).toBe(first.rows[0].id);
+    const state = await db.query<{ status: string }>("select status from v3_storage.processing_jobs where id=$1", [JOB_B]);
+    expect(state.rows[0].status).toBe("quarantined");
+  });
+
   it("denies customer and AAL1 retry commands", async () => {
     await expect(asUser(CUSTOMER, "aal2", () => db.query(
       "select public.v3_core_retry_processing_job($1,'Customer cannot retry platform jobs',$2,'job-retry-0003')",
@@ -141,5 +178,72 @@ describe("OS Core job operations", () => {
       "select public.v3_core_retry_processing_job($1,'Weak session cannot retry jobs',$2,'job-retry-0004')",
       [JOB_B, "a6000000-0000-4000-8000-000000000002"],
     ))).rejects.toThrow("CORE_JOB_PERMISSION_MFA_REQUIRED");
+  });
+
+  it("delivers connector events idempotently and exposes no payload or secret to Core", async () => {
+    const first = await asService(() => db.query<{ id: string }>(
+      "select public.v3_integrations_enqueue_event($1,'golms.assignment.created','event-key-0001',$2,now()) id",
+      [CONNECTOR, { learnerId: "private-user", programId: "private-program" }],
+    ));
+    const duplicate = await asService(() => db.query<{ id: string }>(
+      "select public.v3_integrations_enqueue_event($1,'golms.assignment.created','event-key-0001',$2,now()) id",
+      [CONNECTOR, { learnerId: "private-user", programId: "private-program" }],
+    ));
+    deliveryId = first.rows[0].id;
+    expect(duplicate.rows[0].id).toBe(deliveryId);
+
+    const claim = await asService(() => db.query<{ delivery_id: string }>(
+      "select * from public.v3_integrations_claim_delivery('connector-worker',120)",
+    ));
+    expect(claim.rows[0].delivery_id).toBe(deliveryId);
+    await asService(() => db.query(
+      "select public.v3_integrations_finish_delivery($1,'connector-worker','failed','REMOTE_TIMEOUT',504)",
+      [deliveryId],
+    ));
+
+    const overview = await asUser(OPERATOR, "aal2", () => db.query<Record<string, unknown>>(
+      "select * from public.v3_core_integration_delivery_overview()",
+    ));
+    expect(overview.rows[0]).toMatchObject({ delivery_id: deliveryId, delivery_status: "failed", error_code: "REMOTE_TIMEOUT" });
+    expect(Object.keys(overview.rows[0])).not.toEqual(expect.arrayContaining([
+      "payload", "event_payload", "endpoint_reference", "secret_reference",
+    ]));
+  });
+
+  it("replays one failed connector delivery only with its exact approval", async () => {
+    const ticket = await approveIntegration(deliveryId);
+    const first = await asUser(OPERATOR, "aal2", () => db.query<{ id: string }>(
+      "select public.v3_core_replay_integration_delivery($1,'Remote provider recovered after timeout',$2,'delivery-replay-0001') id",
+      [deliveryId, ticket],
+    ));
+    const replay = await asUser(OPERATOR, "aal2", () => db.query<{ id: string }>(
+      "select public.v3_core_replay_integration_delivery($1,'Remote provider recovered after timeout',$2,'delivery-replay-0001') id",
+      [deliveryId, ticket],
+    ));
+    expect(replay.rows[0].id).toBe(first.rows[0].id);
+    const state = await db.query<{ status: string; attempt_count: number }>(
+      "select status,attempt_count from v3_integrations.deliveries where id=$1", [deliveryId],
+    );
+    expect(state.rows[0]).toEqual({ status: "queued", attempt_count: 0 });
+  });
+
+  it("denies tenant users access to connector operations", async () => {
+    await expect(asUser(CUSTOMER, "aal2", () => db.query(
+      "select * from public.v3_core_integration_delivery_overview()",
+    ))).rejects.toThrow("CORE_INTEGRATION_READ_PERMISSION_MFA_REQUIRED");
+  });
+
+  it("records service-only worker health and marks old evidence stale", async () => {
+    await expect(asUser(CUSTOMER, "aal2", () => db.query(
+      "select public.v3_core_record_worker_heartbeat('worker-one','integration_delivery','healthy','worker/1.0',null,4,0)",
+    ))).rejects.toThrow("permission denied for function v3_core_record_worker_heartbeat");
+    await asService(() => db.query(
+      "select public.v3_core_record_worker_heartbeat('worker-one','integration_delivery','healthy','worker/1.0',null,4,0)",
+    ));
+    const live = await asUser(OPERATOR, "aal2", () => db.query<{ freshness: string }>("select * from public.v3_core_worker_overview()"));
+    expect(live.rows[0].freshness).toBe("live");
+    await db.query("update v3_core.worker_heartbeats set last_seen_at=now()-interval '3 minutes' where worker_id='worker-one'");
+    const stale = await asUser(OPERATOR, "aal2", () => db.query<{ freshness: string }>("select * from public.v3_core_worker_overview()"));
+    expect(stale.rows[0].freshness).toBe("stale");
   });
 });

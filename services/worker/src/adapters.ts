@@ -7,6 +7,7 @@ import { tmpdir } from "node:os";
 import { extname, join, resolve, sep } from "node:path";
 import type { DownloadedObject, QuarantineObjectReader, ScormIngestionJob, ScormJobRepository, ScormManifestResult } from "./scorm-ingestion";
 import type { ImmutableDirectoryPublisher, PublicationObjectReader, ScormPublicationJob, ScormPublicationRepository } from "./scorm-publication";
+import type { IntegrationDeliveryJob, IntegrationDeliveryRepository } from "./integration-delivery";
 
 type RpcRow = Record<string, unknown>;
 
@@ -38,6 +39,32 @@ export class SupabaseScormPublicationRepository implements ScormPublicationRepos
   reject(job: ScormPublicationJob, errorCode: string) { return finishPublication(this.client, job, this.worker(job.id), "rejected", errorCode, null, null).then(() => { this.workers.delete(job.id); }); }
   fail(job: ScormPublicationJob, errorCode: string) { return finishPublication(this.client, job, this.worker(job.id), "failed", errorCode, null, null).then(() => { this.workers.delete(job.id); }); }
   private worker(jobId: string): string { const value = this.workers.get(jobId); if (!value) throw new Error("SCORM_WORKER_LEASE_MISSING"); return value; }
+}
+
+export class SupabaseIntegrationDeliveryRepository implements IntegrationDeliveryRepository {
+  private readonly workers = new Map<string, string>();
+  constructor(private readonly client: SupabaseClient) {}
+  async claim(workerId: string): Promise<IntegrationDeliveryJob | null> {
+    const row = await rpcOne(this.client, "v3_integrations_claim_delivery", { worker_id: workerId, lease_seconds: 120 });
+    if (!row) return null;
+    const job: IntegrationDeliveryJob = {
+      id: String(row.delivery_id), tenantId: String(row.tenant_id), connectorId: String(row.connector_id),
+      providerKey: String(row.provider_key), capability: String(row.capability), endpointReference: String(row.endpoint_reference),
+      secretReference: String(row.secret_reference), eventType: String(row.event_type), eventPayload: row.event_payload,
+      eventIdempotencyKey: String(row.event_idempotency_key), attemptNumber: Number(row.attempt_number),
+    };
+    this.workers.set(job.id, workerId);
+    return job;
+  }
+  succeed(job: IntegrationDeliveryJob, responseCode: number) {
+    return finishIntegration(this.client, job, this.worker(job.id), "succeeded", null, responseCode)
+      .then(() => { this.workers.delete(job.id); });
+  }
+  fail(job: IntegrationDeliveryJob, errorCode: string, responseCode?: number) {
+    return finishIntegration(this.client, job, this.worker(job.id), "failed", errorCode, responseCode ?? null)
+      .then(() => { this.workers.delete(job.id); });
+  }
+  private worker(deliveryId: string) { const value=this.workers.get(deliveryId); if(!value) throw new Error("INTEGRATION_WORKER_LEASE_MISSING"); return value; }
 }
 
 export class S3ScormObjectReader implements QuarantineObjectReader, PublicationObjectReader {
@@ -86,7 +113,7 @@ export function createWorkerDependencies(environment: NodeJS.ProcessEnv = proces
   const region = required(environment, "AWS_REGION");
   const client = createClient(supabaseUrl, serviceKey, { auth: { persistSession: false, autoRefreshToken: false } });
   const s3 = new S3Client({ region });
-  return { ingestionJobs: new SupabaseScormJobRepository(client), publicationJobs: new SupabaseScormPublicationRepository(client), objects: new S3ScormObjectReader(s3), publisher: new S3ImmutableDirectoryPublisher(s3) };
+  return { ingestionJobs: new SupabaseScormJobRepository(client), publicationJobs: new SupabaseScormPublicationRepository(client), integrationJobs: new SupabaseIntegrationDeliveryRepository(client), objects: new S3ScormObjectReader(s3), publisher: new S3ImmutableDirectoryPublisher(s3) };
 }
 
 async function finishIngestion(client: SupabaseClient, job: ScormIngestionJob, workerId: string, outcome: string, code: string | null, manifest: ScormManifestResult | null): Promise<void> {
@@ -97,6 +124,11 @@ async function finishIngestion(client: SupabaseClient, job: ScormIngestionJob, w
 async function finishPublication(client: SupabaseClient, job: ScormPublicationJob, workerId: string, outcome: string, code: string | null, launchKey: string | null, fileCount: number | null): Promise<void> {
   const { error } = await client.rpc("v3_storage_finish_scorm_publication", { target_job: job.id, worker_id: workerId, outcome, outcome_code: code, published_launch_key: launchKey, published_file_count: fileCount });
   if (error) throw new Error(`SCORM_PUBLICATION_FINISH_FAILED:${error.message}`);
+}
+
+async function finishIntegration(client: SupabaseClient, job: IntegrationDeliveryJob, workerId: string, outcome: string, code: string | null, responseCode: number | null): Promise<void> {
+  const { error } = await client.rpc("v3_integrations_finish_delivery", { target_delivery: job.id, worker_id: workerId, outcome, outcome_code: code, http_status: responseCode });
+  if (error) throw new Error(`INTEGRATION_DELIVERY_FINISH_FAILED:${error.message}`);
 }
 
 async function rpcOne(client: SupabaseClient, name: string, args: Record<string, unknown>): Promise<RpcRow | null> {

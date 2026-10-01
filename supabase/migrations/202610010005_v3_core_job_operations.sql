@@ -96,7 +96,7 @@ begin
     raise exception 'CORE_JOB_NOT_FOUND' using errcode = 'P0002';
   end if;
   if not (
-    job_row.status = 'failed'
+    job_row.status in ('failed','quarantined')
     or (job_row.status = 'processing' and job_row.lease_expires_at <= now())
   ) then
     raise exception 'CORE_JOB_NOT_RETRYABLE' using errcode = '55000';
