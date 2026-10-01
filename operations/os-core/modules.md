@@ -9,7 +9,7 @@
 | CORE-03 | F1 | Tenant ve portal teknik envanteri | 2/3 |
 | CORE-04 | F1 | Sürüm, migration ve özellik bayrağı | 2/3 |
 | CORE-05 | F1 | İş kuyruğu ve entegrasyon operasyonu | 2/3 |
-| CORE-06 | F1 | Güvenlik, audit ve olay müdahalesi | 1/3 |
+| CORE-06 | F1 | Güvenlik, audit ve olay müdahalesi | 2/3 |
 | CORE-07 | F1 | Depolama, bölge ve altyapı kontrolü | 1/3 |
 | CORE-08 | F1 | Ana kataloglar ve paket yönetimi | 1/3 |
 | CORE-09 | F1 | Sağlayıcı, maliyet ve kullanım kontrolü | 1/3 |

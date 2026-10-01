@@ -8,6 +8,7 @@ import { extname, join, resolve, sep } from "node:path";
 import type { DownloadedObject, QuarantineObjectReader, ScormIngestionJob, ScormJobRepository, ScormManifestResult } from "./scorm-ingestion";
 import type { ImmutableDirectoryPublisher, PublicationObjectReader, ScormPublicationJob, ScormPublicationRepository } from "./scorm-publication";
 import type { IntegrationDeliveryJob, IntegrationDeliveryRepository } from "./integration-delivery";
+import type { SecurityRevocationJob, SecurityRevocationRepository } from "./security-revocation";
 
 type RpcRow = Record<string, unknown>;
 
@@ -67,6 +68,29 @@ export class SupabaseIntegrationDeliveryRepository implements IntegrationDeliver
   private worker(deliveryId: string) { const value=this.workers.get(deliveryId); if(!value) throw new Error("INTEGRATION_WORKER_LEASE_MISSING"); return value; }
 }
 
+export class SupabaseSecurityRevocationRepository implements SecurityRevocationRepository {
+  private readonly workers = new Map<string, string>();
+  constructor(private readonly client: SupabaseClient) {}
+  async claim(workerId: string): Promise<SecurityRevocationJob | null> {
+    const row = await rpcOne(this.client, "v3_security_claim_revocation", { worker_id: workerId, lease_seconds: 120 });
+    if (!row) return null;
+    const job: SecurityRevocationJob = {
+      id: String(row.revocation_id), tenantId: row.tenant_id ? String(row.tenant_id) : null,
+      incidentId: String(row.incident_id), targetType: String(row.target_type) as SecurityRevocationJob["targetType"],
+      targetReference: String(row.target_reference),
+    };
+    this.workers.set(job.id, workerId);
+    return job;
+  }
+  succeed(job: SecurityRevocationJob) {
+    return finishRevocation(this.client, job, this.worker(job.id), "succeeded", null).then(() => { this.workers.delete(job.id); });
+  }
+  fail(job: SecurityRevocationJob, errorCode: string) {
+    return finishRevocation(this.client, job, this.worker(job.id), "failed", errorCode).then(() => { this.workers.delete(job.id); });
+  }
+  private worker(revocationId: string) { const value=this.workers.get(revocationId); if(!value) throw new Error("REVOCATION_WORKER_LEASE_MISSING"); return value; }
+}
+
 export class S3ScormObjectReader implements QuarantineObjectReader, PublicationObjectReader {
   constructor(private readonly s3: S3Client) {}
   async download(job: ScormIngestionJob | ScormPublicationJob): Promise<DownloadedObject> {
@@ -113,7 +137,7 @@ export function createWorkerDependencies(environment: NodeJS.ProcessEnv = proces
   const region = required(environment, "AWS_REGION");
   const client = createClient(supabaseUrl, serviceKey, { auth: { persistSession: false, autoRefreshToken: false } });
   const s3 = new S3Client({ region });
-  return { ingestionJobs: new SupabaseScormJobRepository(client), publicationJobs: new SupabaseScormPublicationRepository(client), integrationJobs: new SupabaseIntegrationDeliveryRepository(client), objects: new S3ScormObjectReader(s3), publisher: new S3ImmutableDirectoryPublisher(s3) };
+  return { ingestionJobs: new SupabaseScormJobRepository(client), publicationJobs: new SupabaseScormPublicationRepository(client), integrationJobs: new SupabaseIntegrationDeliveryRepository(client), revocationJobs: new SupabaseSecurityRevocationRepository(client), objects: new S3ScormObjectReader(s3), publisher: new S3ImmutableDirectoryPublisher(s3) };
 }
 
 async function finishIngestion(client: SupabaseClient, job: ScormIngestionJob, workerId: string, outcome: string, code: string | null, manifest: ScormManifestResult | null): Promise<void> {
@@ -129,6 +153,11 @@ async function finishPublication(client: SupabaseClient, job: ScormPublicationJo
 async function finishIntegration(client: SupabaseClient, job: IntegrationDeliveryJob, workerId: string, outcome: string, code: string | null, responseCode: number | null): Promise<void> {
   const { error } = await client.rpc("v3_integrations_finish_delivery", { target_delivery: job.id, worker_id: workerId, outcome, outcome_code: code, http_status: responseCode });
   if (error) throw new Error(`INTEGRATION_DELIVERY_FINISH_FAILED:${error.message}`);
+}
+
+async function finishRevocation(client: SupabaseClient, job: SecurityRevocationJob, workerId: string, outcome: string, code: string | null): Promise<void> {
+  const { error } = await client.rpc("v3_security_finish_revocation", { target_revocation: job.id, worker_id: workerId, outcome, outcome_code: code });
+  if (error) throw new Error(`SECURITY_REVOCATION_FINISH_FAILED:${error.message}`);
 }
 
 async function rpcOne(client: SupabaseClient, name: string, args: Record<string, unknown>): Promise<RpcRow | null> {
