@@ -40,4 +40,6 @@ Hosted ortamda uygulanmadan önce yedek, row-count ve eski rol dağılımı kayd
 
 Yerel PGlite testleri MFA, süresi dolmuş grant, tenant kullanıcısı, Super Admin → Core ve Core → Super Admin negatif erişimini doğrular. OS Core web ekranı gerçek Supabase oturumundan rol/izin okuyarak güvenli boş, hata, MFA ve yasak durumlarını gösterir.
 
-Hosted migration, gerçek MFA oturumu, break-glass (acil erişim), iki kişili yüksek risk onayı, süreli destek oturumu komutları ve ayrıcalıklı eylem audit zinciri henüz kabul kanıtına sahip değildir. Bu nedenle `CORE-01` uygulama ve kabul kapısı açık kalır.
+`202610010001_v3_core_privileged_approvals.sql`, yüksek riskli Core komutları için kısa ömürlü ve tek kullanımlık iki kişili onay bileti ekler. Talep eden kişi kendi yetkisindeki işlem için gerekçe girer; farklı bir `security_operator` onaylar; talep eden kişi bileti yalnız bir kez tüketebilir. Talep, onay ve tüketim aynı korelasyon kimliğiyle audit kaydına bağlanır. Bilet tek başına altyapı işlemi çalıştırmaz; ilgili komutun aynı işlem içinde bu bileti tüketmesi gerekir.
+
+Hosted migration, gerçek MFA oturumu, break-glass (acil erişim), süreli destek oturumu komutları ve iki kişili biletin gerçek release/migration komutuna bağlanması henüz kabul kanıtına sahip değildir. Bu nedenle `CORE-01` uygulama ve kabul kapısı açık kalır.
