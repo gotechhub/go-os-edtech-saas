@@ -2,7 +2,7 @@
 
 **Kaynak tarihi:** 2026-10-01 · **Durum:** Uygulama başladı · **Aktif faz:** F0 Hazırlık ve mimari kapısı
 
-**Doğrulanmış ilerleme:** %11 · **Görev:** 54/495 tamamlandı, 23 aktif, 441 doğrulanmayı bekliyor · **Modül:** 165 · **Engel:** 0
+**Doğrulanmış ilerleme:** %11 · **Görev:** 54/495 tamamlandı, 24 aktif, 441 doğrulanmayı bekliyor · **Modül:** 165 · **Engel:** 0
 **Dil hedefi:** 10 dil; 2 temel (Türkçe varsayılan + İngilizce), 8 ek lisans. Teknik paket yayını OS Core'da, müşteri lisans/ataması [Super Admin](operations/respongo-hq/language-control.md) alanındadır.
 
 > Bu oran yalnızca tarihli kabul kanıtı bulunan görevlerden hesaplanır. Tarihsel V1/V2 oranları ve taslak dosyalar Respongo OS tamamlanması sayılmaz.
@@ -40,7 +40,7 @@
 | Faz | Hedef | Modül | Aktif | Doğrulanan/görev | Faz ilerlemesi |
 |---|---|---:|---:|---:|---:|
 | F0 · Hazırlık ve mimari kapısı | Ürün sahipliği, kullanıcı görevi, veri, güvenlik, UX ve kabul sözleşmelerini doğrulamak | 5 | 2 | 4/15 | %27 |
-| F1 · Respongo OS Core ve güvenli platform omurgası | Kimlik, tenant, rol, deneme, audit ve depolama temelini kurup teknik işletim ekranlarını yalnız yetkili Respongo ekibine açmak | 38 | 7 | 49/114 | %43 |
+| F1 · Respongo OS Core ve güvenli platform omurgası | Kimlik, tenant, rol, deneme, audit ve depolama temelini kurup teknik işletim ekranlarını yalnız yetkili Respongo ekibine açmak | 38 | 8 | 49/114 | %43 |
 | F2 · Super Admin · müşteri ve portal filosu | Müşteri 360, portal fabrikası, demo, lisans, sektör paketi, destek ve tenant rollout yönetimini kurmak | 11 | 0 | 0/33 | %0 |
 | F3 · Control Center ve ortak deneyim | Müşterinin kuruluş, kullanıcı, marka, dil ve hak sahibi olduğu ürünleri yönetmesini sağlayan ortak deneyimi kurmak | 17 | 6 | 0/51 | %0 |
 | F4 · GOLMS · öğrenme operasyonu | İçerik, program, atama, uyum, ölçme, SCORM, rapor ve beş rol akışlarını tamamlamak | 22 | 7 | 1/66 | %2 |
