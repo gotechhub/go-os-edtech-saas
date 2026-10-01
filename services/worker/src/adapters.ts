@@ -9,6 +9,7 @@ import type { DownloadedObject, QuarantineObjectReader, ScormIngestionJob, Scorm
 import type { ImmutableDirectoryPublisher, PublicationObjectReader, ScormPublicationJob, ScormPublicationRepository } from "./scorm-publication";
 import type { IntegrationDeliveryJob, IntegrationDeliveryRepository } from "./integration-delivery";
 import type { SecurityRevocationJob, SecurityRevocationRepository } from "./security-revocation";
+import type { InfrastructureCommandJob, InfrastructureCommandRepository } from "./infrastructure-command";
 
 type RpcRow = Record<string, unknown>;
 
@@ -91,6 +92,20 @@ export class SupabaseSecurityRevocationRepository implements SecurityRevocationR
   private worker(revocationId: string) { const value=this.workers.get(revocationId); if(!value) throw new Error("REVOCATION_WORKER_LEASE_MISSING"); return value; }
 }
 
+export class SupabaseInfrastructureCommandRepository implements InfrastructureCommandRepository {
+  private readonly workers = new Map<string,string>();
+  constructor(private readonly client: SupabaseClient) {}
+  async claim(workerId:string):Promise<InfrastructureCommandJob|null>{
+    const row=await rpcOne(this.client,"v3_core_claim_infrastructure_command",{worker_id:workerId,lease_seconds:180});
+    if(!row)return null;
+    const job:InfrastructureCommandJob={id:String(row.command_id),tenantId:row.tenant_id?String(row.tenant_id):null,provider:String(row.provider) as InfrastructureCommandJob["provider"],resourceType:String(row.resource_type),resourceReference:String(row.resource_reference),commandType:String(row.command_type) as InfrastructureCommandJob["commandType"]};
+    this.workers.set(job.id,workerId);return job;
+  }
+  succeed(job:InfrastructureCommandJob){return finishInfrastructure(this.client,job,this.worker(job.id),"succeeded",null).then(()=>{this.workers.delete(job.id);});}
+  fail(job:InfrastructureCommandJob,errorCode:string){return finishInfrastructure(this.client,job,this.worker(job.id),"failed",errorCode).then(()=>{this.workers.delete(job.id);});}
+  private worker(commandId:string){const value=this.workers.get(commandId);if(!value)throw new Error("INFRASTRUCTURE_WORKER_LEASE_MISSING");return value;}
+}
+
 export class S3ScormObjectReader implements QuarantineObjectReader, PublicationObjectReader {
   constructor(private readonly s3: S3Client) {}
   async download(job: ScormIngestionJob | ScormPublicationJob): Promise<DownloadedObject> {
@@ -137,7 +152,7 @@ export function createWorkerDependencies(environment: NodeJS.ProcessEnv = proces
   const region = required(environment, "AWS_REGION");
   const client = createClient(supabaseUrl, serviceKey, { auth: { persistSession: false, autoRefreshToken: false } });
   const s3 = new S3Client({ region });
-  return { ingestionJobs: new SupabaseScormJobRepository(client), publicationJobs: new SupabaseScormPublicationRepository(client), integrationJobs: new SupabaseIntegrationDeliveryRepository(client), revocationJobs: new SupabaseSecurityRevocationRepository(client), objects: new S3ScormObjectReader(s3), publisher: new S3ImmutableDirectoryPublisher(s3) };
+  return { ingestionJobs: new SupabaseScormJobRepository(client), publicationJobs: new SupabaseScormPublicationRepository(client), integrationJobs: new SupabaseIntegrationDeliveryRepository(client), revocationJobs: new SupabaseSecurityRevocationRepository(client), infrastructureJobs: new SupabaseInfrastructureCommandRepository(client), objects: new S3ScormObjectReader(s3), publisher: new S3ImmutableDirectoryPublisher(s3) };
 }
 
 async function finishIngestion(client: SupabaseClient, job: ScormIngestionJob, workerId: string, outcome: string, code: string | null, manifest: ScormManifestResult | null): Promise<void> {
@@ -158,6 +173,11 @@ async function finishIntegration(client: SupabaseClient, job: IntegrationDeliver
 async function finishRevocation(client: SupabaseClient, job: SecurityRevocationJob, workerId: string, outcome: string, code: string | null): Promise<void> {
   const { error } = await client.rpc("v3_security_finish_revocation", { target_revocation: job.id, worker_id: workerId, outcome, outcome_code: code });
   if (error) throw new Error(`SECURITY_REVOCATION_FINISH_FAILED:${error.message}`);
+}
+
+async function finishInfrastructure(client:SupabaseClient,job:InfrastructureCommandJob,workerId:string,outcome:string,code:string|null):Promise<void>{
+  const{error}=await client.rpc("v3_core_finish_infrastructure_command",{target_command:job.id,worker_id:workerId,outcome,outcome_code:code});
+  if(error)throw new Error(`INFRASTRUCTURE_COMMAND_FINISH_FAILED:${error.message}`);
 }
 
 async function rpcOne(client: SupabaseClient, name: string, args: Record<string, unknown>): Promise<RpcRow | null> {
