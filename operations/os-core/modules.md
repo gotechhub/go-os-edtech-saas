@@ -4,10 +4,10 @@
 
 | ID | Faz | Modül | Durum |
 |---|---|---|---|
-| CORE-01 | F1 | İç operatör kimliği ve ayrıcalıklı erişim | 1/3 |
+| CORE-01 | F1 | İç operatör kimliği ve ayrıcalıklı erişim | 2/3 |
 | CORE-02 | F1 | Sistem komuta merkezi | 2/3 |
 | CORE-03 | F1 | Tenant ve portal teknik envanteri | 2/3 |
-| CORE-04 | F1 | Sürüm, migration ve özellik bayrağı | 1/3 |
+| CORE-04 | F1 | Sürüm, migration ve özellik bayrağı | 2/3 |
 | CORE-05 | F1 | İş kuyruğu ve entegrasyon operasyonu | 1/3 |
 | CORE-06 | F1 | Güvenlik, audit ve olay müdahalesi | 1/3 |
 | CORE-07 | F1 | Depolama, bölge ve altyapı kontrolü | 1/3 |

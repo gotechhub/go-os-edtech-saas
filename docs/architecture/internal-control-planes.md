@@ -44,4 +44,6 @@ Yerel PGlite testleri MFA, süresi dolmuş grant, tenant kullanıcısı, Super A
 
 `202610010002_v3_internal_emergency_sessions.sql`, Super Admin için tenant kapsamlı ve en fazla dört saatlik destek oturumu; OS Core için işlem iznine bağlı, olay referanslı ve en fazla 30 dakikalık break-glass oturumu ekler. Her iki oturum MFA, gerekçe, süre, iptal ve audit zorunluluğu taşır; doğrudan tablo erişimi vermez.
 
-Hosted migration, gerçek MFA oturumu ve iki kişili/break-glass biletinin gerçek release veya migration komutuna aynı transaction içinde bağlanması henüz kabul kanıtına sahip değildir. Bu nedenle `CORE-01` uygulama ve kabul kapısı açık kalır.
+`202610010004_v3_core_release_rollouts.sql`, iki kişili bileti pilot/global rollout, rollback ve tenant/global feature flag komutuna aynı transaction içinde bağlar. Biletin izin, nesne türü ve nesne kimliği hedef komutla eşleşmeden değişiklik yapılmaz; idempotency anahtarı replay sırasında ikinci rollout veya flag değişikliği üretmez.
+
+Hosted migration, gerçek MFA oturumu ve canlı sağlayıcı üzerinde rollout/rollback tatbikatı henüz kabul kanıtına sahip değildir. Bu nedenle `CORE-01` ve `CORE-04` kabul kapıları açık kalır.

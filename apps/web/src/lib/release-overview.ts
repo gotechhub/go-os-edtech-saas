@@ -1,0 +1,5 @@
+import {createSupabaseServerClient} from "./supabase/server";
+export interface ReleaseRow{release_id:string;component:string;version:string;git_sha:string;release_status:string;rollout_id:string|null;rollout_scope:string|null;rollout_status:string|null;tenant_id:string|null;observed_at:string}
+export interface FlagRow{flag_key:string;risk:string;default_enabled:boolean;tenant_id:string|null;override_enabled:boolean|null;starts_at:string|null;observed_at:string}
+export type ReleaseOverviewResult={state:"ready";releases:ReleaseRow[];flags:FlagRow[]}|{state:"unconfigured"|"migration_required"|"error"};
+export async function loadReleaseOverview():Promise<ReleaseOverviewResult>{const client=await createSupabaseServerClient();if(!client)return{state:"unconfigured"};const[releases,flags]=await Promise.all([client.rpc("v3_core_release_overview"),client.rpc("v3_core_feature_flag_overview")]);const error=releases.error??flags.error;if(error)return{state:error.code==="PGRST202"||error.code==="42883"?"migration_required":"error"};return{state:"ready",releases:(releases.data??[])as ReleaseRow[],flags:(flags.data??[])as FlagRow[]};}
