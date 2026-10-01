@@ -23,3 +23,5 @@ Super Admin teknik bir talep oluşturabilir veya tenant kapsamlı rollout isteye
 9. Veri saklama, silme, yedek, geri yükleme, RPO/RTO ve taşınabilirlik.
 
 Her komut `loading`, `success`, `partial`, `stale`, `error`, `forbidden` ve `approval_required` durumlarını destekler. Canlı olmayan veri açıkça işaretlenir. Modül ve kanıt durumu [takip kaynağından](../../project-tracker.json) üretilen [modül dökümünde](modules.md) tutulur.
+
+CORE-02–CORE-10 veri sahipliği, komut, tazelik, güvenlik ve kabul sınırları [modül sözleşmelerinde](module-contracts.md) tanımlıdır.

@@ -4,7 +4,7 @@
 
 | ID | Faz | Modül | Durum |
 |---|---|---|---|
-| AI-01 | F1 | Model ağ geçidi ve politika | 0/3 |
+| AI-01 | F1 | Model ağ geçidi ve politika | 1/3 |
 | AI-02 | F8 | Kaynaklı arama ve bilgi | 0/3 |
 | AI-03 | F8 | Öneri ve beceri zekâsı | 0/3 |
 | AI-04 | F8 | Doğal dille rapor ve agent işleri | 0/3 |
@@ -13,13 +13,13 @@
 | AI-07 | F8 | İçerik zekâsı ve metadata yardımcısı | 0/3 |
 | AI-08 | F8 | Ölçme ve değerlendirme yardımcısı | 0/3 |
 | AI-09 | F8 | Rol bazlı operasyon yardımcıları | 0/3 |
-| AI-10 | F1 | Context Engine ve ürün kayıt sözleşmesi | 0/3 |
-| AI-11 | F1 | Tool Registry ve eylem risk modeli | 0/3 |
-| AI-12 | F1 | Approval Engine ve yüksek etkili eylem | 0/3 |
-| AI-13 | F1 | Agent, prompt ve politika yaşam döngüsü | 0/3 |
-| AI-14 | F1 | GO Credits ve maliyet defteri | 0/3 |
-| AI-15 | F1 | Konuşma, hafıza ve veri yaşam döngüsü | 0/3 |
-| AI-16 | F1 | AI orkestrasyonu ve deterministik workflow sınırı | 0/3 |
+| AI-10 | F1 | Context Engine ve ürün kayıt sözleşmesi | 1/3 |
+| AI-11 | F1 | Tool Registry ve eylem risk modeli | 1/3 |
+| AI-12 | F1 | Approval Engine ve yüksek etkili eylem | 1/3 |
+| AI-13 | F1 | Agent, prompt ve politika yaşam döngüsü | 1/3 |
+| AI-14 | F1 | GO Credits ve maliyet defteri | 1/3 |
+| AI-15 | F1 | Konuşma, hafıza ve veri yaşam döngüsü | 1/3 |
+| AI-16 | F1 | AI orkestrasyonu ve deterministik workflow sınırı | 1/3 |
 | AI-17 | F9 | MCP ve dış AI istemci geçidi | 0/3 |
 | AI-18 | F3 | Shared GOAI UI ve bağlamsal deneyim | 0/3 |
 

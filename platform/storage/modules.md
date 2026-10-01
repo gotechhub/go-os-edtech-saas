@@ -5,8 +5,8 @@
 | ID | Faz | Modül | Durum |
 |---|---|---|---|
 | STOR-01 | F1 | Tenant bucket provisioning ve envanter | 1/3 |
-| STOR-02 | F1 | Upload intent ve karantina | 2/3 |
-| STOR-03 | F1 | Tarama, validasyon ve değişmez yayın | 2/3 |
+| STOR-02 | F1 | Upload intent ve karantina | 3/3 |
+| STOR-03 | F1 | Tarama, validasyon ve değişmez yayın | 3/3 |
 | STOR-04 | F1 | Yetkili indirme ve CloudFront teslimi | 1/3 |
 | STOR-05 | F1 | Sistem asset manifesti ve aktarım aracı | 2/3 |
 | STOR-06 | F9 | Saklama, yaşam döngüsü ve BYOS hazırlığı | 0/3 |

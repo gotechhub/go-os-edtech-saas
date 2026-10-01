@@ -2,7 +2,7 @@
 
 **Kaynak tarihi:** 2026-10-01 · **Durum:** Uygulama başladı · **Aktif faz:** F0 Hazırlık ve mimari kapısı
 
-**Doğrulanmış ilerleme:** %3 · **Görev:** 17/495 tamamlandı, 29 aktif, 478 doğrulanmayı bekliyor · **Modül:** 165 · **Engel:** 0
+**Doğrulanmış ilerleme:** %10 · **Görev:** 50/495 tamamlandı, 24 aktif, 445 doğrulanmayı bekliyor · **Modül:** 165 · **Engel:** 0
 **Dil hedefi:** 10 dil; 2 temel (Türkçe varsayılan + İngilizce), 8 ek lisans. Teknik paket yayını OS Core'da, müşteri lisans/ataması [Super Admin](operations/respongo-hq/language-control.md) alanındadır.
 
 > Bu oran yalnızca tarihli kabul kanıtı bulunan görevlerden hesaplanır. Tarihsel V1/V2 oranları ve taslak dosyalar Respongo OS tamamlanması sayılmaz.
@@ -40,7 +40,7 @@
 | Faz | Hedef | Modül | Aktif | Doğrulanan/görev | Faz ilerlemesi |
 |---|---|---:|---:|---:|---:|
 | F0 · Hazırlık ve mimari kapısı | Ürün sahipliği, kullanıcı görevi, veri, güvenlik, UX ve kabul sözleşmelerini doğrulamak | 5 | 2 | 4/15 | %27 |
-| F1 · Respongo OS Core ve güvenli platform omurgası | Kimlik, tenant, rol, deneme, audit ve depolama temelini kurup teknik işletim ekranlarını yalnız yetkili Respongo ekibine açmak | 38 | 13 | 12/114 | %11 |
+| F1 · Respongo OS Core ve güvenli platform omurgası | Kimlik, tenant, rol, deneme, audit ve depolama temelini kurup teknik işletim ekranlarını yalnız yetkili Respongo ekibine açmak | 38 | 8 | 45/114 | %39 |
 | F2 · Super Admin · müşteri ve portal filosu | Müşteri 360, portal fabrikası, demo, lisans, sektör paketi, destek ve tenant rollout yönetimini kurmak | 11 | 0 | 0/33 | %0 |
 | F3 · Control Center ve ortak deneyim | Müşterinin kuruluş, kullanıcı, marka, dil ve hak sahibi olduğu ürünleri yönetmesini sağlayan ortak deneyimi kurmak | 17 | 6 | 0/51 | %0 |
 | F4 · GOLMS · öğrenme operasyonu | İçerik, program, atama, uyum, ölçme, SCORM, rapor ve beş rol akışlarını tamamlamak | 22 | 7 | 1/66 | %2 |
@@ -55,8 +55,8 @@
 | Alan | Modül | Doğrulanan/görev | Döküm |
 |---|---:|---:|---|
 | Araştırma ve mimari | 4 | 4/12 | [Modüller](docs/architecture/foundation-modules.md) |
-| Ortak SaaS platformu | 15 | 0/45 | [Modüller](platform/modules.md) |
-| Respongo OS Core · sistem işletim konsolu | 10 | 1/30 | [Modüller](operations/os-core/modules.md) |
+| Ortak SaaS platformu | 15 | 14/45 | [Modüller](platform/modules.md) |
+| Respongo OS Core · sistem işletim konsolu | 10 | 10/30 | [Modüller](operations/os-core/modules.md) |
 | Super Admin · müşteri ve portal yönetimi | 11 | 0/33 | [Modüller](operations/respongo-hq/modules.md) |
 | Control Center · müşteri yönetimi | 11 | 0/33 | [Modüller](platform/control-center/modules.md) |
 | Tasarım sistemi ve deneyim | 6 | 0/18 | [Modüller](design/modules.md) |
@@ -66,8 +66,8 @@
 | GOLXP · deneyim ve beceri | 11 | 0/33 | [Modüller](products/golxp/modules.md) |
 | GOCATALOG · içerik kataloğu | 9 | 0/27 | [Modüller](products/gocatalog/modules.md) |
 | GOPM · performans ve gelişim | 9 | 0/27 | [Modüller](products/gopm/modules.md) |
-| GOAI Engine · ortak zekâ | 18 | 0/54 | [Modüller](intelligence/goai-engine/modules.md) |
-| Dosya, medya ve S3 varlık platformu | 6 | 8/18 | [Modüller](platform/storage/modules.md) |
+| GOAI Engine · ortak zekâ | 18 | 8/54 | [Modüller](intelligence/goai-engine/modules.md) |
+| Dosya, medya ve S3 varlık platformu | 6 | 10/18 | [Modüller](platform/storage/modules.md) |
 | Standartlar ve entegrasyon | 4 | 0/12 | [Modüller](standards/modules.md) |
 | Yayın ve operasyon | 7 | 3/21 | [Modüller](docs/architecture/release-modules.md) |
 

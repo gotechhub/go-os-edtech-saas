@@ -42,4 +42,6 @@ Yerel PGlite testleri MFA, süresi dolmuş grant, tenant kullanıcısı, Super A
 
 `202610010001_v3_core_privileged_approvals.sql`, yüksek riskli Core komutları için kısa ömürlü ve tek kullanımlık iki kişili onay bileti ekler. Talep eden kişi kendi yetkisindeki işlem için gerekçe girer; farklı bir `security_operator` onaylar; talep eden kişi bileti yalnız bir kez tüketebilir. Talep, onay ve tüketim aynı korelasyon kimliğiyle audit kaydına bağlanır. Bilet tek başına altyapı işlemi çalıştırmaz; ilgili komutun aynı işlem içinde bu bileti tüketmesi gerekir.
 
-Hosted migration, gerçek MFA oturumu, break-glass (acil erişim), süreli destek oturumu komutları ve iki kişili biletin gerçek release/migration komutuna bağlanması henüz kabul kanıtına sahip değildir. Bu nedenle `CORE-01` uygulama ve kabul kapısı açık kalır.
+`202610010002_v3_internal_emergency_sessions.sql`, Super Admin için tenant kapsamlı ve en fazla dört saatlik destek oturumu; OS Core için işlem iznine bağlı, olay referanslı ve en fazla 30 dakikalık break-glass oturumu ekler. Her iki oturum MFA, gerekçe, süre, iptal ve audit zorunluluğu taşır; doğrudan tablo erişimi vermez.
+
+Hosted migration, gerçek MFA oturumu ve iki kişili/break-glass biletinin gerçek release veya migration komutuna aynı transaction içinde bağlanması henüz kabul kanıtına sahip değildir. Bu nedenle `CORE-01` uygulama ve kabul kapısı açık kalır.

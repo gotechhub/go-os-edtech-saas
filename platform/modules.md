@@ -4,21 +4,21 @@
 
 | ID | Faz | Modül | Durum |
 |---|---|---|---|
-| PLAT-01 | F1 | Kimlik ve oturum | 0/3 |
-| PLAT-02 | F1 | Tenant, organizasyon ve roller | 0/3 |
-| PLAT-03 | F1 | 14 günlük ortak deneme ve lisans | 0/3 |
-| PLAT-04 | F1 | Marka ve sektör temaları | 0/3 |
-| PLAT-05 | F1 | Varlık ve medya yönetimi | 0/3 |
-| PLAT-06 | F1 | Bildirim ve iletişim | 0/3 |
-| PLAT-07 | F1 | İş akışı, kuyruk ve audit | 0/3 |
-| PLAT-08 | F1 | Destek ve bilgi merkezi | 0/3 |
+| PLAT-01 | F1 | Kimlik ve oturum | 1/3 |
+| PLAT-02 | F1 | Tenant, organizasyon ve roller | 1/3 |
+| PLAT-03 | F1 | 14 günlük ortak deneme ve lisans | 1/3 |
+| PLAT-04 | F1 | Marka ve sektör temaları | 1/3 |
+| PLAT-05 | F1 | Varlık ve medya yönetimi | 1/3 |
+| PLAT-06 | F1 | Bildirim ve iletişim | 1/3 |
+| PLAT-07 | F1 | İş akışı, kuyruk ve audit | 1/3 |
+| PLAT-08 | F1 | Destek ve bilgi merkezi | 1/3 |
 | PLAT-09 | F3 | Ortak web/mobil kabuk ve API | 0/3 |
-| PLAT-10 | F1 | 10 dilli mesaj ve terim altyapısı | 0/3 |
-| PLAT-11 | F1 | Dil paketi overlay ve otomatik senkron | 0/3 |
-| PLAT-12 | F1 | Kurum sözlüğü, rol ve yetkinlik çekirdeği | 0/3 |
-| PLAT-13 | F1 | Arama, taksonomi ve kayıt bulma | 0/3 |
-| PLAT-14 | F1 | Entegrasyon merkezi ve webhook yönetimi | 0/3 |
-| PLAT-15 | F1 | Gizlilik, rıza ve veri yaşam döngüsü | 0/3 |
+| PLAT-10 | F1 | 10 dilli mesaj ve terim altyapısı | 1/3 |
+| PLAT-11 | F1 | Dil paketi overlay ve otomatik senkron | 1/3 |
+| PLAT-12 | F1 | Kurum sözlüğü, rol ve yetkinlik çekirdeği | 1/3 |
+| PLAT-13 | F1 | Arama, taksonomi ve kayıt bulma | 1/3 |
+| PLAT-14 | F1 | Entegrasyon merkezi ve webhook yönetimi | 1/3 |
+| PLAT-15 | F1 | Gizlilik, rıza ve veri yaşam döngüsü | 1/3 |
 
 ## PLAT-01 · Kimlik ve oturum
 
